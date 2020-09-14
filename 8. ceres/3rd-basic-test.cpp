@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-13 20:16:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-09-13 22:00:01
+ * @LastEditTime: 2020-09-14 19:24:27
  * @Description: 曲线拟合的ceres 例子
  * 曲线拟合就是构建多个相同形式的LossFunction
  */
@@ -107,6 +107,8 @@ int main(int argc, const char** argv) {
 
     // 第二部分 构建CostFunction
     // NULL 的位置就是用来放置鲁棒核函数的地方
+    // 至此，我们可以知道的是，cost function说的就是 误差项
+    // loss function 说的则是 鲁棒核函数
     ceres::Problem problem;
     for(int i=0;i<kNumObservations;i++)
     {

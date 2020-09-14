@@ -5,6 +5,7 @@ project(ceres-test)
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
 
+
 # helloworld
 add_executable(basic-test basic-test.cpp)
 target_link_libraries(basic-test ${CERES_LIBRARIES})

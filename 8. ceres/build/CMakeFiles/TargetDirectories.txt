@@ -1,0 +1,5 @@
+/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/CMakeFiles/edit_cache.dir
+/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/CMakeFiles/2nd-basic-test.dir
+/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/CMakeFiles/basic-test.dir
+/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/CMakeFiles/3rd-basic-test.dir
+/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/CMakeFiles/rebuild_cache.dir
