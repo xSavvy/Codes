@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-18 07:08:43
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-09-21 21:48:00
+ * @LastEditTime: 2020-09-22 07:08:05
  * @Description: 如何编写一个在ceres中可用的函数
  *               目前分析： 之前写的函数不可用的原因是 没有进行jet部分的重载
  */
@@ -95,6 +95,7 @@ struct CostFunctor
         return true; 
     }
 
+    //  提示：1. 这里的成员函数也需要是const，目前看起来在调用的时候，使用的是一个const functor 对象
     template<typename JetT>
     void Evaluate(const JetT m,const JetT c,JetT & residual) const
     {
