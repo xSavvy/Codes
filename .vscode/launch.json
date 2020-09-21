@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/build/devel/viz-test",
+            "program": "/home/lwl/workspace/3rdparty-test-learning/8. ceres/build/5-self-define-evaluate",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
