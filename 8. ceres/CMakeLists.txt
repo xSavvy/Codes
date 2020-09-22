@@ -14,5 +14,9 @@ target_link_libraries(2nd-basic-test ${CERES_LIBRARIES})
 add_executable(3rd-basic-test 3rd-basic-test.cpp)
 target_link_libraries(3rd-basic-test ${CERES_LIBRARIES})
 
-add_executable(5-self-define-evaluate 5th-how-to-write-function-usable-in-ceres.cpp)
-target_link_libraries(5-self-define-evaluate ${CERES_LIBRARIES})
+add_executable(5th-self-define-evaluate 5th-how-to-write-function-usable-in-ceres.cpp)
+target_link_libraries(5th-self-define-evaluate ${CERES_LIBRARIES})
+
+#开始尝试ceres的接口
+add_executable(6th-a-value-return-function-for-autodiff 6th-a-value-return-function-for-autodiff.cpp)
+target_link_libraries(6th-a-value-return-function-for-autodiff ${CERES_LIBRARIES})
