@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 
 	// LOG 使用
 	bool logIfFlag = true;
-    google::SetLogDestination(google::GLOG_FATAL,"/home/lwl/workspace/3rdparty-test-learning/1. glog/log/log_info_"); 
+    google::SetLogDestination(google::GLOG_FATAL,"/home/sunny/workspace_private/3rd-test-learning/1. glog/log"); 
 	LOG(INFO) << "I am INFO!";
 	LOG(WARNING) << "I am WARNING!";
 	LOG(ERROR) << "I am ERROR!";

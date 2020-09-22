@@ -41,5 +41,9 @@ target_link_libraries(gtest-2 ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 add_executable(gtest-3 "gtest_3.cpp")
 target_link_libraries(gtest-3 ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
+#gtest_test_f 用于更加系统的测试 TEST_F
+add_executable(gtest-test-f "gtest_test_f.cpp")
+target_link_libraries(gtest-test-f ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
 add_test(gtest-3 executable/gtest-3)
 enable_testing()

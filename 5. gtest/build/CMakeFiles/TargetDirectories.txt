@@ -1,0 +1,7 @@
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/rebuild_cache.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/gtest-2.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/gtest-1.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/gtest-3.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/test.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/gtest-test-f.dir
+/home/sunny/workspace_private/3rd-test-learning/5. gtest/build/CMakeFiles/edit_cache.dir

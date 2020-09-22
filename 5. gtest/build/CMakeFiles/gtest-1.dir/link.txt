@@ -1,0 +1,1 @@
+/usr/bin/c++  -std=c++11 -o3 -Wall   CMakeFiles/gtest-1.dir/gtest_1.cpp.o  -o executable/gtest-1 /usr/local/lib/libgtest.a /usr/local/lib/libgtest_main.a -lpthread 
