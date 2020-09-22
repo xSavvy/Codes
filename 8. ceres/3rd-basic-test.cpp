@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-13 20:16:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-09-14 19:24:27
+ * @LastEditTime: 2020-09-18 19:14:57
  * @Description: 曲线拟合的ceres 例子
  * 曲线拟合就是构建多个相同形式的LossFunction
  */
@@ -19,7 +19,7 @@ struct ExponentialResidual
     template <typename T>
     bool operator()(const T*const m, const T* const c, T* residual) const 
     {
-        residual[0] = T(y_) -ceres::exp(m[0]*T(x_)) + c[0];
+        residual[0] = y_ -ceres::exp(m[0]*T(x_)) + c[0];
         return true;       
     }
      double x_;
