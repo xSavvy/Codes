@@ -15,18 +15,16 @@
 #include <memory>
 using namespace std;
 
-struct NonlinearEquation
+class NonlinearEquation:public ceres::SizedCostFunction<1,1,1>
 {
-    NonlinearEquation(const double x,const double y):
-    ober_x(x),ober_y(y){}
-    bool operator()(const double * m,const double *c,double * residual)const
+    public:
+    virtual bool Evaluate(const double * const * parameters, 
+    double *residual, double ** jacobians) const
     {
-        residual[0] = ober_y-exp(ober_x*m[0]+c[0]);
+        
         return true;
     }
-    const double ober_x;
-    const double ober_y;
-};
+}
 
 struct CostFunctor
 {

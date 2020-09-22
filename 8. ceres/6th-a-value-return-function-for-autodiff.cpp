@@ -1,14 +1,16 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-09-22 07:23:32
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-22 19:26:31
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2020-09-22 21:00:29
  * @Description: 讨论ceres autodiff 的多种函数接口？？？
  *               实际讨论的是 如何在autodiff内部使用自定义的函数
  *               如果这个函数只是返回一个double 值而不是 T(也就是说无法处理 Jet) 应该怎么处理
  *               A function return a value 
  *               竟然真的可以  令人窒息的操作
  *               实际上是通过了计算把NumericalDiffCostFunction 计算出的数值转为了Jet 的类型来对 AutoDiff 进行适配
+ *               根据ceres 的doc NumericalDiff 对于三方库会有更好的支持
+ *
  */
 
 #include "data.hpp"
