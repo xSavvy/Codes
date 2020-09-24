@@ -1,8 +1,0 @@
-prefix=/home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/devel
-
-Name: ros-melodic-test
-Description: Description of ros-melodic-test
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
