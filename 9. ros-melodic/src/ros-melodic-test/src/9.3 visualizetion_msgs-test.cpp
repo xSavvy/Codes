@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-16 09:55:41
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-16 14:50:18
+ * @LastEditTime: 2020-09-24 10:13:07
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.3 visualizetion_msgs-test.cpp
  * @Description: 用于测试 ros 显示
  */
@@ -18,6 +18,8 @@
 #include <vector>
 using namespace std;
 
+
+// 用于显示球体
 class VizTestSpheres
 {
     public:
@@ -102,6 +104,7 @@ class VizTestSpheres
     vector<geometry_msgs::PointStamped> pointsPool_;
 };
 
+// 用于显示线
 class VizTestLines
 {
     public:
@@ -187,6 +190,7 @@ class VizTestLines
     vector<geometry_msgs::PointStamped> pointsPool_;
 };
 
+// 用于将在rviz 上面点击的点 使用线段 将他们连接起来
 class VizTestForClickPoint
 {
     public:
@@ -259,6 +263,7 @@ class VizTestForClickPoint
     vector<geometry_msgs::PointStamped> pointsPool_;
 };
 
+
 void frameCallback(const ros::TimerEvent& /*unused*/)
 {
   static uint32_t counter = 0;
@@ -280,8 +285,7 @@ int main(int argc, char **argv)
     ros::NodeHandle nh_;
     ros::Timer frame_timer = nh_.createTimer(ros::Duration(0.01), frameCallback);
     
-    VizTestForClickPoint viztest_;
-
+    VizTestSpheres viztest_;
     
     ros::spin();
 

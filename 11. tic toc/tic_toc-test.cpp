@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-23 16:08:13
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-23 16:15:36
+ * @LastEditTime: 2020-09-24 09:49:52
  * @FilePath: /3rd-test-learning/11. tic toc/tic_toc-test.cpp
  * @Description: tic_toc 计时器测试
  */
@@ -11,7 +11,7 @@
 
 #include <chrono>
 #include <iostream>
-
+#include "tic_toc.hpp"
 using namespace std;
 
 int main()
@@ -20,7 +20,12 @@ int main()
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> diff = end - start;
     auto ms = std::chrono::duration_cast<chrono::microseconds>(diff);
-
+    {
+        Tic tic("sss");
+        cout<<tic.checkprint_nano()<<endl;
+        cout<<tic.checkprint_milli()<<endl;
+        tic.checkprint_micro();
+    }
     cout<< ms.count()<<endl;
     return 0;
 }

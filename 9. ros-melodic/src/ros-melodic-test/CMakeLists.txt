@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(ros-melodic-test)
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../devel")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
