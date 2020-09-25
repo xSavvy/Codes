@@ -29,6 +29,9 @@ include_directories(
 add_executable(viz-test "src/9.3 visualizetion_msgs-test.cpp")
 target_link_libraries(viz-test ${catkin_LIBRARIES})
 
+add_executable(9.5-spinner-test "src/9.5 spinner-test.cpp")
+target_link_libraries(9.5-spinner-test ${catkin_LIBRARIES})
+
 add_executable(viz-template "src/viz-template.cpp")
 target_link_libraries(viz-template ${catkin_LIBRARIES})
 ## System dependencies are found with CMake's conventions
