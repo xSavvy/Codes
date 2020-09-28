@@ -16,3 +16,6 @@ target_link_libraries(simple-case-no-invasive ${Boost_LIBRARIES})
 
 add_executable(derived-base-serialization ./derived-base-serialization.cpp)
 target_link_libraries(derived-base-serialization ${Boost_LIBRARIES})
+
+add_executable(stl-member-object ./stl-member-object.cpp)
+target_link_libraries(stl-member-object ${Boost_LIBRARIES})

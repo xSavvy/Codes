@@ -22,15 +22,18 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 include_directories(
-# include
+ include
   ${catkin_INCLUDE_DIRS}
 )
 
 add_executable(viz-test "src/9.3 visualizetion_msgs-test.cpp")
 target_link_libraries(viz-test ${catkin_LIBRARIES})
 
-add_executable(9.5-spinner-test "src/9.5 spinner-test.cpp")
-target_link_libraries(9.5-spinner-test ${catkin_LIBRARIES})
+add_executable(9.5.1-multiple-spinner-test "src/9.5.1 multiple-spinner-test.cpp")
+target_link_libraries(9.5.1-multiple-spinner-test ${catkin_LIBRARIES})
+
+add_executable(9.5.2-spinner-with-callbackqueue "src/9.5.2 spinner-with-callbackqueue.cpp")
+target_link_libraries(9.5.2-spinner-with-callbackqueue ${catkin_LIBRARIES})
 
 add_executable(viz-template "src/viz-template.cpp")
 target_link_libraries(viz-template ${catkin_LIBRARIES})
