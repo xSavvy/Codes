@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-22 07:23:32
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-09-22 21:00:29
+ * @LastEditTime: 2020-10-06 21:09:52
  * @Description: 讨论ceres autodiff 的多种函数接口？？？
  *               实际讨论的是 如何在autodiff内部使用自定义的函数
  *               如果这个函数只是返回一个double 值而不是 T(也就是说无法处理 Jet) 应该怎么处理
@@ -37,8 +37,7 @@ struct CostFunctor
 {
     CostFunctor(const double x,const double y):
     ober_x(x),ober_y(y){
-
-
+        
         nonliearEquation_.reset(new ceres::CostFunctionToFunctor<1,1,1>(
         new ceres::NumericDiffCostFunction<NonlinearEquation,ceres::CENTRAL,1,1,1>(
             new NonlinearEquation(ober_x,ober_y))));

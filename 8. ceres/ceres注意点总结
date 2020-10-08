@@ -13,6 +13,11 @@ struct Functor 编写部分 问题主要是在operator() 上面
 主要问题
     |__ AutoDiff <typename 构建CostFunction,int input_1,...input_9,int output>
         (具体构造形式看demo)
-
+    |__ 什么时候使用 Auto Numerical 和 Analytic
+        |__ Analytic 性能第一,且明确公式推导,且不嫌烦
+        |__ Numerical 不能使用Auto的时候, 三方库基本并不适配Jet
+        |__ Auto 最方便 嘿嘿嘿
+        
 第三部分 配置求解器
     |__ Solve 的命名空间是 ceres 而不是 ceres::Solver 因为Solver 内部也有一个叫Solve的成员函数
+

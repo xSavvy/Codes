@@ -1,11 +1,12 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-09-22 19:16:32
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-22 19:17:55
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2020-10-06 21:09:22
  * @FilePath: /3rd-test-learning/8. ceres/7th-value-jacobian-return-function-for-autodiff.cpp
  * @Description:  在尝试了令人窒息的6th 的之后，再来尝试 可以和Sophus 混合使用的7
  *                一个可以返回value 和 jacobian 的接口
+ *                TODO 还没有编写完
  */
 
 #include "data.hpp"
