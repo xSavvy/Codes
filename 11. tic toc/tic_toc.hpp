@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-23 16:19:04
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-24 09:49:21
+ * @LastEditTime: 2020-10-10 08:48:21
  * @FilePath: /3rd-test-learning/11. tic toc/tic_toc.hpp
  * @Description: 函数当中进行使用的计时器
  */
@@ -29,7 +29,7 @@ class Tic
         start = std::chrono::high_resolution_clock::now();
     }
 
-    __tp check(){return std::chrono::high_resolution_clock::now();}
+    auto check(){return std::chrono::high_resolution_clock::now();}
 
     auto checkprint_nano()
     {
@@ -71,8 +71,6 @@ class Tic
         nanos(diff).count()<<" nanoseconds "<<" == "<<micros(diff).count()<<" macroseconds "<<
         " == "<<millis(diff).count()<<" milliseconds "<<std::endl;
     }
-
-    
     __tp start;
     const std::string funcName_;      
 };
