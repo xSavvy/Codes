@@ -1,3 +1,0 @@
-/home/lwl/workspace/3rdparty-test-learning/16. pcl/build/CMakeFiles/rebuild_cache.dir
-/home/lwl/workspace/3rdparty-test-learning/16. pcl/build/CMakeFiles/edit_cache.dir
-/home/lwl/workspace/3rdparty-test-learning/16. pcl/build/CMakeFiles/icp_test.dir
