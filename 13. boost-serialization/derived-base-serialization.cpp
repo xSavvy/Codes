@@ -2,9 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-27 18:58:49
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-27 19:28:37
+ * @LastEditTime: 2020-10-09 09:27:11
  * @FilePath: /3rd-test-learning/13. boost-serialization/derived-base-serialization.cpp
  * @Description: 现在的版本是一个derived-base的版本
+ *               也就是如何序列化一个子类
  */
 
 #include "boost/archive/text_iarchive.hpp"
@@ -21,6 +22,7 @@ class Base
     friend class boost::serialization::access;
     Base(){}
     Base(int tmp1,int tmp2):Content_1(tmp1),Content_2(tmp2){}
+    // serial part
     template <typename T>
     void serialize( T & ar, unsigned int version)
     {
@@ -44,7 +46,7 @@ class Derived :public Base
 
     Derived(int tmp12,int tmp3):Base(tmp12,tmp12),Content_3(tmp3){}
 
-
+    // 对于derived 对象进行serialization 的方法
     template <typename T>
     void serialize(T & ar, unsigned int version)
     {
