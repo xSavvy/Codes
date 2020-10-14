@@ -1,0 +1,49 @@
+============================= from pcl ======================================
+Registration
+    |__ hits from typedef
+        |__ Kdtree 正反Kdtree
+        |__ PointCloudSource
+        |__ PointCloudTarget
+        |__ TransformationEstimation
+            |__ 一个匹配基类 用于估算 source target 之间的transformation
+                内含多种匹配模式
+        |__ CorrespondenceEstimation
+            |__ 点云对应关联生成基类
+    |__ main member
+        |__ setTransformationEstimation 设置求解器 类似 求解 SVD 等等内容的东西
+        |__ setCorrespondenceEstimation 设置关联生成器
+        |__ get/set + Target/source
+        |__ set + 各种参数 
+        |__ registerVisualizationCallback 疑似点云匹配的可视化 过程
+        |__ getFitnessScore 得到匹配分数 欧式距离 加和
+        |__ getFinalTransformation 得匹配结果
+        |__ align() 主体匹配函数
+            |__ initCompute()
+            |__ extractInputPointsWithIndics() 也就是提纯Source 点云
+            |__ computeTransformation() =0 正式计算 也就是真正的函数主题
+
+NDT：public Registration
+    |__ hits from typedef
+        |__ VoxelGridCovariance Voxel with mean and covariance 分割函数
+    |__ main member
+        |__ setInputTarget 会进行一次Voxel 计算
+        |__ get/set + OutlierRatio 预测有RANSAC
+        |__ get/set + StepSize/Resolution 
+        |__ computeTransformation
+            |__ initialization c 和d 目的目前看来和鲁棒核一致
+            |__ while converge
+                |__ for each input_point
+                    |__ radiusSearch() Faster than neighbor checking
+                        而且细节上使用了 radius 进行的搜索 也就是说同一个点
+                        可以关联多个voxel 
+                        然后对每一个关联的voxel 都进行得分 求导等计算
+                    |__ for each Voxel
+                        |__ UpdateDerivatives 更新 J H
+                |__ Update delta_T
+                |__ TransformPointCloud
+
+========================== from Github ========================================
+NDT_omp 代码阅读
+
+                    
+                    
