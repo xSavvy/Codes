@@ -1,6 +1,16 @@
 1. cmake
 2. openmp
+   |__ 使用教程
 3. ndt_omp
+   |__ 阅读
 4. pcl
+   |__ feature 
+   |__ correspondence
 5. eigen
    |__ finished 为什么要用这个？
+6. 库头文件问题
+   |__ .h .hpp 文件path的问题
+   |__ 
+7. global variable multiple defintion
+   BugFreePlam
+8. 多级指针

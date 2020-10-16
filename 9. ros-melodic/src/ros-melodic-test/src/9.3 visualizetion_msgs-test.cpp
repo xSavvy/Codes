@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-16 09:55:41
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-24 10:13:07
+ * @LastEditTime: 2020-10-16 11:23:54
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.3 visualizetion_msgs-test.cpp
  * @Description: 用于测试 ros 显示
  */
@@ -27,7 +27,7 @@ class VizTestSpheres
     VizTestSpheres():nh_(){
         pointSub_ = nh_.subscribe("/clicked_point",3,&VizTestSpheres::pointCb,this);
         timer_ = nh_.createTimer(ros::Duration(0.3),boost::bind(&VizTestSpheres::vizPubCb,this));
-        markerPub_ = nh_.advertise<visualization_msgs::Marker>("/Marker_show",0);
+        markerPub_ = nh_.advertise<visualization_msgs::Marker>("/Marker_show",1);
         pointsPool_.clear();
 
         for(int i =0; i<10;i++)

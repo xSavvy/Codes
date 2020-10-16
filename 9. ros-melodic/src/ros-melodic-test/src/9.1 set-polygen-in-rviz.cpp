@@ -10,6 +10,8 @@
 #include "ros/ros.h"
 #include "visualization_msgs/Marker.h"
 #include "geometry_msgs/PointStamped.h"
+
+// 这个实际上是多边形的显示函数
 void setpolygen()
 {
     vector<geometry_msgs::PointStamped> Points_;
