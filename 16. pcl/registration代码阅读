@@ -44,6 +44,27 @@ NDT：public Registration
 
 ========================== from Github ========================================
 NDT_omp 代码阅读
+    |__ Filter
+        |__ getRemovedIndices
+        |__ filter 滤波主体
+            |__ applyfilter()=0 函数主体
+    |__ VoxelGrid
+        |__ set/getLeafSize
+        |__ set/getDownSampleAllData
+        |__ set/getMinimumPointsNumberPerVoxel
+        |__ get(Max)MinBoxCoordinates 得到最大最小边界
+        |__ getNrDivisions() 已知是每个坐标轴上voxel的个数
+        |__ getDivisionMultiplier() 用于点乘还获得一维坐标(CentroidIndex)
+        |__ get(Neighbor)CentroidIndex 得到对应的格子坐标
+                                       neighbor 的坐标是相对于reference point 的 坐标
+        |__ applyfilter()
+            |__ initializeParam() min_b_ max_b_ div_b_ div_mul_
+            |__ voxelizePoint() 对点云进行Voxel 分割
+            |__ getCentoridinEveryVoxel() 得到各个Voxel的点云中心
+    |__ VoxelGridCovariance
+        |__ 
+
+
 
                     
                     

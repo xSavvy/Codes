@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-13 10:42:12
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-13 21:04:16
+ * @LastEditTime: 2020-10-15 18:32:31
  * @Description: 用于测试 和 实验icp 的匹配
  *               主要注意：1. PCL 库的API调用
  *                          |__ PCL ICP 之前总是匹配不准的问题
@@ -26,7 +26,7 @@
  *                                        精度没有 ICP 高 
  *                          |__ GICP 特别慢
  *                       2. Eigen 的赋值运算
- *                       3. 
+ *                       
  */
 
 #include <string>
@@ -98,7 +98,7 @@ int main()
     cout<< " the ICP result transform is "<<endl<<
     result_<<endl;
 
-    // 从Matix4f 转到轴交公式
+    // 从Matix4f 转到轴角表示
     
     Eigen::AngleAxisf angle_axis_from_result_;
     Eigen::Matrix3f rotation_matrix_(result_.block(0,0,3,3));
