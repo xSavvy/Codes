@@ -28,7 +28,8 @@ NDT：public Registration
     |__ main member
         |__ setInputTarget 会进行一次Voxel 计算
         |__ get/set + OutlierRatio 预测有RANSAC
-        |__ get/set + StepSize/Resolution 
+        |__ get/set + StepSize/Resolution  Resolution 会init()进行网格重置计算
+        |__ init()
         |__ computeTransformation
             |__ initialization c 和d 目的目前看来和鲁棒核一致
             |__ while converge
@@ -44,9 +45,12 @@ NDT：public Registration
 
 ========================== from Github ========================================
 NDT_omp 代码阅读
+
+VoxelGridCovariance 系列
+
     |__ Filter
         |__ getRemovedIndices
-        |__ filter 滤波主体
+        |__ filter 滤波主体 
             |__ applyfilter()=0 函数主体
     |__ VoxelGrid
         |__ set/getLeafSize
@@ -57,14 +61,36 @@ NDT_omp 代码阅读
         |__ getDivisionMultiplier() 用于点乘还获得一维坐标(CentroidIndex)
         |__ get(Neighbor)CentroidIndex 得到对应的格子坐标
                                        neighbor 的坐标是相对于reference point 的 坐标
-        |__ applyfilter()
+        |__ applyfilter() 
+            这里的调用是通过直接调用Base::filter 因为VoxelGrid 里面没有重名的函数
+            filter依旧使用Base 的形式 但是 applyfilter 虚函数产生替换 
             |__ initializeParam() min_b_ max_b_ div_b_ div_mul_
             |__ voxelizePoint() 对点云进行Voxel 分割
             |__ getCentoridinEveryVoxel() 得到各个Voxel的点云中心
     |__ VoxelGridCovariance
-        |__ 
+        |__ struct Leaf 包含每一个Voxel 的mean covar inverse_convariance
+                                        eigen_vector eigen_value
+        |__ set(get)MinPointPerVoxel
+        |__ getLeaf()
+        |__ set(get)CovEigValueInflationRatio
+        |__ getNeighborhoodAtPoint 得到附近的 reference_point 附近的 内部点数大于voxels
+            |__ 四种 getNeighborhoodAtPoint 26 个 Voxel
+                    getNeighborhoodAtPoint7 7 个 Voxel 
+                    getNeighborhoodAtPoint1 1 个 Voxel
+        |__ getLeaves
+        |__ getCentroids
+        |__ nearestKSearch K 最近邻搜索
+        |__ radiusSearch 
+        |__ applyfilter
+            |__ initializeParam() min_b_ max_b_ div_b_ div_mul_
+            |__ voxelizePointAndCalcualteMeanCovariance() 
+                对点云进行Voxel 分割 并计算 均值和方差
+            |__ calculateEigen() 计算特征向量和特征值
 
 
-
+ndt_omp 系列
+    |__ setNumThreads
+    |__ computeTransformation 代码阅读之后发现 
+        优化的部分就是在计算导数的部分使用了omp 进行并行计算
                     
                     
