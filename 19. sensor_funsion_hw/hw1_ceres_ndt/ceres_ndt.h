@@ -2,98 +2,51 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-17 21:41:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-18 07:21:48
+ * @LastEditTime: 2020-10-18 16:24:18
  * @Description:  基于ceres 的ndt 算法
  */
 #include <iostream>
+#include <vector>
 #include "Eigen/Eigen"
-#include "sophus/se3.hpp"
+#include "sophus/so3.hpp"
 #include "glog/logging.h"
 #include "ceres/ceres.h"
+#include "pcl/filters/voxel_grid_covariance.h"
 
-template <typename Scalar>
-Sophus::SO3<Scalar> getCeresSO3AndTheta(const Eigen::Matrix<Scalar,3,1> & rotation)
-{
-    LOG_IF(INFO,theta != NULL);
-    using ceres::abs;
-    using ceres::cos;
-    using ceres::sin;
-    using ceres::sqrt;
-    Scalar theta_sq = rotation(0) * rotation(0) +
-                      rotation(1) * rotation(1) + 
-                      rotation(2) * rotation(2);
-
-    Scalar imag_factor;
-    Scalar real_factor;
-    if (theta_sq < Scalar(0.0)) {
-      *theta = Scalar(0);
-      Scalar theta_po4 = theta_sq * theta_sq;
-      imag_factor = Scalar(0.5) - Scalar(1.0 / 48.0) * theta_sq +
-                    Scalar(1.0 / 3840.0) * theta_po4;
-      real_factor = Scalar(1) - Scalar(1.0 / 8.0) * theta_sq +
-                    Scalar(1.0 / 384.0) * theta_po4;
-    } else {
-      *theta = sqrt(theta_sq);
-      Scalar half_theta = Scalar(0.5) * (*theta);
-      Scalar sin_half_theta = sin(half_theta);
-      imag_factor = sin_half_theta / (*theta);
-      real_factor = cos(half_theta);
-    }
-
-    SO3 q;
-    q.unit_quaternion_nonconst() =
-        QuaternionMember(real_factor, imag_factor * omega.x(),
-                         imag_factor * omega.y(), imag_factor * omega.z());
-    SOPHUS_ENSURE(abs(q.unit_quaternion().squaredNorm() - Scalar(1)) <
-                      Sophus::Constants<Scalar>::epsilon(),
-                  "SO3::exp failed! omega: %, real: %, img: %",
-                  omega.transpose(), real_factor, imag_factor);
-    return q;
-}
-
-
-template <typename Scalar>
-Sophus::SE3<Scalar> getCeresSE3(const Eigen::Matrix<Scalar,6,1>& pose)
-{
-    
-}
-
-
-class NDTCostFunctor
+class NDTCostFunctorNumerical
 {
     public:
 
-    NDTCostFunctor(const Eigen::Matrix3f & covar, 
-                   const Eigen::Vector3f & mean,
-                   const Eigen::Vector3f & point):
-                   covar_(covar),mean_(mean)
+    NDTCostFunctorNumerical(const Eigen::Matrix3d & covar, 
+                            const Eigen::Vector3d & mean,
+                            const Eigen::Vector3d & point):
+                            mean_(mean),point_(point)
     {
-        Eigen::LLT<Eigen::Matrix3f> llt_of_covar(covar);
+        Eigen::LLT<Eigen::Matrix3d> llt_of_covar(covar);
         l_matrix_ = llt_of_covar.matrixL();
         LOG(INFO)<<"A  cost function is built"<<std::endl;
     }
     
-    template <typename T>
-    bool operator()(const T* pose , T* resiudal)const
+    bool operator()(const double* rotation, const double * translation , double* resiudal)const
     {
-        Eigen::Map<Eigen::Matrix<T,3,1>> residual_map(residual);
-        Eigen::Map<Eigen::Matrix<T,6,1>> pose_map;
-        Sophus::SE3<T> se3_ = Sophus::SE3<T>::exp(pose_map);
-        Eigen::Matrix<T,3,1> point_homo_;
-        point_homo_<<T(point_(0)),T(point_(1)),T(point(2));
-
-        residual_map = se3_*point_homo_;
+        Eigen::Map<Eigen::Matrix<double,3,1>> residual_map(resiudal);
+        Eigen::Map<const Eigen::Matrix<double,3,1>> rotation_map(rotation);
+        Eigen::Map<const Eigen::Matrix<double,3,1>> translation_map(translation);
+        Sophus::SO3<double> so3_ = Sophus::SO3<double>::exp(rotation_map);
+        residual_map = so3_.matrix()*point_+translation_map -mean_;
+        residual_map = l_matrix_*residual_map;
+        
         return true;
     }
     
     private:
-    Eigen::Matrix3f covar_;
-    Eigen::Vector3f mean_;
-    Eigen::Vector3f point_;
-    Eigen::Matrix3f l_matrix_;
+
+    Eigen::Vector3d mean_;
+    Eigen::Vector3d point_;
+    Eigen::Matrix3d l_matrix_;
 };
 
-class SE3LocalParam :public ceres::LocalParameterization
+class SO3LocalParam :public ceres::LocalParameterization
 {
     public:
 
@@ -101,8 +54,158 @@ class SE3LocalParam :public ceres::LocalParameterization
                     const double* delta,
                     double* x_plus_delta) const 
     {
+        Eigen::Map<const Eigen::Matrix<double,3,1>> rotation_map(x);
+        Eigen::Map<const Eigen::Matrix<double,3,1>> delta_rotation_map(delta);
+        Eigen::Map<Eigen::Matrix<double,3,1>> new_rotation(x_plus_delta);
+        Sophus::SO3<double> so3_rotation = Sophus::SO3<double>::exp(rotation_map);
+        Sophus::SO3<double> so3_delta_rotation = Sophus::SO3<double>::exp(delta_rotation_map);
         
+        auto result = so3_delta_rotation*so3_rotation;
         
+        new_rotation = result.log();
+
         return true;
     }
+
+    virtual bool ComputeJacobian(const double* x, double* jacobian) const
+    {
+        Eigen::Map<Eigen::Matrix<double,3,3>> jacobian_map(jacobian);
+        jacobian_map = Eigen::Matrix3d::Identity();
+        return true;
+    }
+
+    virtual int GlobalSize() const { return 3; }
+    virtual int LocalSize() const { return 3; }
 };
+
+class NDTCostFunctionWrapper
+{
+    public:
+
+    NDTCostFunctionWrapper(const Eigen::Matrix3d & covar, 
+                           const Eigen::Vector3d & mean,
+                           const Eigen::Vector3d & point )
+    {
+        nolinear_equation_.reset(new ceres::CostFunctionToFunctor<3,3,3>(
+            new ceres::NumericDiffCostFunction<NDTCostFunctorNumerical,ceres::CENTRAL,3,3,3>(
+                new NDTCostFunctorNumerical(covar,mean,point))));
+    }
+
+
+    template<typename T>
+    bool operator()(const T* rotation,const T* translation,T*residual)const
+    {
+        (*nolinear_equation_)(rotation,translation,residual);
+        return true;
+    }
+
+
+    private:
+    std::unique_ptr<ceres::CostFunctionToFunctor<3,3,3>> nolinear_equation_;
+};
+
+class NDTProblem
+{
+    public:
+    
+    void setInputSource(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud);
+
+    void setInputTarget(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud);
+
+    void setResolution(double voxel_size){
+        leaf_size_ = voxel_size;
+        resolution_ = voxel_size;
+    }
+    
+    void setRadius(double radius){
+
+    }
+
+    void buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix4f predict_pose);
+
+    void buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix<double,6,1> predict_pose) =delete;
+
+    private:
+    pcl::VoxelGridCovariance<pcl::PointXYZ> voxel_covar_;
+    pcl::PointCloud<pcl::PointXYZ>::ConstPtr source_point_cloud_;
+    pcl::PointCloud<pcl::PointXYZ>::ConstPtr target_point_cloud_;
+    double leaf_size_;
+    double radius_;
+    double resolution_;
+};
+
+void NDTProblem::setInputSource(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
+{
+    source_point_cloud_ = cloud;
+}
+
+void NDTProblem::setInputTarget(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
+{
+    target_point_cloud_ = cloud;
+    voxel_covar_.setLeafSize(resolution_,resolution_,resolution_);
+    voxel_covar_.setInputCloud(target_point_cloud_);
+    voxel_covar_.filter(true);
+}
+
+void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix4f predict_pose)
+{
+    
+
+    if(source_point_cloud_ == nullptr ||target_point_cloud_ == nullptr
+       ||source_point_cloud_->empty()||target_point_cloud_->empty())
+       {
+           return;
+       }
+    
+    ceres::Problem problem;
+
+    double rotation [3] = {0,0,0};
+    double translation [3] = {0,0,0};
+    
+    Eigen::Map<Eigen::Vector3d> rotation_map(rotation);
+    Eigen::Map<Eigen::Vector3d> translation_map(translation);
+    
+    Eigen::Matrix4d predict_pose_double (predict_pose.cast<double>());
+    Eigen::AngleAxisf axis;
+    Eigen::Matrix3f tmp_matrix(predict_pose.block(0,0,3,3));
+    axis.fromRotationMatrix(tmp_matrix);
+
+    rotation_map<<axis.axis().cast<double>();
+    rotation_map *= double(axis.angle());
+
+    translation_map<<predict_pose.block(0,3,3,1).cast<double>();
+    
+    for(auto & point:source_point_cloud_->points)
+    {
+        Eigen::Vector3d point_v3;
+        point_v3<<point.x,point.y,point.z;
+        std::vector<pcl::VoxelGridCovariance<pcl::PointXYZ>::LeafConstPtr> k_leaves;
+        std::vector<float> distancess;
+        voxel_covar_.radiusSearch(point,resolution_,k_leaves,distancess);
+        LOG(INFO)<<"the size of k_leaves is "<<k_leaves.size()<<std::endl;
+        for (auto leaf:k_leaves)
+        {
+            LOG(INFO)<<leaf->getPointCount()<<std::endl;
+            ceres::CostFunction * cf = new ceres::AutoDiffCostFunction<NDTCostFunctionWrapper,3,3,3>(
+                                        new NDTCostFunctionWrapper(leaf->cov_,leaf->mean_,point_v3));
+            problem.AddResidualBlock(cf,new ceres::HuberLoss(0.5),rotation,translation);
+        }
+    }
+
+    problem.SetParameterization(rotation,new SO3LocalParam());
+
+    ceres::Solver::Options options;
+    ceres::Solver::Summary summary;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.max_num_iterations = 20;
+
+    ceres::Solve(options,&problem,&summary);
+
+    std::cout<<summary.BriefReport()<<std::endl;
+
+    std::cout<<"rotation is "<<std::endl
+             <<rotation_map.transpose()<<std::endl
+             <<"translation is "<<std::endl
+             <<translation_map.transpose()<<std::endl;   
+}
+

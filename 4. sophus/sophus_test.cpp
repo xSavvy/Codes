@@ -37,5 +37,7 @@ int main()
     cout<<" the se3 is "<<endl
     << se3_.matrix()<<endl;
 
+    
+
     return 0;
 }
