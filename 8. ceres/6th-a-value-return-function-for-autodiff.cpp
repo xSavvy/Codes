@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-22 07:23:32
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-06 21:09:52
+ * @LastEditTime: 2020-10-18 16:46:30
  * @Description: 讨论ceres autodiff 的多种函数接口？？？
  *               实际讨论的是 如何在autodiff内部使用自定义的函数
  *               如果这个函数只是返回一个double 值而不是 T(也就是说无法处理 Jet) 应该怎么处理
@@ -11,6 +11,8 @@
  *               实际上是通过了计算把NumericalDiffCostFunction 计算出的数值转为了Jet 的类型来对 AutoDiff 进行适配
  *               根据ceres 的doc NumericalDiff 对于三方库会有更好的支持
  *
+ *               重点注意：
+ *               1. CostFunctor 对于Nonlinear的包裹方式
  */
 
 #include "data.hpp"
@@ -38,6 +40,11 @@ struct CostFunctor
     CostFunctor(const double x,const double y):
     ober_x(x),ober_y(y){
         
+        // 通过 ceres_ndt 的测试，
+        // 如果这里的包裹方式是包裹一个已经实例化的对象
+        // 那么AutoDiffCostFunction 无法进行析构
+        // 所以这里必须是new 一个新的对象出来
+
         nonliearEquation_.reset(new ceres::CostFunctionToFunctor<1,1,1>(
         new ceres::NumericDiffCostFunction<NonlinearEquation,ceres::CENTRAL,1,1,1>(
             new NonlinearEquation(ober_x,ober_y))));

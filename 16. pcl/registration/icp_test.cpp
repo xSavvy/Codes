@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-13 10:42:12
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-15 18:32:31
+ * @LastEditTime: 2020-10-18 16:49:14
  * @Description: 用于测试 和 实验icp 的匹配
  *               主要注意：1. PCL 库的API调用
  *                          |__ PCL ICP 之前总是匹配不准的问题
@@ -50,7 +50,7 @@ int main()
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformed_point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
-    string pcd_name_ = "/home/lwl/workspace/3rdparty-test-learning/16. pcl/registration/key_frame_0.pcd";
+    string pcd_name_ = "/home/lwl/workspace/3rd-test-learning/16. pcl/registration/key_frame_0.pcd";
     pcl::io::loadPCDFile(pcd_name_.c_str(),*point_cloud_);
 
     // 准备变换

@@ -38,6 +38,16 @@ int main()
     << se3_.matrix()<<endl;
 
     
+    // Eigen::Map + Sophus 结合使用
+    // 此处可以知道 0,0,0,1 前四位对应 四元数 最后一位是实数位
+    // 后三位是 位移位
+
+    double se3_array [] = {0,0,0,1,0,0,0};
+    Eigen::Map<Sophus::SE3d> se3_map(se3_array);
+
+    cout<<"the SE3 matrix is "<<endl
+        << se3_map.matrix3x4()<<endl; 
+    
 
     return 0;
 }

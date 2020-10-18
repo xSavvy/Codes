@@ -2,11 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-18 11:31:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-18 16:14:47
+ * @LastEditTime: 2020-10-18 17:52:32
  * @Description:  NDT 运行文件
  */
 #include "glog/logging.h"
-#include "ceres_ndt.h"
+#include "ceres_ndt_se3.h"
 #include "pcl/io/pcd_io.h"
 #include "pcl/common/transforms.h"
 #include "pcl/registration/ndt.h"
@@ -26,7 +26,7 @@ int main(int argc,char **argv)
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformed_point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_point_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
-    std::string pcd_name_ = "/home/lwl/workspace/3rdparty-test-learning/16. pcl/registration/key_frame_0.pcd";
+    std::string pcd_name_ = "/home/lwl/workspace/3rd-test-learning/16. pcl/registration/key_frame_0.pcd";
     pcl::io::loadPCDFile(pcd_name_.c_str(),*point_cloud_);
 
     // 准备变换
@@ -65,10 +65,18 @@ int main(int argc,char **argv)
     ndt_problem.setInputTarget(transformed_point_cloud_);
     ndt_problem.setInputSource(point_cloud_);
 
-    Eigen::Matrix4f result;
+    Eigen::Matrix4f result = transform_;
+    
+    std::cout<<"the real transform is "<<std::endl
+             <<transform_<<std::endl;  
     ndt_problem.buildProlemAndSolve(result,result);
 
+
+
+    
+
     // ======================================= PCL NDT 实验 =================================================
+    
     Eigen::Matrix4f result_;
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_registered_ (new pcl::PointCloud<pcl::PointXYZ>());
     pcl::NormalDistributionsTransform<pcl::PointXYZ,pcl::PointXYZ> ndt_;

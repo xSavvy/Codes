@@ -2,8 +2,9 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-17 21:41:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-18 16:24:18
+ * @LastEditTime: 2020-10-18 17:53:50
  * @Description:  基于ceres 的ndt 算法
+ *                基于 translation 和 rotation的方式好像不太行
  */
 #include <iostream>
 #include <vector>
@@ -24,7 +25,7 @@ class NDTCostFunctorNumerical
     {
         Eigen::LLT<Eigen::Matrix3d> llt_of_covar(covar);
         l_matrix_ = llt_of_covar.matrixL();
-        LOG(INFO)<<"A  cost function is built"<<std::endl;
+        // LOG(INFO)<<"A  cost function is built"<<std::endl;
     }
     
     bool operator()(const double* rotation, const double * translation , double* resiudal)const
@@ -188,7 +189,7 @@ void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matr
             LOG(INFO)<<leaf->getPointCount()<<std::endl;
             ceres::CostFunction * cf = new ceres::AutoDiffCostFunction<NDTCostFunctionWrapper,3,3,3>(
                                         new NDTCostFunctionWrapper(leaf->cov_,leaf->mean_,point_v3));
-            problem.AddResidualBlock(cf,new ceres::HuberLoss(0.5),rotation,translation);
+            problem.AddResidualBlock(cf,new ceres::CauchyLoss(0.5),rotation,translation);
         }
     }
 
@@ -197,7 +198,12 @@ void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matr
     ceres::Solver::Options options;
     ceres::Solver::Summary summary;
     options.linear_solver_type = ceres::DENSE_QR;
-    options.max_num_iterations = 20;
+    options.minimizer_type = ceres::TRUST_REGION;
+    options.trust_region_strategy_type = ceres::LEVENBERG_MARQUARDT;
+
+
+   
+    
 
     ceres::Solve(options,&problem,&summary);
 
