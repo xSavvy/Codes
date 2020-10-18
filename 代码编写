@@ -15,3 +15,6 @@
    BugFreePlam
 8. 多级指针
 9. yaml 无法使用的问题
+10. LocalParameterization ComputeJacobian() 的意思 完成
+    这里ComputeJacobian 什么时候使用还不明确
+    但是对于Sophus 已经有对于quternion 的表示了

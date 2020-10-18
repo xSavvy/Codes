@@ -21,3 +21,6 @@ struct Functor 编写部分 问题主要是在operator() 上面
 第三部分 配置求解器
     |__ Solve 的命名空间是 ceres 而不是 ceres::Solver 因为Solver 内部也有一个叫Solve的成员函数
 
+
+
+LocalParameterization ComputeJacobian() 的意思？
