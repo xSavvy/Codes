@@ -17,6 +17,8 @@
 
 namespace LwlSLAM
 {
+   
+
     void structure_convert()
     {
         rosbag::Bag bag_input,bag_output;

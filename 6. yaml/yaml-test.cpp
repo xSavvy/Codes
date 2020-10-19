@@ -14,7 +14,7 @@ using namespace std;
 
 
 int main(){
-    YAML::Node node_ = YAML::LoadFile("/home/lwl/workspace/3rdparty-test-learning/6. yaml/test-config.yaml");
+    YAML::Node node_ = YAML::LoadFile("./");
 
     cout<<node_["Person"]["name"].as<string>().c_str()<<endl;
     
