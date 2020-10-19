@@ -92,5 +92,11 @@ ndt_omp 系列
     |__ setNumThreads
     |__ computeTransformation 代码阅读之后发现 
         优化的部分就是在计算导数的部分使用了omp 进行并行计算
-                    
+        |__ initialization c 和d 目的目前看来和鲁棒核一致
+        |__ transformPointCloudWithGuess
+        |__ computeDerivatives() 矩阵更新主体
+            |__ initialization() 准备vector<hessian>\vector<score_gradient>
+            |__ ComputeAngleDerivatives() 
+
+                
                     

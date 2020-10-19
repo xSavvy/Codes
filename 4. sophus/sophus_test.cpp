@@ -42,7 +42,7 @@ int main()
     // 此处可以知道 0,0,0,1 前四位对应 四元数 最后一位是实数位
     // 后三位是 位移位
 
-    double se3_array [] = {0,0,0,1,0,0,0};
+    double se3_array [] = {0,0,0,1,10,10,10};
     Eigen::Map<Sophus::SE3d> se3_map(se3_array);
 
     cout<<"the SE3 matrix is "<<endl

@@ -18,3 +18,6 @@
 10. LocalParameterization ComputeJacobian() 的意思 完成
     这里ComputeJacobian 什么时候使用还不明确
     但是对于Sophus 已经有对于quternion 的表示了
+    经过查阅还是和 AutoDiff 联合进行使用当中进行使用
+    所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
+11. pcl ndt 的深度阅读

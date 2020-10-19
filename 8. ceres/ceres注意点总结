@@ -24,3 +24,12 @@ struct Functor 编写部分 问题主要是在operator() 上面
 
 
 LocalParameterization ComputeJacobian() 的意思？
+    这里ComputeJacobian 什么时候使用还不明确
+    但是对于Sophus 已经有对于quternion 的表示了
+    +
+    经过查阅还是和 AutoDiff 联合进行使用当中进行使用
+    所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
+    但是我自己编写的内容当中含有AutoDiff 应该会对结果产生影响，明天进行验证
+    +
+    之后定位到ResidualBlock 之中进行使用
+

@@ -2,9 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-17 21:41:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-18 21:34:54
+ * @LastEditTime: 2020-10-19 07:46:16
  * @Description:  基于ceres 的ndt 算法
- *                基于 translation 和 rotation的方式好像不太行
+ *                现在换成Sophus ::SE3 的方法效果也还是不行
+ *                
  */
 #include <iostream>
 #include <vector>
@@ -15,6 +16,32 @@
 #include "ceres/ceres.h"
 #include "pcl/filters/voxel_grid_covariance.h"
 
+class NDTLoss: public ceres::LossFunction
+{
+    public:
+    explicit NDTLoss(double resolution,double outlier_ratio)
+    {
+        double gauss_c1, gauss_c2;
+        double outlier_ratio_ = outlier_ratio;
+        double resolution_ = resolution;
+        // Initializes the guassian fitting parameters (eq. 6.8) [Magnusson 2009]
+        gauss_c1 = 10.0 * (1 - outlier_ratio_);
+        gauss_c2 = outlier_ratio_ / pow (resolution_, 3);
+        gauss_d3_ = -log (gauss_c2);
+        gauss_d1_ = -log ( gauss_c1 + gauss_c2 ) - gauss_d3_;
+        gauss_d2_ = -2 * log ((-log ( gauss_c1 * exp ( -0.5 ) + gauss_c2 ) - gauss_d3_) / gauss_d1_);
+    }
+
+    virtual void Evaluate(double,double * )const
+    {
+        
+    }
+
+    private:
+    double gauss_d1_,gauss_d2_,gauss_d3_;
+};
+
+
 class NDTCostFunctorNumerical
 {
     public:
@@ -24,18 +51,20 @@ class NDTCostFunctorNumerical
                             const Eigen::Vector3d & point):
                             mean_(mean),point_(point)
     {
-        Eigen::LLT<Eigen::Matrix3d> llt_of_covar(covar);
-        l_matrix_ = llt_of_covar.matrixL();
+        Eigen::LLT<Eigen::Matrix3d> llt_of_info(covar.inverse());
+        l_matrix_ = llt_of_info.matrixL();
         // LOG(INFO)<<"A  cost function is built"<<std::endl;
     }
     
-    bool operator()(const double* lie, double* resiudal)const
+    //  这里使用Sophus 的 SE3 四元数和位移进行表示
+    
+    bool operator()(const double* transform, double* resiudal)const
     {
-        Eigen::Map<Eigen::Matrix<double,3,1>> residual_map(resiudal);
-        Eigen::Map<const Eigen::Matrix<double,6,1>> lie_map(lie);
-        Sophus::SE3<double> se3_ = Sophus::SE3<double>::exp(lie_map);
-        residual_map = se3_*point_ -mean_;
-        residual_map = l_matrix_*residual_map;
+        Eigen::Map<const Sophus::SE3d> transform_map(transform);
+        Eigen::Map<Eigen::Matrix<double,3,1>> resiudal_map(resiudal);
+
+        resiudal_map = transform_map*point_ -mean_;
+        resiudal_map = l_matrix_*resiudal_map;
         
         return true;
     }
@@ -55,26 +84,23 @@ class SE3LocalParam :public ceres::LocalParameterization
                     const double* delta,
                     double* x_plus_delta) const 
     {
-        Eigen::Map<const Eigen::Matrix<double,6,1>> lie(x);
+        Eigen::Map<const Sophus::SE3d> lie(x);
         Eigen::Map<const Eigen::Matrix<double,6,1>> delta_lie(delta);
-        Eigen::Map<Eigen::Matrix<double,6,1>> new_lie(x_plus_delta);
-        Sophus::SE3<double> so3_rotation = Sophus::SE3<double>::exp(lie);
-        Sophus::SE3<double> so3_delta_rotation = Sophus::SE3<double>::exp(delta_lie);
-        
-        auto result = so3_delta_rotation*so3_rotation;
-        
-        new_lie = result.log();
+        Eigen::Map<Sophus::SE3d> new_lie(x_plus_delta);        
+        new_lie  = lie*Sophus::SE3d::exp(delta_lie);
 
         return true;
     }
 
     virtual bool ComputeJacobian(const double* x, double* jacobian) const
     {
-        ceres::MatrixRef(jacobian, 6, 6) = ceres::Matrix::Identity(6, 6);
+        Eigen::Map<const Sophus::SE3d> lie(x);
+        Eigen::Map<Eigen::Matrix<double,7,6>> jacobian_map(jacobian);
+        jacobian_map = lie.Dx_this_mul_exp_x_at_0();
         return true;
     }
 
-    virtual int GlobalSize() const { return 6; }
+    virtual int GlobalSize() const { return 7; }
     virtual int LocalSize() const { return 6; }
 };
 
@@ -86,8 +112,8 @@ class NDTCostFunctionWrapper
                            const Eigen::Vector3d & mean,
                            const Eigen::Vector3d & point )
     {
-        nolinear_equation_.reset(new ceres::CostFunctionToFunctor<3,6>(
-            new ceres::NumericDiffCostFunction<NDTCostFunctorNumerical,ceres::CENTRAL,3,6>(
+        nolinear_equation_.reset(new ceres::CostFunctionToFunctor<3,7>(
+            new ceres::NumericDiffCostFunction<NDTCostFunctorNumerical,ceres::CENTRAL,3,7>(
                 new NDTCostFunctorNumerical(covar,mean,point))));
     }
 
@@ -101,7 +127,7 @@ class NDTCostFunctionWrapper
 
 
     private:
-    std::unique_ptr<ceres::CostFunctionToFunctor<3,6>> nolinear_equation_;
+    std::unique_ptr<ceres::CostFunctionToFunctor<3,7>> nolinear_equation_;
 };
 
 class NDTProblem
@@ -123,7 +149,7 @@ class NDTProblem
 
     void buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix4f predict_pose);
 
-    void buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix<double,6,1> predict_pose) =delete;
+    void buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matrix<double,7,1> predict_pose) =delete;
 
     private:
     pcl::VoxelGridCovariance<pcl::PointXYZ> voxel_covar_;
@@ -159,7 +185,7 @@ void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matr
     
     ceres::Problem problem;
 
-    double lie [6] = {0,0,0,0,0,0};
+    double lie [7] = {0,0,0,1,0,0,0};
     
     for(auto & point:source_point_cloud_->points)
     {
@@ -172,7 +198,7 @@ void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matr
         for (auto leaf:k_leaves)
         {
             // LOG(INFO)<<leaf->getPointCount()<<std::endl;
-            ceres::CostFunction * cf = new ceres::AutoDiffCostFunction<NDTCostFunctionWrapper,3,6>(
+            ceres::CostFunction * cf = new ceres::AutoDiffCostFunction<NDTCostFunctionWrapper,3,7>(
                                         new NDTCostFunctionWrapper(leaf->cov_,leaf->mean_,point_v3));
             problem.AddResidualBlock(cf,new ceres::CauchyLoss(0.5),lie);
         }
@@ -184,7 +210,7 @@ void NDTProblem::buildProlemAndSolve(Eigen::Matrix4f & result, const Eigen::Matr
     ceres::Solver::Summary summary;
     options.linear_solver_type = ceres::DENSE_QR;
     options.minimizer_type = ceres::TRUST_REGION;
-    options.trust_region_strategy_type = ceres::LEVENBERG_MARQUARDT;
+    options.trust_region_strategy_type = ceres::DOGLEG;
 
     ceres::Solve(options,&problem,&summary);
 
