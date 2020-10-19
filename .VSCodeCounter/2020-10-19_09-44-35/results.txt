@@ -1,0 +1,109 @@
+Date : 2020-10-19 09:44:35
+Directory : /home/sunny/workspace_private/3rd-test-learning
+Total : 54 files,  3135 codes, 652 comments, 830 blanks, all 4617 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         51 |      3,087 |        616 |        808 |      4,511 |
+| XML      |          1 |         32 |         36 |         13 |         81 |
+| Markdown |          1 |         13 |          0 |          9 |         22 |
+| YAML     |          1 |          3 |          0 |          0 |          3 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                               | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                  |         54 |      3,135 |        652 |        830 |      4,617 |
+| 1. glog                                                                                                                            |          1 |         15 |         11 |         10 |         36 |
+| 1. glog/src                                                                                                                        |          1 |         15 |         11 |         10 |         36 |
+| 10. protobuf                                                                                                                       |          1 |          0 |          0 |          1 |          1 |
+| 11. tic toc                                                                                                                        |          2 |         73 |         17 |         17 |        107 |
+| 12. eigen                                                                                                                          |          1 |         14 |          7 |          4 |         25 |
+| 13. boost-serialization                                                                                                            |          4 |        223 |         49 |         62 |        334 |
+| 14. random-generator                                                                                                               |          1 |         18 |         12 |          7 |         37 |
+| 15. TBB                                                                                                                            |          1 |          0 |          8 |          1 |          9 |
+| 16. pcl                                                                                                                            |          3 |         87 |         82 |         39 |        208 |
+| 16. pcl/display                                                                                                                    |          1 |         20 |          8 |          6 |         34 |
+| 16. pcl/filter                                                                                                                     |          1 |         20 |         11 |          5 |         36 |
+| 16. pcl/registration                                                                                                               |          1 |         47 |         63 |         28 |        138 |
+| 17. openmp                                                                                                                         |          2 |         16 |         15 |          2 |         33 |
+| 19. sensor_funsion_hw                                                                                                              |          5 |        535 |         61 |        173 |        769 |
+| 19. sensor_funsion_hw/hw1_ceres_ndt                                                                                                |          5 |        535 |         61 |        173 |        769 |
+| 2. rosbag-convert                                                                                                                  |          1 |         69 |         12 |         18 |         99 |
+| 4. sophus                                                                                                                          |          1 |         24 |         12 |         17 |         53 |
+| 5. gtest                                                                                                                           |          4 |        123 |         35 |         50 |        208 |
+| 6. yaml                                                                                                                            |          2 |         10 |          7 |          7 |         24 |
+| 7. eigen                                                                                                                           |          2 |         26 |         18 |         11 |         55 |
+| 8. ceres                                                                                                                           |         14 |        849 |        193 |        219 |      1,261 |
+| 8. ceres/ceres_pnp                                                                                                                 |          4 |        241 |         23 |         83 |        347 |
+| 9. ros-melodic                                                                                                                     |          9 |      1,053 |        113 |        192 |      1,358 |
+| 9. ros-melodic/src                                                                                                                 |          9 |      1,053 |        113 |        192 |      1,358 |
+| 9. ros-melodic/src/ros-melodic-test                                                                                                |          9 |      1,053 |        113 |        192 |      1,358 |
+| 9. ros-melodic/src/ros-melodic-test/include                                                                                        |          1 |         26 |          9 |          3 |         38 |
+| 9. ros-melodic/src/ros-melodic-test/include/ros-melodic-test                                                                       |          1 |         26 |          9 |          3 |         38 |
+| 9. ros-melodic/src/ros-melodic-test/src                                                                                            |          7 |        995 |         68 |        176 |      1,239 |
++------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                           | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/sunny/workspace_private/3rd-test-learning/1. glog/src/glog-test.cpp                                                          | C++      |         15 |         11 |         10 |         36 |
+| /home/sunny/workspace_private/3rd-test-learning/10. protobuf/protobuf-test.cpp                                                     | C++      |          0 |          0 |          1 |          1 |
+| /home/sunny/workspace_private/3rd-test-learning/11. tic toc/tic_toc-test.cpp                                                       | C++      |         19 |          9 |          3 |         31 |
+| /home/sunny/workspace_private/3rd-test-learning/11. tic toc/tic_toc.hpp                                                            | C++      |         54 |          8 |         14 |         76 |
+| /home/sunny/workspace_private/3rd-test-learning/12. eigen/map-test.cpp                                                             | C++      |         14 |          7 |          4 |         25 |
+| /home/sunny/workspace_private/3rd-test-learning/13. boost-serialization/derived-base-serialization.cpp                             | C++      |         63 |         14 |         15 |         92 |
+| /home/sunny/workspace_private/3rd-test-learning/13. boost-serialization/simple-case-no-invasive.cpp                                | C++      |         47 |          9 |         12 |         68 |
+| /home/sunny/workspace_private/3rd-test-learning/13. boost-serialization/simple-case-test.cpp                                       | C++      |         44 |         14 |         14 |         72 |
+| /home/sunny/workspace_private/3rd-test-learning/13. boost-serialization/stl-member-object.cpp                                      | C++      |         69 |         12 |         21 |        102 |
+| /home/sunny/workspace_private/3rd-test-learning/14. random-generator/random_generator.cpp                                          | C++      |         18 |         12 |          7 |         37 |
+| /home/sunny/workspace_private/3rd-test-learning/15. TBB/tbb_helloworld.cpp                                                         | C++      |          0 |          8 |          1 |          9 |
+| /home/sunny/workspace_private/3rd-test-learning/16. pcl/display/display.hpp                                                        | C++      |         20 |          8 |          6 |         34 |
+| /home/sunny/workspace_private/3rd-test-learning/16. pcl/filter/filter.hpp                                                          | C++      |         20 |         11 |          5 |         36 |
+| /home/sunny/workspace_private/3rd-test-learning/16. pcl/registration/icp_test.cpp                                                  | C++      |         47 |         63 |         28 |        138 |
+| /home/sunny/workspace_private/3rd-test-learning/17. openmp/omp_exercise1.cpp                                                       | C++      |         16 |          8 |          1 |         25 |
+| /home/sunny/workspace_private/3rd-test-learning/17. openmp/omp_exercise2.cpp                                                       | C++      |          0 |          7 |          1 |          8 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt.cpp                                  | C++      |         53 |         16 |         26 |         95 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt_se3(likely to be wrong).h            | C++      |        143 |         11 |         43 |        197 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt_se3.h                                | C++      |        161 |         14 |         48 |        223 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt_so3.h                                | C++      |        158 |          9 |         51 |        218 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/filter.hpp                                     | C++      |         20 |         11 |          5 |         36 |
+| /home/sunny/workspace_private/3rd-test-learning/2. rosbag-convert/rosbag_convert.cpp                                               | C++      |         69 |         12 |         18 |         99 |
+| /home/sunny/workspace_private/3rd-test-learning/4. sophus/sophus_test.cpp                                                          | C++      |         24 |         12 |         17 |         53 |
+| /home/sunny/workspace_private/3rd-test-learning/5. gtest/gtest_1.cpp                                                               | C++      |         15 |          8 |          6 |         29 |
+| /home/sunny/workspace_private/3rd-test-learning/5. gtest/gtest_2.cpp                                                               | C++      |         18 |          8 |         13 |         39 |
+| /home/sunny/workspace_private/3rd-test-learning/5. gtest/gtest_3.cpp                                                               | C++      |         45 |          9 |         12 |         66 |
+| /home/sunny/workspace_private/3rd-test-learning/5. gtest/gtest_test_f.cpp                                                          | C++      |         45 |         10 |         19 |         74 |
+| /home/sunny/workspace_private/3rd-test-learning/6. yaml/test-config.yaml                                                           | YAML     |          3 |          0 |          0 |          3 |
+| /home/sunny/workspace_private/3rd-test-learning/6. yaml/yaml-test.cpp                                                              | C++      |          7 |          7 |          7 |         21 |
+| /home/sunny/workspace_private/3rd-test-learning/7. eigen/eigen-test-array-vector.cpp                                               | C++      |         10 |         10 |          6 |         26 |
+| /home/sunny/workspace_private/3rd-test-learning/7. eigen/eigen_llt.cpp                                                             | C++      |         16 |          8 |          5 |         29 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/2nd-basic-test.cpp                                                        | C++      |         66 |         12 |         21 |         99 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/3rd-basic-test.cpp                                                        | C++      |        107 |         15 |         13 |        135 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/4th-basic-test.cpp                                                        | C++      |        127 |         36 |         21 |        184 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/5th-how-to-write-function-usable-in-ceres.cpp                             | C++      |         58 |         18 |         18 |         94 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/6th-a-value-return-function-for-autodiff.cpp                              | C++      |         58 |         23 |         17 |         98 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/7th-value-jacobian-return-function-for-autodiff.cpp                       | C++      |         55 |         13 |         16 |         84 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/8th-numericalDiff-example.cpp                                             | C++      |          0 |          7 |          1 |          8 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/9th-analytic-derivation.cpp                                               | C++      |         38 |         16 |         11 |         65 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/basic-test.cpp                                                            | C++      |         29 |         22 |         16 |         67 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/ceres_pnp/PNPSimulation.cpp                                               | C++      |        138 |         16 |         46 |        200 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/ceres_pnp/PNPSimulation.h                                                 | C++      |         75 |          3 |         21 |         99 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/ceres_pnp/README.md                                                       | Markdown |         13 |          0 |          9 |         22 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/ceres_pnp/main.cpp                                                        | C++      |         15 |          4 |          7 |         26 |
+| /home/sunny/workspace_private/3rd-test-learning/8. ceres/data.hpp                                                                  | C++      |         70 |          8 |          2 |         80 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/include/ros-melodic-test/test-use-function.hpp | C++      |         26 |          9 |          3 |         38 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/package.xml                                    | XML      |         32 |         36 |         13 |         81 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.1 set-polygen-in-rviz.cpp                | C++      |         45 |          9 |          8 |         62 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.2 set-logging-level.cpp                  | C++      |         13 |          8 |          6 |         27 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.3 visualizetion_msgs-test.cpp            | C++      |        234 |         11 |         49 |        294 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.4 multiple-nodehandle-test.cpp           | C++      |          0 |          0 |          1 |          1 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.5.1 multiple-spinner-test.cpp            | C++      |         15 |         12 |          8 |         35 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.5.2 spinner-with-callbackqueue.cpp       | C++      |         29 |         18 |         15 |         62 |
+| /home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/viz-template.cpp                           | C++      |        659 |         10 |         89 |        758 |
+| Total                                                                                                                              |          |      3,135 |        652 |        830 |      4,617 |
++------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
