@@ -20,6 +20,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 add_executable(hello_world omp_exercise1.cpp)
 target_link_libraries(hello_world PUBLIC OpenMP::OpenMP_CXX)
 
+add_executable(integratePi omp_exercise2.cpp)
+target_link_libraries(integratePi PUBLIC OpenMP::OpenMP_CXX)
+
+add_executable(critical_and_atomic omp_exercise3.cpp)
+target_link_libraries(critical_and_atomic PUBLIC OpenMP::OpenMP_CXX)
+
+add_executable(parallel_for omp_exercise4.cpp)
+target_link_libraries(parallel_for PUBLIC OpenMP::OpenMP_CXX)
 
 ############## 对于cmake 3.9 + 有了更好的处理方法
 

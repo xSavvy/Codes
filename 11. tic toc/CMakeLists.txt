@@ -8,3 +8,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
 
 
 add_executable(tic-toc-test tic_toc-test.cpp)
+add_executable(tic_toc_duration tic_toc_duration.cpp)

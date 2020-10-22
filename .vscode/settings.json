@@ -66,6 +66,10 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "*.ipp": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "filesystem": "cpp",
+        "regex": "cpp",
+        "future": "cpp",
+        "shared_mutex": "cpp"
     }
 }
