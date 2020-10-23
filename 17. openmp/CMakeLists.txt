@@ -29,6 +29,11 @@ target_link_libraries(critical_and_atomic PUBLIC OpenMP::OpenMP_CXX)
 add_executable(parallel_for omp_exercise4.cpp)
 target_link_libraries(parallel_for PUBLIC OpenMP::OpenMP_CXX)
 
+add_executable(share_and_private omp_exercise4_private_shared.cpp)
+target_link_libraries(share_and_private PUBLIC OpenMP::OpenMP_CXX)
+
+add_executable(barrier_nowait omp_exercise5.cpp)
+target_link_libraries(barrier_nowait PUBLIC OpenMP::OpenMP_CXX)
 ############## 对于cmake 3.9 + 有了更好的处理方法
 
 # cmake_minimum_required(VERSION 3.9 FATAL_ERROR)

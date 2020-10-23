@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-22 16:43:30
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-22 17:07:05
+ * @LastEditTime: 2020-10-23 09:34:56
  * @FilePath: /3rd-test-learning/17. openmp/omp_exercise3.cpp
  * @Description: OMP exercise 3 主要是 omp critical 和 omp atomic的使用
  *               
@@ -17,8 +17,9 @@
  *               2. 慢
  *               
  *               atomic：
- *               1. 只能用于一些特殊操作
+ *               1. 只能用于一些特殊操作 一个语句
  *               2. 快
+ *               3. 只支持 simple type (scalar type)
  * 
  */
 #include "omp.h"

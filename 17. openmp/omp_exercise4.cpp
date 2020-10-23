@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-22 17:09:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-22 18:10:26
+ * @LastEditTime: 2020-10-23 13:51:55
  * @FilePath: /3rd-test-learning/17. openmp/omp_exercise4.cpp
  * @Description:  用于学习如何使用OMP 进行 worksharing 而不是SPMD(Single Program Multiple Data)
  *         
@@ -10,6 +10,26 @@
  *                #pragma omp parallel for
  *                #pragma omp for
  *                #pragma omp parallel for reduction(+:var) 
+ *                
+ *                通过阅读内容：http://ppc.cs.aalto.fi/ch3/nowait/
+ *                一定程度上，打开迷思 
+ *                #pragma omp parallel 的代码块内部 
+ *                再次使用 #pragma for 内部的代码用所有的线程执行一次的意思
+ *                而不是 所有的线程都 执行一次for 内的代码
+ *                ie. 
+ *                omp_set_num_threads(4)
+ *                #pragma omp parallel
+ *                {for(int i =0; i<100;i++){cout<< i <<endl;}}  0-99 打印4次
+ *                
+ *                #pragma omp parallel
+ *                {
+ *                   #pragma omp for
+ *                   for(int i =0; i<100;i++){cout<< i <<endl;} 4个线程集中打印 0-99 一次
+ *                }               
+ *                这样的话 nowait 的问题也解开了
+ *                
+ *                // omp parallel for reduction （+ - ×） 计算操作比 atomic 进一步缩小
+                    经过测试 下面这个 reduction 比上面的方法还是要快很多
  */
 #include "omp.h"
 #include <iostream>
