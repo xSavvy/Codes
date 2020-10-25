@@ -29,3 +29,5 @@
 13. google code standard C++
 14. 43周 code self-review
 15. friend 函数和类的声明和使用方式i
+16. C++ 容器wrapper 防止进行错误的访问
+17. stringstream .str() 之后 再次.str() 之前需要使用.clear() 
