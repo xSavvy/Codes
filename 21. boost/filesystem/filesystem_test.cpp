@@ -1,9 +1,11 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-25 17:15:21
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-25 17:16:55
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-10-26 15:08:47
  * @Description:  学习如何使用filesystem 进行文件夹的操作
+ * 
+ *                get_filenames 主要用于统计路径下的文件数 和文件名
  */
 
 #include <boost/filesystem.hpp> 

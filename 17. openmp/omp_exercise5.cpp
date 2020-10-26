@@ -2,14 +2,16 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-23 09:23:05
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-23 13:52:20
+ * @LastEditTime: 2020-10-26 14:39:42
  * @FilePath: /3rd-test-learning/17. openmp/omp_exercise5.cpp
  * @Description: 用于测试 barrier 和 nowait
  * 
  *               API 测试
  *               #pragma omp barrier 等到所有线程执行到这里，再往下进行
  *               #pragma omp for nowait 打破 omp for 的implicit barrier 让代码继续向后执行
- * 
+ *               
+ *               #pragma omp parallel for 默认barrier  不等待的话需要自行添加nowait
+ *               #pragma critical atomic 没有默认 barrier 也就是说就是nowait 的方式进行执行
  */
 
 #include "omp.h"

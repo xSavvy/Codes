@@ -2,12 +2,15 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-28 15:47:14
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-28 16:37:35
+ * @LastEditTime: 2020-10-26 10:05:14
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.5.2 spinner-with-callbackqueue.cpp
  * @Description:   用于测试CallBackQueue的使用 来让回调分NodeHandle 来进行 而不是都挤在一个回调队列内
  *                 主要内容： 1. 直接使用 callbackqueue 来进行回调函数处理
  *                          2. 使用spinner 来对callbackqueue 内的回调函数进行处理
- *                           3. 使用AynscSpinner     来对callbackqueue 内的回调函数进行处理            
+ *                          3. 使用AynscSpinner     来对callbackqueue 内的回调函数进行处理    
+ * 
+ *                 MultiThreadedSpinner 和 AynscSpinner 的差别在于
+ *                 AynscSpinner 需要手动开始        
  */
 
 #include "ros/ros.h"
@@ -51,7 +54,7 @@ int main(int argc, char** argv)
 
     // 使用AsyncSpinner 来对回调函数进行处理
     ros::AsyncSpinner asyapinner(4,&cbq1);
-    asyapinner.start(); // 开心进行回调
+    asyapinner.start(); // 开始进行回调
 
     ros::waitForShutdown(); //不加上的话就只会 spin 一次
 

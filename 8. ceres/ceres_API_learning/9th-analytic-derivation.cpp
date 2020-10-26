@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-06 21:15:50
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-09 07:47:50
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-10-26 15:56:13
  * @Description: 使用 Analytic Diff 来进行代码编写，这个地方也就是补上了 7th的例子
  */
 
@@ -24,10 +24,10 @@ class Rat43Analytic: public ceres::SizedCostFunction<1,4>
                           double * residuals,
                           double **jacobians)const
     {
-        const double b1 = parameters[0][0];
-        const double b2 = parameters[0][1];
-        const double b3 = parameters[0][2];
-        const double b4 = parameters[0][3];
+        const double b1 = params[0][0];
+        const double b2 = params[0][1];
+        const double b3 = params[0][2];
+        const double b4 = params[0][3];
 
         const double t1 = exp(b2 -  b3 * x_);
         const double t2 = 1 + t1;

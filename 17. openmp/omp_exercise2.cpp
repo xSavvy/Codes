@@ -2,13 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-17 10:31:52
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-22 16:34:07
+ * @LastEditTime: 2020-10-26 14:46:48
  * @Description: 使用 omp 对积分进行计算
  * 
  *               API 使用：
- *               omp_set_num_threads()
- *               omp_get_num_threads()
- *               omp_get_thread_num()
+ *               omp_set_num_threads() // 设置omp 区域内线程总数    
+ *               omp_get_num_threads() // 得到omp 区域内线程总数
+ *               omp_get_thread_num() // 得到当前线程编号
  */
 
 #include "omp.h"

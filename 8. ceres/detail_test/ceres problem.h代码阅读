@@ -1,0 +1,29 @@
+重点关注
+    problem.AddResidualBlock(CostFuction,LossFunction,var...)
+            |__ 使用problem_impl->AddResidualBlock(CostFuction,LossFunction,var...)
+                |__ 使用vector <double * > 收集var... double 指针
+                |__ 调用AddResidualBlock(CostFuction,LossFunction,vector<double *>)
+                    |__ 产生对应的ParameterBlock 和 ResiudalBlock
+    SizedCostFunction 
+            |__ 在ctor 的时候确定reidual的维数 和 params 每个块的大小 并把大小压入vector<int>
+    
+    ResiudalBlock
+            |__ Evaluate(bool apply_loss_function, 函数主体
+                        double* cost,
+                        double* residuals,
+                        double** jacobians,       每一个jacobians[i] 都是用一段连续内存对jacobian 进行存储
+                        double* scratch)          目前sratch 未知 
+                                                  感觉就是只是一段空间
+                |__ 使用FixedArray 对 parameters 和 jacobians 进行包装
+                    这也是为什么会出现，double ** 的原因
+                    所以实际上ParameterBlock 和 JacobianBlock 的数据存储都是在一段连续的内存上的 (真相大白)
+                |__ cost_function_->Evaluate(const double ** params,double * residaul, double ** jacobians)
+                |__ LocalParameterization 存在的时候对jacobians 进行更新
+                    在这个时候global_jacobians 和 local_jacobian 之间的关系就出现了
+                    global_jacobian * local_jacobian = 最终jacobian
+                    这里相乘的顺序也是确定的了： 是 global_jacobian * local_jacobian
+                |__ 如果有LossFunction 对 最终jacobian 和 residual 进行纠正
+                    使用了Corrector 来进行纠正 这里就使用上了 double * rho
+                
+    FixedArray<T,int default_size>
+            |__ ctor() 内进进行内存分配在 InnerContainer * 指向的一段连续内存中
