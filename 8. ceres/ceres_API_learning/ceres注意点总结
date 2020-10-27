@@ -23,7 +23,7 @@ struct Functor 编写部分 问题主要是在operator() 上面
 
 
 
-LocalParameterization ComputeJacobian() 的意思？
+LocalParameterization ComputeJacobian() 的意思  寻根完成
     这里ComputeJacobian 什么时候使用还不明确
     但是对于Sophus 已经有对于quternion 的表示了
     +
