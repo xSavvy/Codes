@@ -44,7 +44,7 @@ int main()
 
     double se3_array [] = {0,0,0,1,10,10,10};
     Eigen::Map<Sophus::SE3d> se3_map(se3_array);
-
+    
     cout<<"the SE3 matrix is "<<endl
         << se3_map.matrix3x4()<<endl; 
     

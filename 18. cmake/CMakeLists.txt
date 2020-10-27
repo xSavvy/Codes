@@ -1,23 +1,47 @@
-project(openmp_test)
-############# 对于cmake 3.9 以下的版本只能使用这种方式
-cmake_minimum_required(VERSION 3.5)
-if(NOT TARGET OpenMP::OpenMP_CXX)
-    find_package(Threads REQUIRED)
-    add_library(OpenMP::OpenMP_CXX IMPORTED INTERFACE)
-    set_property(TARGET OpenMP::OpenMP_CXX
-                 PROPERTY INTERFACE_COMPILE_OPTIONS ${OpenMP_CXX_FLAGS})
-    # Only works if the same flag is passed to the linker; use CMake 3.9+ otherwise (Intel, AppleClang)
-    set_property(TARGET OpenMP::OpenMP_CXX
-                 PROPERTY INTERFACE_LINK_LIBRARIES ${OpenMP_CXX_FLAGS} Threads::Threads)
+# 这个CMakeLists.txt 文件主要是为了加深对于cmake 的使用
+# 并且提供一个 之后可以直接复制使用的CMakeLists文件
 
-endif()
-target_link_libraries(MyTarget PUBLIC OpenMP::OpenMP_CXX)
+cmake_minimum_required( VERSION 3.5)
+project(cmake_test)
+
+# 设置一个包括所有三方库的库
+set(ALL_TARGET_LIBRARIES "")
+
+# include cmake 文件进行第三方库的配置
+# 内部使用 list 进行文件的添加和删除
+include(cmake/PCL.cmake)
+include(cmake/global_defination.cmake)
+
+# 另外一种寻找库的方法
+# FIND_LIBRARY(GLOG_LIB
+#         NAMES glog glog.so libglog.so
+#         PATH
+#         /usr/lib/x86_64-linux-gnu
+#         /opt/local/lib
+#         /usr/lib
+#         /usr/local/lib
+#         )
+
+# 给自身添加include路径
+include_directories(include)
+
+# GLOB_RECURSE 进行源文件搜索
+file(GLOB_RECURSE ALL_SRCS "*.cpp")
+file(GLOB_RECURSE NODE_SRCS "main.cpp")
 
 
-############## 对于cmake 3.9 + 有了更好的处理方法
 
-# cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-# find_package(OpenMP)
-# if(OpenMP_CXX_FOUND)
-#     target_link_libraries(MyTarget PUBLIC OpenMP::OpenMP_CXX)
-# endif()
+# 使用list(REMOVE_ITEM )去除不需要的源文件
+list(REMOVE_ITEM ALL_SRCS ${NODE_SRCS})
+# list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
+
+# 展示CMAKE 的内置路径
+
+message(STATUS " 1. cmake_binary_dir: " ${CMAKE_BINARY_DIR})
+message(STATUS " 2. cmake_source_dir: " ${CMAKE_SOURCE_DIR})
+message(STATUS " 3. cmake_project_binary_dir: " ${PROJECT_BINARY_DIR})
+message(STATUS " 4. cmake_project_source_dir: " ${PROJECT_SOURCE_DIR})
+
+add_executable(main_test src/main.cpp)
+target_link_libraries(main_test ${ALL_TARGET_LIBRARIES})
+

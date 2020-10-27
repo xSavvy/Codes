@@ -1,10 +1,11 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-17 21:41:02
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-18 17:53:50
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-10-27 09:33:32
  * @Description:  基于ceres 的ndt 算法
  *                基于 translation 和 rotation的方式好像不太行
+ *                so3 + r3 的版本有问题 需要进行修改
  */
 #include <iostream>
 #include <vector>
@@ -75,7 +76,7 @@ class SO3LocalParam :public ceres::LocalParameterization
         return true;
     }
 
-    virtual int GlobalSize() const { return 3; }
+    virtual int GlobalSize() const { return 4; }
     virtual int LocalSize() const { return 3; }
 };
 

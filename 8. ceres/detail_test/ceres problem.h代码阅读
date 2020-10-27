@@ -1,10 +1,51 @@
 重点关注
 
-    problem.AddResidualBlock(CostFuction,LossFunction,var...)
-            |__ 使用problem_impl->AddResidualBlock(CostFuction,LossFunction,var...)
-                |__ 使用vector <double * > 收集var... double 指针
-                |__ 调用AddResidualBlock(CostFuction,LossFunction,vector<double *>)
-                    |__ 产生对应的ParameterBlock 和 ResiudalBlock
+    problem.h 正式阅读版
+            |__ 重要member 记述
+                |__ problem_impl 算法实现类
+                |__ EvaluateOptions
+                    |__ parameters_block
+                    |__ std::vector<ResidualBlockId> residual_blocks; 
+                        注 这里的ReisudalBlockId 也就是一个ResidualBlock *
+                |__ friendClass
+                    |__ Solver
+                    |__ Covariance
+            |__ AddResidualBlock(CostFuction,LossFunction,var...)
+                最终都是使用problem_impl->AddResidualBlock(CostFuction,LossFunction,vector<double *>)
+                |__ parameterBlockNumCheck()
+                |__ duplicateParameterBlockCheck()  检查 vector<double*> 里面有没有重复的内存区域
+                |__ for_each parameter_block:parameters_blocks
+                    |__ InternalAddParameterBlock(double* parameter_block,size) 
+                        检查 parameter_block_map<double * ,ParameterBlock*> 如果没有重复的就创建存在于program_,返回ParameterBlock*，
+                        有重复的就check size之后返回已存在的parameter_block
+                |__ createResidualBlock(vector<ParameterBlock *>,costfunction )
+                    并存入program_
+                |__ CostFuctionRefCount++,LossFunctionRefCount++
+            |__ AddParameterBlock(double*,size,LocalParameterization)
+                |__ 调用 problem_impl->AddParameterBlock(values, size, local_parameterization)
+                    |__ InternalAddParameterBlock(double* parameter_block,size) 
+                    |__ problem->setLocalParameterization()
+                现在看起来这个有没有好像没啥关系，只是减少部分函数调用的消耗
+            |__ SetParameterBlockConstant(double* values)   设置ParameterBlock 在优化的时候是否更新
+            |__ SetParameterBlockVariable(double* values)
+            |__ ... 之后都是根据double * 来进行搜索，获得getNum 之类的函数
+            |__ Evaluate(const EvaluateOptions& options,
+                        double* cost,
+                        std::vector<double>* residuals,  不知道为什么不用double* 了 但是vector内部内存连续，倒也无所谓了
+                        std::vector<double>* gradient,
+                        CRSMatrix* jacobian)             评价主体函数
+                内部继续调用problem_impl->Evaluate(...)来执行
+                |__ initialize parameter_blocks 
+                    如果没有提供options，就使用 program_ 的underlying
+                |__ unqiuelyCollectAllVariableParameter() 唯一地得到所有ParameterBlock
+                |__ useProgramEvaluatorToComputeCost/Residual/Gradient/JacobianMatrix
+                    这里的计算就是调用 ResidualBlock->Evaluate(...) 进行计算
+
+                    注： ProgramEvaluator 是一切优化的核心组件，负责计算各种Cost/Residual/Gradient/JacobianMatrix，
+                                                            负责 LocalParameterization 的Plus
+
+==================================================================================================================
+
     program.h
             |__ Plus() 调用LocalParameterization 进行使用，并且内部根据 lower bound 和upper bound 对变量进行限制
     SizedCostFunction 
@@ -20,7 +61,12 @@
                 |__ 使用FixedArray 对 parameters 和 jacobians 进行包装
                     这也是为什么会出现，double ** 的原因
                     所以实际上ParameterBlock 和 JacobianBlock 的数据存储都是在一段连续的内存上的 (真相大白)
+                    
                 |__ cost_function_->Evaluate(const double ** params,double * residaul, double ** jacobians)
+
+                    这里就是对应上了CostFunction 的Evalutate double ** jacobians 来自FixedArray 内存连续
+                                                          double ** params    来自FixedArray 内存连续
+                                                          
                 |__ LocalParameterization 存在的时候对jacobians 进行更新 
                     在这个时候global_jacobians 和 local_jacobian 之间的关系就出现了
                     global_jacobian * local_jacobian = 最终jacobian
@@ -47,7 +93,7 @@
     LocalParameterization
             |__ ComputeJacobian 在计算代码的时候进行链接
                 真正在计算的时候使用的是 LocalSize
-            |__ 但是使用
+            |__ Plus 的位置也已经被找到了
     之后的主要目标是对于 solve 的阅读
     主要是是对于四元数流程求解的学习
     

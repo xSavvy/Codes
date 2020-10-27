@@ -1,9 +1,9 @@
-1. cmake
+1. cmake   完成了 install 之前的部分
    |__ lidar_localization
    |__ PNPSimulation
-2. openmp
+2. openmp 最基础的部分 完成
    |__ 使用教程
-3. ndt_omp
+3. ndt_omp 
    |__ 阅读
 4. pcl
    |__ feature 
@@ -16,18 +16,21 @@
    |__ 
 7. global variable multiple defintion
    BugFreePlam
-8. 多级指针
+8. 多级指针   完成
 
 9. yaml 无法使用的问题   完成
-10. LocalParameterization ComputeJacobian() 的意思 完成
+10. LocalParameterization  完成 并且阅读了一大部分的problem.h problem_impl.h problem.cc
     这里ComputeJacobian 什么时候使用还不明确
     但是对于Sophus 已经有对于quternion 的表示了
     经过查阅还是和 AutoDiff 联合进行使用当中进行使用
     所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
 11. pcl ndt 的深度阅读
 12. 不使用 inline 的情况下，如何定义Common Function？ 能够防止 multiple define
-13. google code standard C++
-14. 43周 code self-review
-15. friend 函数和类的声明和使用方式i
-16. C++ 容器wrapper 防止进行错误的访问
+13. google code standard C++ 
+14. 43周 code self-review 
+15. friend 函数和类的声明和使用方式 暂时不进行
+16. C++ 容器wrapper 防止进行错误的访问  暂时不进行
+    算法内部可以通过glog::CHECK 来保证正确性
+    所以就先不进行添加了
 17. stringstream .str() 之后 再次.str() 之前需要使用.clear() 
+18. TBB
