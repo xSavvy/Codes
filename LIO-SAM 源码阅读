@@ -1,2 +1,102 @@
+utility.h 实用类 其他类都是继承这个 有点意思 的确是节省代码
+    |__ ParamServer 负责各种参数？
+        |__ 重要memeber var 记述
+            |__ ext 系列             这个估计是到imu到 lidar 的坐标转换
+                |__ extRot
+                |__ extQRPY
+        |__ ctor() 各种参数的初始化
+        |__ imuConverter() imu_in田ext_imu ext_imu 未知
+                           感觉ext_Rot = R_imu_lidar  这个是绝对没有错的
+                              ext_RPY = R_lidar_imu  存疑 按下不表
+        |__ publishCloud()
+        |__ imuAngular2rosAngular() 内容应该是 rosAngular2imuAngular 这里存疑
+        |__ imuAccel2rosAccel()     同样感觉方向有问题
+        |__ imuRPY2rosRPY()         同样的问题
+        |__ pointDistance()         单点求模，两天求距离
+
+
 imageProjection.cpp
-    |__ 
+    |__ PointXYZIRT 对应Velodyne 的数据类 里面有一些 macro 的有趣使用
+        |__ PCL_ADD_POINT4D                  使用macro 包含了一个union 和一些转换函数 感觉是在适配Eigen
+            |__ PCL_ADD_UNION_POINT4D        一个union 
+            |__ PCL_ADD_EIGEN_MAPS_POINT4D   返回的都是Eigen::Map 用pcl包装了一下
+        |__ uint16_t ring
+        |__ time        
+        |__ EIGEN_MAKE_ALIGNED_OPERATOR_NEW  不知道是干什么的
+    |__ POINT_CLOUD_REGISTER_POINT_STRUCT    不知道是啥
+    |__ ImageProjection
+        |__ 重要member var 记述
+            |__ subImu/Odom/LaserCloud(raw_point_cloud)   Odom是轮子而不是LidarOdom
+            |__ pubExtractedCloud/LaserCloudInfo
+            |__ rangeMat 深度图     还是row col 进行保存
+            |__ fullCloud          一维数组保存XYZI 点云数据
+            |__ imuTime/imuRotX/Y/Z imu数据队列 
+                                    imuTime 保存的是两个imuInfo 之间的时间差
+                                    imuRotX/Y/Z 是递推角度 并且第一个值为0 
+                                    resetParameter 之后会进行全部置零
+                                    存储的是imu 在一个Scan时间内的递推
+                                    所以是一个相对的量而不是绝对量
+            |__ timeScanCur      Scan 开始时间
+            |__ timeScanEnd      Scan 结束时间
+            |__ cloudinfo                        和LeGo-LOAM 一样保存了大量的信息
+                |__ imuRoll/Pitch/YawInit        保存了每一个Scan 起始imuInfo 的 RPY
+                |__ initialGuessX/Y/Z/R/P/Y      均来自每一个Scan 起始Odom
+                |__ startRingIndex
+                |__ endRingIndex
+                |__ pointColInd
+                |__ pointRange
+            |__ extractedCloud   取出掉无效点之后的PointCloud
+            |__ increX/Y/Z       每个Scan 对应的OdomStart和OdomEnd 之间的位置差
+        |__ ctor()
+            |__ subAndPub()
+            |__ allocateMemory()
+            |__ resetParameters()
+            |__ setVerbosityLevel pcl 相关 不知道是干啥的
+        |__ imuHandler()
+            |__ imuConverter()
+            |__ saveInQueue()
+        |__ odometryHandler()
+        |__ cloudHandler()                      函数主体
+            |__ cachePointloud() 缓存数据 + 数据check
+            |__ deskewInfo()     
+                |__ makeImuInfoAlignWithScan()  就是要让imu数据时间戳能够包裹Scan的持续时间
+                |__ imuDeskewInfo()
+                    |__ discardUnusefulImuInfo()  丢弃过早imu数据
+                    |__ imuDeadReckon()           做IMUqueue 更新和递推
+                                                  -> ImuRotX/Y/Z
+                |__ odomDeskewInfo()              ->cloudInfo::initialGuessX/Y/Z/R/P/Y
+                    |__ discardUnusefulOdomInfo()
+                    |__ initCloudInfoForCorrespondingScan()
+                    |__ IfEndOdomEnough()
+                    |__ calculateOdomIncreX/Y/Z() ->increX/Y/Z
+            |__ projectPointCloud()
+                |__ deskewLidarPoint()          这个还是把激光点转移到了Scan第一点时插值的所产生的坐标系下
+                    |__ findRotation()          imuRotX/Y/Z 插值
+                    |__ findPosition()          可选不用odom 进行递推 如果是慢速可以当作匀速运动进行插值
+                |__ saveRangeMatAndFullCloud()  -> rangeMat -> fullCloud 
+            |__ cloudExtraction()
+            |__ publishClouds()                 发送点云和cloudinfo
+            |__ resetParameters()               重置imuRotXYZ 等参数设置
+
+imuPreintegration.cpp
+    |__ TransformFusion           看名字是一个融合模块？
+        |__ 输入
+            |__ LaserOdom
+            |__ Odom              感觉就是轮子的数据
+        |__ 输出
+            |__ ImuOdome
+            |__ imuPath
+        |__ 重要member var记述
+            |__ lidarOdomAffine   从lidarHandler 那里得到的Odom 的转换值
+            |__ lidarOdomTime     对应LidarOdomAffine 的时间戳
+        |__ ctor()                基本的各种初始化和sub、pub
+        |__ lidarOdometryHandler()一个简单的类型转换
+        |__ imuOdometryHandler()
+            |__ saveInQueue()
+            |__ discardUnusefulOdomInfo()
+            |__ predictLaserOdomWithOdomData()
+            |__ pubPredictLaserOdom()
+            |__ pubtf()            以下两项没有仔细看
+            |__ pubIMUpath()
+    |__ IMUPreintegration        一看名字就是IMU预积分模块
+        |__ 
