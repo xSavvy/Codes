@@ -7,7 +7,8 @@ utility.h 实用类 其他类都是继承这个 有点意思 的确是节省代�
         |__ ctor() 各种参数的初始化
         |__ imuConverter() imu_in田ext_imu ext_imu 未知
                            感觉ext_Rot = R_imu_lidar  这个是绝对没有错的
-                              ext_RPY = R_lidar_imu  存疑 按下不表
+                              ext_RPY = R_lidar_imu  存疑 按下不表 但是好像没有使用 
+                                                     (imageProjection)
         |__ publishCloud()
         |__ imuAngular2rosAngular() 内容应该是 rosAngular2imuAngular 这里存疑
         |__ imuAccel2rosAccel()     同样感觉方向有问题
@@ -32,10 +33,13 @@ imageProjection.cpp
             |__ fullCloud          一维数组保存XYZI 点云数据
             |__ imuTime/imuRotX/Y/Z imu数据队列 
                                     imuTime 保存的是两个imuInfo 之间的时间差
+                                    
                                     imuRotX/Y/Z 是递推角度 并且第一个值为0 
                                     resetParameter 之后会进行全部置零
                                     存储的是imu 在一个Scan时间内的递推
                                     所以是一个相对的量而不是绝对量
+                                    imuRotX/Y/Z 是很正确的激光在世界坐标下的表示
+
             |__ timeScanCur      Scan 开始时间
             |__ timeScanEnd      Scan 结束时间
             |__ cloudinfo                        和LeGo-LOAM 一样保存了大量的信息
@@ -45,7 +49,10 @@ imageProjection.cpp
                 |__ endRingIndex
                 |__ pointColInd
                 |__ pointRange
-            |__ extractedCloud   取出掉无效点之后的PointCloud
+                |__ cloud_deskewed/corner/surface cloud_deskewed 之中还包含着extractedCloud
+                |__ odomAvailable     判断initialGuessX/Y/Z/R/P/Y 是否有效
+                |__ imuAvailable      判断imuRoll/Pitch/YawInit  是否有效
+            |__ extractedCloud   取出掉无效点之后的PointCloud 保存XYZI信息
             |__ increX/Y/Z       每个Scan 对应的OdomStart和OdomEnd 之间的位置差
         |__ ctor()
             |__ subAndPub()
@@ -78,14 +85,16 @@ imageProjection.cpp
             |__ publishClouds()                 发送点云和cloudinfo
             |__ resetParameters()               重置imuRotXYZ 等参数设置
 
-imuPreintegration.cpp
+imuPreintegration.cpp     TransformFusion 应该是来自 LeGo-LOAM 的transFusion
+                                          和imuPregration 没有太大的相关性
+                          目前看需要学习一下gtsam
     |__ TransformFusion           看名字是一个融合模块？
         |__ 输入
             |__ LaserOdom
-            |__ Odom              感觉就是轮子的数据
+            |__ Odom              确认是轮子
         |__ 输出
             |__ ImuOdome
-            |__ imuPath
+            |__ lio_sam/imu/path
         |__ 重要member var记述
             |__ lidarOdomAffine   从lidarHandler 那里得到的Odom 的转换值
             |__ lidarOdomTime     对应LidarOdomAffine 的时间戳
@@ -99,4 +108,48 @@ imuPreintegration.cpp
             |__ pubtf()            以下两项没有仔细看
             |__ pubIMUpath()
     |__ IMUPreintegration        一看名字就是IMU预积分模块
-        |__ 
+        |__ 输入
+            |__ ImuInfo 
+            |__ lio_sam/mapping/Odometry 目前 不知道从哪里来的
+        |__ 输出
+            |__ odomTopic+"_incremental"
+        |__ 重要member 记述
+            |__ 
+        |__ ctor()
+            |__ subAndPub()
+            |__ setNoiseAndCovariance()
+        |__ odometryHandler()      
+            |__ fromROSodomToEigenAffline()
+            |__ saveTimeStamp()
+        |__ imuHandler()
+
+
+featureExtraction.cpp
+    |__ 输入 lio_sam/deskew/cloud_info  去畸变之后的点云
+    |__ 输出 lio_sam/feature/cloud_info
+            lio_sam/feature/cloud_corner
+            lio_sam/feature/cloud_surface
+    |__ 重要member var 记述
+    |__ ctor()
+    |__ laserCloudInfoHandler()
+        |__ calculateSmoothness()
+        |__ markOccludedPoints()
+        |__ extractFeatures()         提取Edge 和Surface 的点方式比之前简单了
+        |__ pubpoincloud()            cloud_info的 cloud_corner 和cloud_surface 被附上线面点云
+
+mapOptimization.cpp       想读懂的话问题还是坐标系转换上 还有一个解析ICP
+    |__ 输入
+    |__ 输出
+    |__ 重要member var 记述
+        |__ transformTobeMapped 猜测是之后的大地图根据这个坐标系来建
+        |__ lastImuTransformation predict pose
+    |__ laserCloudInfoHandler() 函数主体 方法基本没有变化
+        |__ updateInitialGuess()
+        |__ extractSurroundingKeyFrames()
+        |__ downsampleCurrentScan()
+        |__ scan2MapOptimization()
+        |__ saveKeyFramesAndFactor()
+        |__ correctPoses()
+        |__ pubOdomFrames();
+    |__ loop 回环基本没有变化
+学一手gtsam 再来看吧
