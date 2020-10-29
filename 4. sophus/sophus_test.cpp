@@ -48,6 +48,8 @@ int main()
     cout<<"the SE3 matrix is "<<endl
         << se3_map.matrix3x4()<<endl; 
     
+    cout<<"the log of SE3 is "<<endl
+        << se3_map.log()      <<endl;
 
     return 0;
 }
