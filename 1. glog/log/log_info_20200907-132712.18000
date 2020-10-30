@@ -1,4 +1,0 @@
-Log file created at: 2020/09/07 13:27:12
-Running on machine: lwl-GK5S
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-F0907 13:27:12.570412 18000 glog-test.cpp:32] Check failed: false there is something wrong with xxx

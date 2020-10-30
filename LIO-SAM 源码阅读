@@ -26,6 +26,13 @@ imageProjection.cpp
         |__ EIGEN_MAKE_ALIGNED_OPERATOR_NEW  不知道是干什么的
     |__ POINT_CLOUD_REGISTER_POINT_STRUCT    不知道是啥
     |__ ImageProjection
+        |__ 输入
+            |__ imu_raw       初始imu信息
+            |__ points_raw    初始点云信息
+            |__ odometry/imu_incremental  imu 预积分量 和imu同频率
+        |__ 输出
+            |__ lio_sam/deskew/cloud_deskewed
+            |__ lio_sam/deskew/cloud_info
         |__ 重要member var 记述
             |__ subImu/Odom/LaserCloud(raw_point_cloud)   Odom是轮子而不是LidarOdom
             |__ pubExtractedCloud/LaserCloudInfo
@@ -88,13 +95,13 @@ imageProjection.cpp
 imuPreintegration.cpp     TransformFusion 应该是来自 LeGo-LOAM 的transFusion
                                           和imuPregration 没有太大的相关性
                           目前看需要学习一下gtsam
-    |__ TransformFusion           看名字是一个融合模块？
+    |__ TransformFusion           看名字是一个融合模块 结论就是没啥用 可以先不管
         |__ 输入
-            |__ LaserOdom
-            |__ Odom              确认是轮子
+            |__ lio_sam/mapping/odometry  来自mapOptimization 的odom
+            |__ odometry/imu_incremental  预积分量
         |__ 输出
-            |__ ImuOdome
-            |__ lio_sam/imu/path
+            |__ odometry/imu              预积分量 没啥用
+            |__ lio_sam/imu/path          这个没啥用
         |__ 重要member var记述
             |__ lidarOdomAffine   从lidarHandler 那里得到的Odom 的转换值
             |__ lidarOdomTime     对应LidarOdomAffine 的时间戳
@@ -109,10 +116,11 @@ imuPreintegration.cpp     TransformFusion 应该是来自 LeGo-LOAM 的transFusi
             |__ pubIMUpath()
     |__ IMUPreintegration        一看名字就是IMU预积分模块
         |__ 输入
-            |__ ImuInfo 
-            |__ lio_sam/mapping/Odometry 目前 不知道从哪里来的
+            |__ lio_sam/mapping/odometry  来自mapOptimization 的odom
+            |__ imu_raw                   imu_raw 信息
         |__ 输出
-            |__ odomTopic+"_incremental"
+            |__ odometry/imu_incremental  预积分量
+            |__ lio_sam/imu/path          这个没啥用
         |__ 重要member 记述
             |__ 
         |__ ctor()
@@ -139,17 +147,34 @@ featureExtraction.cpp
 
 mapOptimization.cpp       想读懂的话问题还是坐标系转换上 还有一个解析ICP
     |__ 输入
+        |__ lio_sam/feature/cloud_info
+        |__ gpsTopic
     |__ 输出
+        |__ lio_sam/mapping/odometry_incremental  一大堆输出就这一个有用
     |__ 重要member var 记述
-        |__ transformTobeMapped 猜测是之后的大地图根据这个坐标系来建
+        |__ transformTobeMapped        lidar->world 坐标转换
         |__ lastImuTransformation predict pose
     |__ laserCloudInfoHandler() 函数主体 方法基本没有变化
-        |__ updateInitialGuess()
+        |__ updateInitialGuess()     给transfromTobeMapped 进行预测
+                                     有合适的预积分用预积分 预测
+                                     没有则使用imu预测 rotation
         |__ extractSurroundingKeyFrames()
         |__ downsampleCurrentScan()
         |__ scan2MapOptimization()
         |__ saveKeyFramesAndFactor()
+            |__ keyframeCheck()
+            |__ isamUpdate()
+            |__ ifALoopUpdate()
+            |__ addIntocloudKeyPoses6D/3D()
         |__ correctPoses()
-        |__ pubOdomFrames();
+        |__ publishOdometry()          -> 里面有一手匹配之后和imu进行混合的操作，不是很懂
+                                          但是只修正了roll 和pitch  yaw估计是imu不准的原因
+                                          所以没有进行修正
+                                          这里的修正算是一个细节点，之后还是要多琢磨琢磨
     |__ loop 回环基本没有变化
 学一手gtsam 再来看吧
+
+=============================================================
+重要：
+注： odomFrame 和mapFrame 绑在一起的
+也就是说OdomFrame 就是 mapFrame 

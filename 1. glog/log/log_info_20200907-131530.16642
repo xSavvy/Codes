@@ -1,4 +1,0 @@
-Log file created at: 2020/09/07 13:15:30
-Running on machine: lwl-GK5S
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-F0907 13:15:30.882385 16642 glog-test.cpp:21] I am FATAL!

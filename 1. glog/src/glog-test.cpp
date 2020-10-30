@@ -17,10 +17,10 @@ int main(int argc, char ** argv)
 
 	// LOG 使用
 	bool logIfFlag = true;
-    google::SetLogDestination(google::GLOG_FATAL,"/home/sunny/workspace_private/3rd-test-learning/1. glog/log"); 
+    google::SetLogDestination(google::GLOG_INFO,"/home/sunny/workspace_private/3rd-test-learning/1. glog/log/"); 
 	LOG(INFO) << "I am INFO!";
 	LOG(WARNING) << "I am WARNING!";
-	LOG(ERROR) << "I am ERROR!";
+	// LOG(ERROR) << "I am ERROR!";
 	//LOG(FATAL) << "I am FATAL!";
 	
 	LOG_IF(INFO,logIfFlag)<<"HHHH"<<std::endl;
