@@ -106,7 +106,7 @@
     流形的优化过程
                     —> CostFunction          ->Evaluate        -> GlobalJacobian ——
                    |                                                               |
-    ResiudalBlcok——                                                                 —> Global_J × Local_J = Final_J
+    ResiudalBlcok——                                                                 —>    LossFunction×Global_J × Local_J = Final_J
                    |                                                               |
                     —> LocalParameterization ->ComputeJacobian -> LocalJacobian  ——
 

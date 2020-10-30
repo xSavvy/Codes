@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-17 21:41:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-30 08:07:48
+ * @LastEditTime: 2020-10-30 08:10:25
  * @Description:  基于ceres 的ndt 算法
  *                现在换成Sophus ::SE3 的方法效果也还是不行
  *                目前看起来这个部分的确是正确的

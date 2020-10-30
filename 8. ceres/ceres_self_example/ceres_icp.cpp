@@ -2,10 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-10-29 08:09:51
+ * @LastEditTime: 2020-10-30 07:16:21
  * @Description: 主要是为了测试和学习LocalParameter 
- * 
- *               ie.1   Auto Diff SE3 上的优化
+ *              
+ *               ie.1   Auto Diff SE3 上的优化     这个可以判断是基本不行了 还是使用AnalysticDiff 的版本把
  *               ie.2   Analystic Diff SE3 上的优化
  */
 
@@ -171,7 +171,6 @@ class SE3LocalParameterizaton:public ceres::LocalParameterization
 
     virtual int GlobalSize() const { return 6; }
     virtual int LocalSize() const { return 6; }
-
 };
 
 
