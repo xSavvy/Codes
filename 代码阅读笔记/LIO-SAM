@@ -167,10 +167,14 @@ mapOptimization.cpp       想读懂的话问题还是坐标系转换上 还有�
             |__ ifALoopUpdate()
             |__ addIntocloudKeyPoses6D/3D()
         |__ correctPoses()
-        |__ publishOdometry()          -> 里面有一手匹配之后和imu进行混合的操作，不是很懂
+        |__ publishOdometry()             里面有一手匹配之后和imu进行混合的操作，不是很懂
                                           但是只修正了roll 和pitch  yaw估计是imu不准的原因
                                           所以没有进行修正
                                           这里的修正算是一个细节点，之后还是要多琢磨琢磨
+            |__ pubGlobal()               正常发布TransfromTobeMapped
+            |__ pubincremental            目前认为在数值上进行imu信息的修正之后
+                                          发了一个TransformTobeMapped 类似的值
+                                          
     |__ loop 回环基本没有变化
 学一手gtsam 再来看吧
 
