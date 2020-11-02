@@ -63,7 +63,7 @@ VoxelGridCovariance 系列
                                        neighbor 的坐标是相对于reference point 的 坐标
         |__ applyfilter() 
             这里的调用是通过直接调用Base::filter 因为VoxelGrid 里面没有重名的函数
-            filter依旧使用Base 的形式 但是 applyfilter 虚函数产生替换 
+            filter依旧使用Base 的形式 但是 Applyfilter 虚函数产生替换 
             |__ initializeParam() min_b_ max_b_ div_b_ div_mul_
             |__ voxelizePoint() 对点云进行Voxel 分割
             |__ getCentoridinEveryVoxel() 得到各个Voxel的点云中心
@@ -82,7 +82,8 @@ VoxelGridCovariance 系列
         |__ nearestKSearch K 最近邻搜索
         |__ radiusSearch 
         |__ applyfilter
-            |__ initializeParam() min_b_ max_b_ div_b_ div_mul_
+            |__ initializeParam() min_b_ max_b_ 
+                                  div_b_ div_mul_ 用于方格计算 
             |__ voxelizePointAndCalcualteMeanCovariance() 
                 对点云进行Voxel 分割 并计算 均值和方差
             |__ calculateEigen() 计算特征向量和特征值
