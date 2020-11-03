@@ -7,5 +7,8 @@ message(STATUS "aaaaaa" ${EIGEN3_VERSION_STRING})
 
 include_directories("/usr/local/include/eigen3")
 
+include(../cmake/PCL.cmake)
+
 add_executable(eigen-test-array-vector eigen-test-array-vector.cpp)
 add_executable(eigen_llt eigen_llt.cpp)
+add_executable(eigen_icp eigen_icp.cpp)

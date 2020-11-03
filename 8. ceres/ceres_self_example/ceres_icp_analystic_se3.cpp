@@ -2,10 +2,18 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-02 08:02:36
+ * @LastEditTime: 2020-11-03 07:40:44
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
+ *                     在一个机缘巧可下  见证了SE3 对比于Quternion + R3 惊人的稳定性
+ *                     两版ceres_icp 都是 lie[6] 忘记exp 变换
+ *                     就直接赋给了 Sophus::SE3d show_lie   这个时候的 show_lie 已经严重不是SE3了
+ *                     结果在优化的时候SE3 直接给掰成了正确答案
+ *                     Quternion + R3 虽然也有优化效果，但是和正确答案相差较远
+ * 
+ *                     这里提供的是一个T*p 的SE3 优化模型
+ *                     
  */
 
 #include <vector>
@@ -180,6 +188,8 @@ int main()
     const double initial_lie [6] {0.4,0.6,0.7,0.6,0.7,0.8};
     Eigen::Map<const Eigen::Matrix<double,6,1>> k_lie(initial_lie);
     Sophus::SE3<double> se3 = Sophus::SE3d::exp(k_lie);
+
+    
     std::vector<Eigen::Vector4d> point_in_camera;
     transformPointCloud(se3,point_cloud,point_in_camera);
     AddNoise(point_in_camera);
@@ -193,6 +203,7 @@ int main()
     ceres::Problem problem;
     double lie [6] {0.44,0.65,0.72,0.55,0.73,0.86};
 
+    // 这个地方明明是错的  LieGroup 惊人的稳定性 还是给掰过来了
     Eigen::Map<Sophus::SE3d> show_lie(lie);
     
     cout<<" the right SE3 is "<<endl

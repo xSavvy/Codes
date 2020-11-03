@@ -1,6 +1,6 @@
 LeGO-LOAM 还有细节上的阅读没有进行完有些可惜
 
-FeatureAssociation
+FeatureAssociation              给去畸变的点云进行特征提取和Odom 匹配
     |__ 输入
         |__ segmentedCloud
         |__ imu
@@ -96,7 +96,7 @@ FeatureAssociation
             |__ PluginIMURotation()
         |__ pubOdometry() 
 
-ImageProjection
+ImageProjection                             处理原始点云
     |__ 输入
         |__ 原始点云
     |__ 输出
@@ -168,7 +168,7 @@ ImageProjection
         |__ PublishCloud()    
         |__ resetParameters()  
 
-mapOptimization
+mapOptimization                             LoopClosue 和 ScanToMap匹配  整体优化
     |__ 输入
         |__ surfPointsLessFlat
         |__ cornerPointsLessSharp
@@ -192,7 +192,6 @@ mapOptimization
             |__ transformIncre
             |__ transformTobeMapped
             |__ 
-
     |__ run() 主体函数
         |__ timeStampcheck()
         |__ transformAssociateToMap()

@@ -9,5 +9,8 @@ include_directories(${CERES_INCLUDE_DIRS})
 
 include(../cmake/g2o.cmake)
 # helloworld
-add_executable(local_parameter_test ceres_self_example/local_parameter_test.cpp)
-target_link_libraries(local_parameter_test ${CERES_LIBRARIES} )
+add_executable(ceres_icp_analystic_se3 ceres_self_example/ceres_icp_analystic_se3.cpp)
+target_link_libraries(ceres_icp_analystic_se3 ${CERES_LIBRARIES} )
+
+add_executable(ceres_icp_autodiff_q_r3 ceres_self_example/ceres_icp_autodiff_q_r3.cpp)
+target_link_libraries(ceres_icp_autodiff_q_r3 ${CERES_LIBRARIES} )
