@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-03 07:40:44
+ * @LastEditTime: 2020-11-04 08:12:52
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
@@ -13,6 +13,10 @@
  *                     Quternion + R3 虽然也有优化效果，但是和正确答案相差较远
  * 
  *                     这里提供的是一个T*p 的SE3 优化模型
+ * 
+ *                     
+ * 
+ *                     另外包含从Matrix4f 创建SE3
  *                     
  */
 
@@ -25,80 +29,21 @@
 #include <sophus/so3.hpp>
 #include <Eigen/Eigen>
 #include <g2o/stuff/sampler.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/common/transforms.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace std;
-
-std::vector<Eigen::Vector4d> point_cloud;
-
-void buildPointCloud()
-{
-    for(int i = 0;i<30;i++)
-    {
-        Eigen::Vector4d tmp_point;
-        tmp_point<< i * 0.3,i*0.3,i*0.3,1;
-        point_cloud.push_back(tmp_point);
-    }
-
-    for(int i = 0;i<30;i++)
-    {
-        Eigen::Vector4d tmp_point;
-        tmp_point<< 0.5,i*0.3 + i* 0.02,i*0.3,1;
-        point_cloud.push_back(tmp_point);
-    }
-    
-    for(int i = 0;i<30;i++)
-    {
-        Eigen::Vector4d tmp_point;
-        tmp_point<< 0.9,i*0.3 + i* 0.04,i*0.3 - i*0.01,1;
-        point_cloud.push_back(tmp_point);
-    }    
-}
-
-bool transformPointCloud(const Sophus::SE3d & pose_camera_to_world, 
-                         const vector<Eigen::Vector4d> & points_in_world,
-                         vector<Eigen::Vector4d> & points_in_camera)
-{
-    if(points_in_world.size() == 0)
-    {
-        std::cout<<"[Bad Data]: the size of point array is 0.Thus return false!"<<std::endl;
-        return false;
-    }
-    
-    Eigen::Matrix4d pose_world_to_camera = pose_camera_to_world.matrix().inverse();
-    points_in_camera.clear();
-    points_in_camera.reserve(points_in_world.size());
-
-    for(const auto & point:points_in_world)
-    {
-        Eigen::Vector4d tmp_point = pose_world_to_camera * point;
-        points_in_camera.push_back(tmp_point);
-    }
-}
-
-// 这里使用高斯分布的误差(0,1) 高斯分布
-// TODO 这里的参数可以进行调节，如果出问题可以注意这里
-bool AddNoise(std::vector<Eigen::Vector4d> & point_cloud)
-{
-    // scale 再大基本就挂了  因为点在设置的时候就比较密集
-    double scale = 0.001;
-    Eigen::Matrix3d covar = Eigen::Matrix3d::Identity()*scale;
-    g2o::GaussianSampler<Eigen::Matrix<double,3,1>,Eigen::Matrix<double,3,3>> sampler;
-    sampler.setDistribution(covar);
-    for(auto & point :point_cloud)
-    {
-        Eigen::Vector4d noise;
-        noise<<sampler.generateSample(),0;
-        cout<<"the noise is "<<noise.transpose()<<endl;
-        point = point + noise;
-    }
-}
 
 
 class AnalyticCostFunction:public ceres::SizedCostFunction<3,6>
 {
     public:
-    AnalyticCostFunction(const Eigen::Vector3d watched_point, const Eigen::Vector3d point_in_world):
-                         watched_point_(watched_point),point_in_world_(point_in_world){}
+    AnalyticCostFunction(const Eigen::Vector3d watched_point, const Eigen::Vector3d point_in_world,double scale_factor=1.0):
+                         watched_point_(watched_point),
+                         point_in_world_(point_in_world),
+                         scale_factor_(scale_factor_)
+                         {}
 
     virtual bool Evaluate(double const * const * params,
                           double * residuals,
@@ -111,6 +56,7 @@ class AnalyticCostFunction:public ceres::SizedCostFunction<3,6>
         
         residual_map = se3*watched_point_ -point_in_world_;
 
+        residual_map = residual_map ;
         if (!jacobians) return true;
         double* jacobian = jacobians[0];
         if (!jacobian) return true;
@@ -147,6 +93,7 @@ class AnalyticCostFunction:public ceres::SizedCostFunction<3,6>
     private:
     Eigen::Vector3d watched_point_;
     Eigen::Vector3d point_in_world_;
+    double scale_factor_;
 };
 
 class SE3LocalParameterizaton:public ceres::LocalParameterization
@@ -180,57 +127,119 @@ class SE3LocalParameterizaton:public ceres::LocalParameterization
     virtual int LocalSize() const { return 6; }
 };
 
+  bool ICPRegistrationSingle(pcl::PointCloud<pcl::PointXYZ>::Ptr t_pc_ptr,pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree_ptr,
+                              Eigen::Matrix4f predict_pose, Eigen::Matrix4f & result_pose, 
+                              bool & finish,
+                              float max_dis_squared = 3,
+                              float min_err2 = 2e-2) // 感觉重点还是在这个参数上面 决定优化次数
+    {
+        // 调节正交性 因为坐标转换方式的原因 注释掉了 正交性调节的环节
+        // Sophus::SE3d init_se3 = Sophus::SE3d::trans(predict_pose.block(0,3,3,1));
+        // Eigen::AngleAxisd angle_axis(Eigen::Matrix3d(predict_pose.block(0,0,3,3)));
+        // init_se3.setRotationMatrix(angle_axis.toRotationMatrix());
+        // cout<<" show the inital matrix"<<endl
+        //     << init_se3.matrix()<<endl;
+        // cout<<" show the initial lie "<<endl
+        //     << init_se3.log().transpose()<<endl;
+
+        Eigen::Matrix<double,6,1> delta_transform = Eigen::Matrix<double,6,1>::Zero();
+        ceres::Problem problem;
+        const auto & target_pc = kdtree_ptr->getInputCloud()->points;
+
+        problem.AddParameterBlock(delta_transform.data(),6,new SE3LocalParameterizaton());
+        
+        // 进行匹配
+        std::vector<int> search_index_array;
+        std::vector<float> search_dis_array;
+        std::vector<Eigen::Vector3d> watched_point_matched;
+        std::vector<Eigen::Vector3d> point_in_world_matched;
+        for( auto & point: t_pc_ptr->points)
+        {
+            if(! kdtree_ptr->nearestKSearch(point,1,search_index_array,search_dis_array))
+            {
+                return false;
+            }
+            if(search_dis_array[0]<max_dis_squared)
+            {
+                watched_point_matched.push_back (point.getVector3fMap().cast<double>());
+                point_in_world_matched.push_back(target_pc.at(search_index_array[0]).getVector3fMap().cast<double>());
+            }
+        }
+
+        double scale_factor = std::sqrt(1.0/double(watched_point_matched.size()));
+
+        for(int i =0;i<watched_point_matched.size();i++)
+        {   
+            
+            ceres::CostFunction * cf = new AnalyticCostFunction(watched_point_matched[i],point_in_world_matched[i]);
+            problem.AddResidualBlock(cf,new ceres::HuberLoss(0.1),delta_transform.data());
+        }
+
+        ceres::Solver::Options options;
+        ceres::Solver::Summary summary;
+        options.linear_solver_type = ceres::DENSE_QR;
+        options.minimizer_type = ceres::TRUST_REGION;
+        options.trust_region_strategy_type = ceres::LEVENBERG_MARQUARDT;
+        
+        options.max_num_iterations = 8;
+        options.function_tolerance = 1e-3;
+        
+        
+
+        // 这个Solve 和那个不能用的solve 看起来还是有区分度的
+        ceres::Solve(options,&problem,&summary);
+        // std::cout<<summary.BriefReport()<<endl;
+        
+        result_pose = Sophus::SE3d::exp(delta_transform).matrix().cast<float>()*predict_pose;
+
+        // auto temp = summary.final_cost/double(watched_point_matched.size());
+        // cout<<" the final in every point is "<<temp<<endl;
+        if(summary.final_cost/double(watched_point_matched.size()) < min_err2)
+        {
+            finish = true;
+        }
+        return true;
+    }
+
 
 int main()
 {
-    buildPointCloud();
-    Eigen::Matrix4d transform = Eigen::Matrix4d::Identity();
-    const double initial_lie [6] {0.4,0.6,0.7,0.6,0.7,0.8};
-    Eigen::Map<const Eigen::Matrix<double,6,1>> k_lie(initial_lie);
-    Sophus::SE3<double> se3 = Sophus::SE3d::exp(k_lie);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr target_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::PointCloud<pcl::PointXYZ>::Ptr source_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_source_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr target_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr source_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr whole_cloud_with_color_(new pcl::PointCloud<pcl::PointXYZRGB>());
+
+    pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree(new pcl::KdTreeFLANN<pcl::PointXYZ>());
 
     
-    std::vector<Eigen::Vector4d> point_in_camera;
-    transformPointCloud(se3,point_cloud,point_in_camera);
-    AddNoise(point_in_camera);
-
-    cout<<" show the transform matrix from SE3"<<endl
-        <<se3.matrix()<<endl;
+    pcl::io::loadPCDFile("/home/lwl/workspace/3rd-test-learning/8. ceres/ceres_self_example/source_point_cloud.pcd",*source_point_cloud);
+    pcl::io::loadPCDFile("/home/lwl/workspace/3rd-test-learning/8. ceres/ceres_self_example/target_point_cloud.pcd",*target_point_cloud);
     
-    assert(point_in_camera.front()(3) == 1);
-    assert(point_in_camera.back()(3) == 1);    
 
-    ceres::Problem problem;
-    double lie [6] {0.44,0.65,0.72,0.55,0.73,0.86};
+    Eigen::Matrix4d transform_test;  
+    transform_test<<
+        0.475569   , -0.879562 ,   0.0143053  ,     1.0811
+   ,     0.879678  ,   0.475521,   -0.0068145 ,     1.33754
+   , -0.000808696  ,  0.0158249,     0.999874 ,    0.795587
+   ,         0     ,       0   ,         0    ,        1;
 
-    // 这个地方明明是错的  LieGroup 惊人的稳定性 还是给掰过来了
-    Eigen::Map<Sophus::SE3d> show_lie(lie);
-    
-    cout<<" the right SE3 is "<<endl
-        << show_lie.matrix()<<endl;
-    // 现在这么看的的确是节省了一些添加 LocalParameterization 的代码
-    problem.AddParameterBlock(lie,6,new SE3LocalParameterizaton());
-    for(int i = 0; i<point_in_camera.size();i++)
+    pcl::transformPointCloud(*source_point_cloud,*transformed_source_point_cloud,transform_test.cast<float>());
+    kdtree->setInputCloud(target_point_cloud);
+    Eigen::Matrix4f iterative_result = transform_test.cast<float>();
+    bool finish = false;
+    for(int i =0;i<10;i++)
     {
-        ceres::CostFunction * cf = new AnalyticCostFunction(point_in_camera[i].segment(0,3),point_cloud[i].segment(0,3));
-        problem.AddResidualBlock(cf,new ceres::CauchyLoss(0.5),lie);       
+        ICPRegistrationSingle(transformed_source_point_cloud,kdtree,iterative_result,iterative_result,finish);
+        if(finish)
+        {
+            cout<<"Totally, "<<i<<" th iterations"<<endl;
+            break;
+        }
+        cout<<"print the iterative result matrix :"<<endl
+            << iterative_result<<endl;
+        pcl::transformPointCloud(*source_point_cloud,*transformed_source_point_cloud,iterative_result);
     }
-   
-
-    ceres::Solver::Options options;
-    ceres::Solver::Summary summary;
-    options.linear_solver_type = ceres::DENSE_QR;
-    options.minimizer_type = ceres::TRUST_REGION;
-    options.trust_region_strategy_type = ceres::DOGLEG;
-    options.minimizer_progress_to_stdout = true;
-
-    // 这个Solve 和那个不能用的solve 看起来还是有区分度的
-    ceres::Solve(options,&problem,&summary);
-    Eigen::Map<Eigen::Matrix<double,6,1>> lie_map(lie);
-    cout<<summary.BriefReport()<<endl;
-    cout<<"the initial lie is "<< k_lie.transpose()<<endl
-        <<"the result lie is "<< lie_map.transpose()<<endl;
-    
-    
 
 };

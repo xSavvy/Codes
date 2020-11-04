@@ -12,5 +12,7 @@ include_directories("/usr/local/include/eigen3")
 
 add_executable(icp_test registration/icp_test.cpp)
 target_link_libraries(icp_test ${PCL_LIBRARIES})
+add_executable(icp_display registration/icp_display.cpp)
+target_link_libraries(icp_display ${PCL_LIBRARIES})
 
 

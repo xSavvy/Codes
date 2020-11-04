@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-03 07:19:03
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-03 08:12:40
- * @Description:  基于Eigen 实现的ICP 算法 据说是又快又好
+ * @LastEditTime: 2020-11-03 19:55:58
+ * @Description:  基于Eigen 实现的ICP 算法 据说是又快又好  目前还是有问题  告一段落
  */
 #include <vector>
 #include <iostream>
@@ -14,7 +14,7 @@
 #include <Eigen/Eigen>
 #include <g2o/stuff/sampler.h>
 #include <pcl/kdtree/kdtree_flann.h>
-
+#include <pcl/common/transforms.h>
 using namespace std;
 
 std::vector<Eigen::Vector4d> point_cloud;
@@ -86,7 +86,7 @@ template <typename T>
 void ToPclPointType(const std::vector<Eigen::Vector4d> & point_array, 
                     pcl::PointCloud<T> & point_cloud)
 {
-    CHECK_NE(point_array.size(),0);
+    // CHECK_NE(point_array.size(),0);
     point_cloud.clear();
     for(auto & point:point_array)
     {
@@ -105,7 +105,7 @@ int main()
     Sophus::SE3d transform_se3 = Sophus::SE3d::exp(lie_map);
     
     cout<<"the targeted transform is "<< endl
-        << transform_se3.log().transpose()<<endl;
+        << transform_se3.matrix()<<endl;
 
     // ================================ 点云变换 ================================
 
@@ -113,7 +113,7 @@ int main()
     transformPointCloud(transform_se3,point_cloud,point_in_camera);
     AddNoise(point_in_camera);
 
-    // ================================ 变换到pcl类型并存入Kdtree ===========================
+    // ================================ 变换到pcl类型并存入Kdtree ================
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud_in_world (new pcl::PointCloud<pcl::PointXYZ>());
     pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud_in_camera(new pcl::PointCloud<pcl::PointXYZ>());
@@ -121,9 +121,90 @@ int main()
     ToPclPointType(point_in_camera,*point_cloud_in_camera);
 
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
-    kdtree.
+
+    // ================================ 准备params =============================
+
+    int max_iter = 30;
+    double euclidean_change = 1e-3;
+    double euclidean_eps = 1e-2;
+    double max_dis = 3.0;
+    Eigen::Matrix3f R = Eigen::Matrix3f::Identity();
+    Eigen::Vector3f t = Eigen::Vector3f::Zero();
     
+    double squared_distance_th = max_dis * max_dis;
+    double cur_squared_dist = 0.0;
+    double last_squared_dist = std::numeric_limits<double>::max();
 
 
+    Eigen::Vector3f target_center;
+    Eigen::Vector3f source_center;
+    std::vector<int> search_index;
+    std::vector<float> search_dis;
+    std::vector<Eigen::Vector3f> target_match;
+    std::vector<Eigen::Vector3f> source_match;
+    kdtree.setInputCloud(point_cloud_in_world);
+
+    for(int i=0;i<max_iter;i++)
+    {
+        double sum_squared_dist = 0.0;
+
+        target_match.clear();
+        source_match.clear();
+        target_center = Eigen::Vector3f::Zero();
+        source_center = Eigen::Vector3f::Zero();
+        
+        Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
+        transform.block(0,0,3,3)=R;
+        transform.block(0,3,3,1)=t;
+
+        pcl::transformPointCloud(*point_cloud_in_camera,*point_cloud_in_camera,transform);
+
+        for(auto & point:point_cloud_in_camera->points)
+        {
+            if(!kdtree.nearestKSearch(point,1,search_index,search_dis))
+            {
+                std::cerr<<"there is something wrong with the kdtree!"<<std::endl;
+            }
+            if(search_dis[0] < squared_distance_th)
+            {
+                sum_squared_dist = search_dis[0];
+                auto & points = point_cloud_in_world->points;
+                int index = search_index[0];
+                target_match.emplace_back(points[index].x,points[index].y,points[index].z);
+                source_match.emplace_back(point.x,point.y,point.z);
+            }
+
+            for(int i = 0;i<target_match.size();i++)
+            {
+                target_center += target_match[i];
+                source_center += source_match[i];
+            }
+            target_center = target_center/float(target_match.size());
+            source_center = source_center/float(source_match.size());        
+            
+            Eigen::Matrix3f W = Eigen::Matrix3f::Zero();
+            for(int i = 0;i<source_match.size();i++)
+            {
+                W += (target_match.at(i) -target_center) *(source_match.at(i)-source_center).transpose();
+            }            
+            Eigen::JacobiSVD<Eigen::Matrix3f> svd(W,Eigen::ComputeFullU|Eigen::ComputeFullV);
+            R = svd.matrixU() * svd.matrixV().transpose();
+            t = target_center - R*source_center;
+
+            cur_squared_dist = sum_squared_dist/float(source_match.size());
+            double squared_dist_change = last_squared_dist - cur_squared_dist;
+            if(squared_dist_change<euclidean_change*euclidean_change || cur_squared_dist < euclidean_eps * euclidean_eps)
+            {
+                break;
+            }
+        }
+    }
+
+
+        Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
+        transform.block(0,0,3,3)=R;
+        transform.block(0,3,3,1)=t;
+        std::cout<<"the esitimation is "<<std::endl
+                 <<transform<<std::endl;
 
 }
