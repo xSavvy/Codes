@@ -42,11 +42,18 @@
 18. TBB
 19. 左值右值的深度学习
 20. LIO-SAM 代码阅读             大作业之后
-    |__ FeatureExtraction
+    |__ FeatureExtraction       完成
     |__ ImageProjection         完成
-    |__ ImuPreintegration
-    |__ mapOptimization
+    |__ ImuPreintegration       
+    |__ mapOptimization         完成
     |__ utility                 完成
 21. STL 上班闲暇时
 22. 44 周 留下周末一天进行代码review
 23. ECPP MECPP
+24. C++ 编译、链接的方式和流程
+25. 根据google 代码学习参数传入负责标准
+26. 突然的感悟： GTSAM 之后，一个时代马上就要落幕了，接下来的重点是 如何设计因子
+                                                           增强鲁棒性的trick 
+                                                           深度学习
+                                                           还有就是误差分析
+                                                           代码加速
