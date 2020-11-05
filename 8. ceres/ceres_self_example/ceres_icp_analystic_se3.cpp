@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-04 08:12:52
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-11-04 08:45:51
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
@@ -14,9 +14,14 @@
  * 
  *                     这里提供的是一个T*p 的SE3 优化模型
  * 
+ *                     2020.11.4 早上 更改至与 lidar Localization 适配的调用形式
+ *                               晚上 添加每次正交调节 + 8.0 点云去畸变
+ *                                    进行二次调试
+
+ *                     另外包含
+ *                     1. 从Matrix4f 创建SE3
+ *                     2. 调节正交性用于从Eigen::Matrix4 到 Sophus::SE3  
  *                     
- * 
- *                     另外包含从Matrix4f 创建SE3
  *                     
  */
 
