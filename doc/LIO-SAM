@@ -142,7 +142,7 @@ featureExtraction.cpp
     |__ laserCloudInfoHandler()
         |__ calculateSmoothness()
         |__ markOccludedPoints()
-        |__ extractFeatures()         提取Edge 和Surface 的点方式比之前简单了
+        |__ extractFeatures()         提取Edge 和Surface 的点方式比之前简单了 依旧六个部分
         |__ pubpoincloud()            cloud_info的 cloud_corner 和cloud_surface 被附上线面点云
 
 mapOptimization.cpp       想读懂的话问题还是坐标系转换上 还有一个解析ICP
@@ -182,3 +182,5 @@ mapOptimization.cpp       想读懂的话问题还是坐标系转换上 还有�
 重要：
 注： odomFrame 和mapFrame 绑在一起的
 也就是说OdomFrame 就是 mapFrame 
+注： 要注意Lego-LOAM 和LIO-SAM 的差别并找出工程上的trick 需要在细节上在看一下
+    构建细节trick库
