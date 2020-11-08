@@ -6,6 +6,7 @@
                 "${workspaceFolder}/**",
                 "/usr/local/include/*",
                 "/opt/ros/melodic/include",
+                "/opt/ros/kinetic/include",
                 "/usr/include/pcl-1.7",
                 "/usr/local/include/eigen3",
                 "/usr/include/pcl-1.8",
@@ -16,7 +17,9 @@
                 "/home/sunny/workspace/nav_ws/install/**",
                 "/home/sunny/workspace/nav_ws/install/nav2_msgs/include/**",
                 "/home/sunny/workspace/ros2_foxy/install/**",
-                "/usr/local/include/gtsam"
+                "/usr/local/include/gtsam",
+                "/usr/local/include/*"
+                
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

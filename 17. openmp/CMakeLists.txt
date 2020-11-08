@@ -1,5 +1,5 @@
 project(openmp_test)
-
+set(CMAKE_CXX_FLAGS "-std=c++14")
 ############# 对于cmake 3.9 以下的版本只能使用这种方式
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
@@ -11,7 +11,6 @@ if(NOT TARGET OpenMP::OpenMP_CXX)
     # Only works if the same flag is passed to the linker; use CMake 3.9+ otherwise (Intel, AppleClang)
     set_property(TARGET OpenMP::OpenMP_CXX
                  PROPERTY INTERFACE_LINK_LIBRARIES ${OpenMP_CXX_FLAGS} Threads::Threads)
-
 endif()
 
 # gcc 编译标记 需要添加 -fopenmp
