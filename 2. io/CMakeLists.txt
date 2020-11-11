@@ -19,4 +19,3 @@ include_directories(.
 # csv 到 rosbag
 add_executable(csv_to_rosbag "synthesis/csv_to_rosbag.cpp")
 target_link_libraries(csv_to_rosbag PRIVATE ${catkin_LIBRARIES})
-# target_link_libraries(csv_to_rosbag PUBLIC OpenMP::OpenMP_CXX)
