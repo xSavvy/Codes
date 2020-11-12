@@ -77,10 +77,10 @@ vins_estimator_node
         |__ while(true)
             |__ getMeasurements()
             |__ for_each IMU in IMUs     IMU 信息放入Estimator
-                fillIntoEstimator
+                fillIntoEstimator        ->processIMU()
             |__ handleRelocationInfo() ? 暂时对不起来
             |__ collectFeatureInfo()     feature_points 放入 Estimator
-                fillIntoEstimator
+                fillIntoEstimator        ->processImage()
             |__ 一堆Pub()
             |__ update()                 使用优化信息 更新 tmpP tmpQ tempV 
                                          tmp_Ba tmp_Bg acc_0 gyr_0
@@ -95,7 +95,7 @@ estimator
             |__ linear_acceleration_buf
             |__ angular_velocity_buf
             |__ all_image_frame                    map<time,ImageFrame> 
-                                                   保存所有图像和imu预积分
+                                                   保存所有图像RT和imu预积分
         |__ 内嵌类
             |__ IntegrationBase
             |__ FeatureManager
@@ -114,15 +114,26 @@ estimator
             |__ fillIntoFeatureManager()
             |__ calibExtrinsicIfNeeded()            ?
             |__ initialIfNeeded()
-                |__ initialStructue()
+                |__ initialStructure()
             |__ NonLiearOpIfNeeded()
     |__ internal
-        |__ initialStructue()
+        |__ initialStructure()
             |__ checkVarofGravity()                为什么var<0.25 会说excitation not enough！ 存疑
             |__ globalSFM()
                 |__ collectSFMInfo()               将目前所有feature 的所有观测得到
-                |__ relativePose()                 检查视差和特征数量是否足够
-                |__ 
+                                                   
+                |__ relativePose()                 检查视差和特征数量是否足够，然后计算相对
+                                                   返回relative R 和 T 还有就是满足三角化视差的
+                                                   图像帧id l
+                |__ GlobalSFM()                    使用l 和 10 的图像帧进行滑窗内所有帧的初始化
+                    -> GlocalSFM::construct()             
+                |__ solvePnPforAllFrame()          对all_image_frame 内所有的帧进行 PNP 估计
+                |__ visualInitialAlign()           视觉+惯导融合
+        |__ visualInitialAlign()                   视觉+惯导融合
+            |__ VisualIMUAlignment()
+
+
+
 feature_manager.h
     FeaturePerFrame                   用途: 保存特征点在每一帧数据中的信息
         |__ point,uv,velocity         用途已知
@@ -154,13 +165,35 @@ feature_manager.h
         |__ addFeatureCheckParallax()
             |__ updateFeatureInfo()            这里的Feature说的就是 list<FeaturePerId> feature
             |__ checkParallex()                计算视差决定是不是关键帧
-                                            检查过后发现是比较倒数第二第三帧的特征
+                                               检查过后发现是比较倒数第二第三帧的特征
                 |__ for feature
                     compensatedParallax2()
-
+        |__ getCorresponding(int frame_id_1, int frame_id_2)   查找frame_id_1 和 frame_id_2 之间相互关联的点
+                                                               这里的id 表示存疑
 initial_sfm.h
-    SFMFeature  没有多少问题不进行解读
+    SFMFeature  没有多少问题不进行解读        
+        |__ vector<pair<int,vector2d>> oberservation    存储观察到的frame_id 和归一化信息
+        |__ state                                       是否已经进行过三角测量
+        |__ point                                       三角测量结果
     ReprojectionError3D ceres 误差项
     GlobalSFM
-        |__ triangulatePoint()            视觉基础内容 三角测量
-    
+        |__ triangulatePoint()                                  视觉基础内容 三角测量
+        |__ triangulateTwoFrames()                              两帧数据进行三角测量
+                                                                有结果的SFMFeatrue status = true point赋值 三维点
+        |__ solveFrameByPnP(R_initial,P_inital,frame_id,sfm_f)  使用已经有的sfm_f 对 frame_id i的图像帧估计 R 和P  
+        |__ construct()                                         整体求3d 点和0到frame_num-1 的位姿
+            - step 1: 所有pose和feature点的初始化, 以第l帧为参考坐标系
+            1. 先第l帧和最后一帧做三角化,根据三角化的点PnP求解第l+1的位姿,再l+1和最后一帧三角化,再PnP求l+2位姿,依次求到倒数第二帧的位姿.
+            2. 第l+1帧~倒数第二帧的所有帧与第l帧三角化剩下的特征点
+            3. 依次PnP求解第l-1帧~第0帧的位姿并将第l-1帧~第0帧 与 第l帧做三角化.
+            4. 遍历所有特征点, 对那些还没有三角化的点,如果观测大于2个, 根据首尾观测进行三角化.
+            - step 2: Local Bundle Adjustment, ceres
+            5. ceres求解, residuals用的特征点到每一帧重投影误差, 将求解结果写出到q,T和sfm_tracked_points
+
+initial_alignment.cpp
+    |__ VisualIMUAlignment() 
+        |__ solveGyroscopeBias()            更新 gyro 的bias 并 使用新的gyro_bias repropagate
+        |__ LinearAlignment()   
+integration_base.h q p v ba bg 一共15维
+    |__ IntegrationBase
+        |__       
