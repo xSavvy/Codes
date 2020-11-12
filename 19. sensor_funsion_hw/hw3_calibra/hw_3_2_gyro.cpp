@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-08 10:28:52
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-08 22:28:19
+ * @LastEditTime: 2020-11-11 19:50:47
  * @Description: 代码用于求解分立式标定
  *               代码分成两个部分一个IMU_accel
  *                                IMU_gyro
@@ -57,6 +57,32 @@ class ImuAccelError
     Eigen::Vector3d real_;
 };
 
+bool GyroIntegration(std::vector<Eigen::Matrix<double,3,1>> & angular_velocity, 
+                     Eigen::Vector3d & integration_result,
+                     double time_interval,int n)
+{
+    if(angular_velocity.size()==0 || time_interval<0 || n<0)
+    {
+        cout<<"the angular_velocity's size or time_interval may be wrong !!"<<endl;
+        return false;
+    }
+
+    omp_set_num_threads(6);
+    double integration_x = 0,integration_y=0,integration_z = 0;
+    #pragma omp parallel for reduction(+:integration_x,integration_y,integration_z)
+    for(int i = 0;i<n;i++)
+    {
+        integration_x += angular_velocity[i].x()*time_interval;
+        integration_y += angular_velocity[i].y()*time_interval;
+        integration_z += angular_velocity[i].z()*time_interval;
+    }
+    
+    integration_result.x() = integration_x;
+    integration_result.y() = integration_y;
+    integration_result.z() = integration_z;
+    
+    return true;
+}
 
 int main()
 {
@@ -69,8 +95,8 @@ int main()
              << error_matrix<<endl;
 
     // readCSV 数据
-    std::string measure_path="/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/accel-0.csv";
-    std::string real_path ="/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/ref_accel.csv";
+    std::string measure_path="/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/gyro-0.csv";
+    std::string real_path ="/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/ref_gyro.csv";
     std::string time_csv_path="/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/time.csv";
     std::vector<string> path_array;
     path_array.push_back(measure_path);
@@ -109,15 +135,25 @@ int main()
         new_gyro_measure.push_back(error_matrix*tmp_real + bias_and_noise);
     }
 
-    // 增加一个积分环节
-
-    double interval = 1/100;
-    double 
-
-
-
-
-
+    // 增加一个积分环节 虽然结果可以但是感觉这里做的有问题这里并不是一个SO3上的积分
+    // 虽然不是 但是 因为数值比较小，所以采用泰勒一阶展开结果也还行
+    double interval = 1.0/100.0;
+    
+    std::vector<Eigen::Vector3d> gyro_integration;
+    gyro_integration.resize(new_gyro_measure.size(),Eigen::Vector3d::Zero());
+    for(int i=1;i<new_gyro_measure.size();i++)
+    {
+        gyro_integration[i] = gyro_integration[i-1] + new_gyro_measure[i-1] * interval;
+    }
+    std::vector<Eigen::Vector3d> gyro_integration_without_noise;
+    gyro_integration_without_noise.resize(new_gyro_measure.size(),Eigen::Vector3d::Zero());
+    for(int i=1;i<new_gyro_measure.size();i++)
+    {
+        Eigen::Matrix<double,3,1> tmp_real(real_accel_data.at(0)[i-1],
+                                           real_accel_data.at(1)[i-1],
+                                           real_accel_data.at(2)[i-1]);
+        gyro_integration_without_noise[i] = gyro_integration_without_noise[i-1] + tmp_real * interval;
+    }  
 
     // 数据 下采样一下然后丢进 ceres 进行优化
 
@@ -132,12 +168,9 @@ int main()
     problem.AddParameterBlock(k,3);
     problem.AddParameterBlock(s,6);
     problem.AddParameterBlock(b,3);
-    for(int i=0;(10*i)<new_gyro_measure.size();i++)
+    for(int i=0;(10*i)<gyro_integration_without_noise.size();i++)
     {
-        Eigen::Matrix<double,3,1> tmp_real(real_accel_data.at(0)[i*10],
-                                           real_accel_data.at(1)[i*10],
-                                           real_accel_data.at(2)[i*10]);
-        problem.AddResidualBlock(ImuAccelError::CreateError(new_gyro_measure[i*10],tmp_real),new ceres::CauchyLoss(0.1),k,s,b);
+        problem.AddResidualBlock(ImuAccelError::CreateError(gyro_integration[i*10],gyro_integration_without_noise[i*10]),new ceres::CauchyLoss(0.1),k,s,b);
     }
     
     ceres::Solver::Options options;

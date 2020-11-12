@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-09 18:47:30
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-09-09 18:53:11
+ * @LastEditTime: 2020-11-09 19:37:18
  * @Description: 测试一下 Eigen 里Vector Array 相同读值的手法
  */
 
@@ -11,7 +11,7 @@
 */
 
 #include <iostream>
-#include "eigen3/Eigen/Eigen"
+#include "Eigen/Eigen"
 
 using namespace std;
 
