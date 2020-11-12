@@ -112,7 +112,8 @@
 
     流形的更新过程
 
-    优化的计算-> delta_local_var -> LocalParameterization ::Plus(last_global_var,delta_local_var,new_global_var)
+    优化的计算-> delta_local_var 
+            -> LocalParameterization ::Plus(last_global_var,delta_local_var,new_global_var)
             -> 得到新的global_var 然后就可以投入CostFunction 进行计算
 
 
