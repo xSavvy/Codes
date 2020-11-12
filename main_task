@@ -1,8 +1,9 @@
 1. 传感器融合第三章作业
-2. 视觉实现    类SVO PnP Triangulate
+2. 视觉实现    类SVO(LK 、DriectMethod) PnP Triangulate
               EPnP  极线搜索 ICP(完成)
               BA (SE3\Sim3估计) EFH估计
-              类ORB 
+              类ORB(Feature) 
+2. ORB-SLAM3 代码阅读
 2. VINS-Mono代码阅读
 3. gtsam 学习
 4. LIO-SAM 剩余代码阅读

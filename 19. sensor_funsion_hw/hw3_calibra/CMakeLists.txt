@@ -6,6 +6,8 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -o3")
 include(../../cmake/ceres.cmake)
 include(../../cmake/omp.cmake)
 include(../../cmake/eigen3.cmake)
+include(../../cmake/sophus.cmake)
 
 add_executable(calibra_accel hw_3_2_accel.cpp)
 add_executable(calibra_gyro hw_3_2_gyro.cpp)
+add_executable(SO3_RK4_test SO3_RK4_test.cpp)
