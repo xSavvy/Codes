@@ -11,8 +11,6 @@ GeometricCamera             基类
         -> vMatches,R21,t21,vP3D,vbTriangulated                  
 
 
-include(TwoViewReconstruction)
-
 TwoViewReconstruction
     |__ 重要member var
         |__ mvMatches12             vector<int> 代表了12帧特征点之间的Matches 关系

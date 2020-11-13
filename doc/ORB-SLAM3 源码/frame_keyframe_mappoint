@@ -35,10 +35,21 @@ Frame(Mono)
 
 KeyFrame(Mono)
     |__ 重要member var
-        |__ mBowVec、mFeatVec      词袋和特征向量
-        |__ mConnectedKeyFrameWeights
+        |__ mBowVec、mFeatVec                词袋和特征向量
+        |__ mConnectedKeyFrameWeights        map<KeyFrame *,int> 包含KeyFrame 的指针和权重
+        |__ mvpOrderedConnectedKeyFrames     list<KeyFrame*>根据权重排序的Keyframe
+        |__ mvOrderedWeights                 上面的mvpOrderedConnectedKeyFrames 每个KeyFrame 对应的权重
+        |__ mbFirstConnection                ？
+        |__ mparent                          ?
     |__ ctor(pFrame, pMap,pDataSet)
     |__ Set/Get...                 接口函数、没卵用
     |__ ComputeBoW()               计算词带向量和特征向量
     |__ covisibilityGraph
         |__ AddConnection(pKF,weight)     添加pKF 共视关系
+        |__ EraseConnection(pKF)          估计是删除共视关系
+        |__ UpdateConnections()           对当前KF 内的所有MapPoints 的 observation 进行统计 -> 放在Kcounter内
+                                          共视>th个点 放入 vPairs
+                                          根据vPairs 生成新的 mvpOrderedConnectedKeyFrames、mvOrderedWeights
+                                          更新mparent？ 
+        |__ UpdateBestCovisibles()        从mConnectedKeyFrameWeights 更新 mvpOrderedConnectedKeyFrames、mvOrderedWeights
+    |__ SpinningTree
