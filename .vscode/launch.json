@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/build/calibra_gyro",
+            "program": "/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/build/SO3_RK4_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

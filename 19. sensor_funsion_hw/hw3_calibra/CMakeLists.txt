@@ -1,6 +1,6 @@
 project(hw3)
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS "-std=c++11 -o3")
 
 include(../../cmake/ceres.cmake)

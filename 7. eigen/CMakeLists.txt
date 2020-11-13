@@ -1,6 +1,6 @@
 project(eigen-test)
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++14")
 find_package(Eigen3 3.3.7 REQUIRED)
 
 message(STATUS "aaaaaa" ${EIGEN3_VERSION_STRING})

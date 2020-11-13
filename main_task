@@ -4,6 +4,7 @@
               BA (SE3\Sim3估计) EFH估计
               类ORB(Feature) 
 2. ORB-SLAM3 代码阅读
+2. 预积分误差 误差关系确定
 2. VINS-Mono代码阅读
 3. gtsam 学习
 4. LIO-SAM 剩余代码阅读
