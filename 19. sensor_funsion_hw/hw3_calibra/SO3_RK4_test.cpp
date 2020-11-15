@@ -2,10 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-12 10:40:57
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-13 07:00:43
+ * @LastEditTime: 2020-11-14 22:05:45
  * @FilePath: /3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/SO3_RK4_test.cpp
  * @Description: 用于验证SO3 RK4 的正确性
- * 
+ *               IntegrationUsedInSemiCalib 积分太过暴力 结果很不好
  * 
  *               坑位预订：1. AngleAxis 的angle 单位是 radian 不能用deg
  *                       2. Sophus::SO3d::exp(so3) so3 的单位是 radian/s 不能直接使用deg/s
@@ -96,37 +96,73 @@ void IntegrationMidValue(const vector<Vector3d> & gyro_measurements,
 // }
 
 
+
+void IntegrationUsedInSemiCalib(const vector<Vector3d> & gyro_measurements,
+                         double dt,vector<Matrix3d> & output)
+{
+    Sophus::SO3d cur = Sophus::SO3d::exp(Vector3d::Zero());
+    Eigen::Matrix3d cur_matrix = cur.matrix();
+    output.clear();
+    Eigen::Vector3d sum = Eigen::Vector3d::Zero();
+    for(auto & measurement:gyro_measurements)
+    {
+        sum += (measurement/180.0*M_PI);
+        cur_matrix = (Eigen::Matrix3d::Identity()+Sophus::SO3d::hat(sum)*dt);
+        output.push_back(cur_matrix);
+    }
+}
+
+
 int main()
 {
     std::string gyro_real_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/gyro-0.csv";
+    std::string gravity_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/ref_accel.csv";
     std::vector<std::string> headers;
     std::vector<std::vector<double>> data;
     std::vector<Vector3d> data_in_vector;
+
+    std::vector<std::string> gravity_headers;
+    std::vector<std::vector<double>> gravity_data;
+    std::vector<Vector3d> gravity_in_vector;
     
     if(!readCSV(headers,data,gyro_real_measurement))
     {
         std::abort();
     };
     
+    if(!readCSV(gravity_headers,gravity_data,gravity_measurement))
+    {
+        std::abort();
+    };
+
     data_in_vector.reserve(data.front().size());
     
     for(int i=0;i<data.front().size();i++)
     {
         data_in_vector.push_back(Eigen::Vector3d(data.at(0)[i],data.at(1)[i],data.at(2)[i]));
     }
+
+    gravity_in_vector.reserve(gravity_data.front().size());
+    
+    for(int i=0;i<gravity_data.front().size();i++)
+    {
+        gravity_in_vector.push_back(Eigen::Vector3d(gravity_data.at(0)[i],gravity_data.at(1)[i],gravity_data.at(2)[i]));
+    }
+
     double deltaT= 1.0/100.0;
     std::vector<Matrix3d> result_1,result_2,result_3,result_4;
     IntegrationEuler(data_in_vector,deltaT,result_1);
 
     IntegrationEulerWithNumeric1stApproximate(data_in_vector,deltaT,result_2);
     IntegrationMidValue(data_in_vector,deltaT,result_3);
+    IntegrationUsedInSemiCalib(data_in_vector,deltaT,result_4);
     // IntegrationRK4(data_in_vector,0.01,result_4);
 
     // show the final result
     Eigen::Matrix3d rotation_matrix1;
-    rotation_matrix1 = Eigen::AngleAxisd(40.0/180.0*M_PI, Eigen::Vector3d::UnitZ()) *
-                Eigen::AngleAxisd(0, Eigen::Vector3d::UnitY()) *
-                Eigen::AngleAxisd(0, Eigen::Vector3d::UnitX());
+    rotation_matrix1 = Eigen::AngleAxisd(55.0/180.0*M_PI, Eigen::Vector3d::UnitZ()) *
+                Eigen::AngleAxisd(72.0/180.0*M_PI, Eigen::Vector3d::UnitY()) *
+                Eigen::AngleAxisd(31.0/180.0*M_PI, Eigen::Vector3d::UnitX());
     cout<<"the result should be "<<endl
         << rotation_matrix1<<endl;
     cout<<"the IntegrationEuler result is "<<endl
@@ -135,7 +171,15 @@ int main()
         << result_2.back()<<endl;
     cout<<"the IntegrationMidValue result is "<<endl
         << result_3.back()<<endl;
+    cout<<"the IntegrationUsedInSemiCalib result is "<<endl
+        << result_4.back()<<endl;
     // cout<<"the IntegrationRK4 result is "<<endl
     //     << result_4.back()<<endl;
-
+    cout<<"the origin gravity vector is "<<endl
+        <<gravity_in_vector.front().transpose()<<endl;
+    cout<<"the final gravity is "<<endl
+        <<gravity_in_vector.back().transpose()<<endl;
+    
+    cout<<"the transformed final gravity is "<<endl
+        <<rotation_matrix1* gravity_in_vector.back()<<endl;
 }
