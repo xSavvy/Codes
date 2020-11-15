@@ -2,13 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-09 23:06:06
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-15 02:42:07
+ * @LastEditTime: 2020-11-15 12:12:53
  * @Description: 半系统级 imu 标定
  *               先是gyro 的标定 1. 造误差数据 debug 没有问题
  *                             2. 找间隔     debug 没有问题
  *                             4. 积分的问题  目前看起来是有问题的 之前的内容太暴力 已经更改成细腻一点的版本
  *                             3. 做优化     目前怀疑是优化有问题
- *               
+ *               半系统级 accel 标定
  */
 #include "read_csv.h"
 #include "sophus/so3.hpp"
