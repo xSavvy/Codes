@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-11 09:27:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-11-11 10:47:31
+ * @LastEditTime: 2020-11-17 16:35:31
  * @FilePath: /3rd-test-learning/25. slam_demo/build_test_environment.h
  * @Description: 用于建立测试环境 拥有数据一致性
  */
@@ -17,6 +17,18 @@ struct Landmark
   Eigen::Vector3d position_;
   unsigned int label_;
 };
+
+void transfromPointIntoNewFrame(const Eigen::Vector3d &  point_old,Eigen::Vector3d & point_new,
+                                const Eigen::Matrix3d & rotation,const Eigen::Vector3d& translation)
+{
+    point_new = rotation * point_old + translation;
+}
+
+void transformNormalizedPointIntoUV(const Eigen::Matrix3d & intrinc_params,const Eigen::Vector3d landmark,
+                                    Eigen::Vector3d & uv)
+{
+    uv = intrinc_params * landmark/landmark.z();
+}
 
 bool buildEnvironment(double x_min,double y_min,double z_min ,
                       double x_scale, double y_scale, double z_scale ,
@@ -33,23 +45,26 @@ bool buildEnvironment(double x_min,double y_min,double z_min ,
     landmark_array.reserve(static_cast<size_t>(std::ceil(x_scale/x_interval))*
                            static_cast<size_t>(std::ceil(y_scale/y_interval))*
                            static_cast<size_t>(std::ceil(z_scale/z_interval)));
-    for(double x_cur = 0.0,y_cur = 0.0,z_cur =0.0; x_cur<x_scale && y_cur<y_scale&& z_cur<z_scale;)
+    for(double x_cur = 0.0;x_cur<x_scale;x_cur+=x_interval)
     {
-        Landmark tmp_lk;
-        tmp_lk.position_ = Eigen::Vector3d(x_cur+x_min,y_cur+y_min,z_cur+z_min);
-        tmp_lk.label_ = count;
-        landmark_array.push_back(tmp_lk);
-        x_cur+= x_interval;
-        y_cur+= y_interval;
-        z_cur+= z_interval;
-        count++;    
+        for(double y_cur = 0.0;y_cur<y_scale;y_cur+=y_interval)
+        {
+            for(double z_cur=0.0;z_cur<z_scale;z_cur+=z_interval)
+            {
+                Landmark tmp_lk;
+                tmp_lk.position_ = Eigen::Vector3d(x_cur+x_min,y_cur+y_min,z_cur+z_min);
+                tmp_lk.label_ = count;
+                landmark_array.push_back(tmp_lk);
+                count++;
+            }
+        }
     }
 
     return true;
 }
 
-// 这里的fov 是半视场角 而不是全视场
-bool foundPointInCamera(double fov_width,double fov_height,const std::vector<Landmark>& landmark_array, 
+// 这里的fov 是半视场角 而不是全视场 R_c_w t_c_w
+bool findPointInCamera(double fov_width,double fov_height,const std::vector<Landmark>& landmark_array, 
                         const Eigen::Matrix3d &rotation, const Eigen::Vector3d & translation,
                         std::vector<Landmark> * landmark_in_camera,std::vector<unsigned int> & index)
 {   
@@ -64,12 +79,13 @@ bool foundPointInCamera(double fov_width,double fov_height,const std::vector<Lan
         return false;
     } 
     
-
+    auto rotation_inv = rotation.transpose();
+    auto translation_inv = -1* rotation_inv*translation;
     std::vector<Landmark> landmark_in_camera_frame;
     landmark_in_camera_frame.resize(landmark_array.size(),Landmark());
     for(int i=0;i<landmark_array.size();i++)
     {
-        transfromPointIntoNewFrame(landmark_array[i].position_,landmark_in_camera_frame[i].position_,rotation,translation);
+        transfromPointIntoNewFrame(landmark_array[i].position_,landmark_in_camera_frame[i].position_,rotation_inv,translation_inv);
         landmark_in_camera_frame[i].label_ = landmark_array[i].label_;
         const auto & l = landmark_in_camera_frame[i];
 
@@ -85,21 +101,12 @@ bool foundPointInCamera(double fov_width,double fov_height,const std::vector<Lan
         // }
         if(fabs(z_angle)<fov_width && fabs(y_angle)<fov_height)
         {
-            landmark_in_camera->push_back(l);
+            landmark_in_camera->push_back(landmark_array[i]);
         }
         index.push_back(i);
     }
     return true;
 }
 
-void transfromPointIntoNewFrame(const Eigen::Vector3d & point_old,Eigen::Vector3d & point_new,
-                                const Eigen::Matrix3d & rotation,const Eigen::Vector3d& translation)
-{
-    point_new = rotation * point_old + translation;
-}
 
-void transformNormalizedPointIntoUV(const Eigen::Matrix3d & intrinc_params,const Eigen::Vector3d landmark,
-                                    Eigen::Vector3d & uv)
-{
-    uv = intrinc_params * landmark/landmark.z();
-}
+

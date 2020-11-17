@@ -1,5 +1,5 @@
 1. 传感器融合第三章作业
-2. 视觉实现    类SVO(LK 、DriectMethod) PnP Triangulate
+2. 视觉实现    类SVO(PLK 、DriectMethod) PnP Triangulate
               EPnP  极线搜索 ICP(完成)
               BA (SE3\Sim3估计) EFH估计
               类ORB(Feature) 
@@ -13,3 +13,4 @@
 6. hdl_localization 代码阅读
 7. lidar_localization 紧耦合
 8. lidar_localization 位姿图替换
+9. 修改一个实用的ICP
