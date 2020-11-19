@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-11-04 08:45:51
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2020-11-19 07:30:29
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
@@ -132,7 +132,7 @@ class SE3LocalParameterizaton:public ceres::LocalParameterization
     virtual int LocalSize() const { return 6; }
 };
 
-  bool ICPRegistrationSingle(pcl::PointCloud<pcl::PointXYZ>::Ptr t_pc_ptr,pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree_ptr,
+bool ICPRegistrationSingle(pcl::PointCloud<pcl::PointXYZ>::Ptr t_pc_ptr,pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree_ptr,
                               Eigen::Matrix4f predict_pose, Eigen::Matrix4f & result_pose, 
                               bool & finish,
                               float max_dis_squared = 3,
