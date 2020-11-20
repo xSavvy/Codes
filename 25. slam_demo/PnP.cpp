@@ -2,12 +2,12 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-17 16:56:39
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-11-17 17:32:53
+ * @LastEditTime: 2020-11-19 16:46:23
  * @FilePath: /3rd-test-learning/25. slam_demo/PnP.cpp
  * @Description: PnP 实现 
  *                   |__ 大规模优化
  *                   |__ P3P
- *                   |__ 三角测量
+ *                   |__ 三角测量      三角化还是有BUG
  */
 
 #include <iostream>
@@ -15,12 +15,6 @@
 #include "sophus/so3.hpp"
 using namespace std;
 
-void TriangulateTwoFrame(const std::vector<Landmark> & vlandmarkInCamera1, 
-                         const std::vector<Landmark> & vlandmarkInCamera2,
-                         Eigen::Matrix3d &rotation,Eigen::Vector3d & translation)
-{
-    
-}
 
 
 // 2D 和 2D 对应关系已知， 两个Frame 的关系已知，从中恢复深度
@@ -33,8 +27,10 @@ void Triangulate(const Landmark & l1,const Landmark & l2,
     auto p2 = l2.position_.normalized();
     
     Eigen::Matrix4d transform1,transform2;
-    transform1<<rotation1,translation1;
-    transform2<<rotation2,translation2;
+    transform1.block(0,0,3,3) = rotation1;
+    transform1.block(0,3,3,1) = translation1;
+    transform2.block(0,0,3,3) = rotation2;
+    transform2.block(0,3,3,1) = translation2;
 
     Eigen::Matrix4d svd_source;
     svd_source.row(0) = p1.x()*transform1.row(2) - transform1.row(1);
@@ -52,6 +48,24 @@ void Triangulate(const Landmark & l1,const Landmark & l2,
 }
 
 
+void TriangulateTwoFrame(const std::vector<Landmark> & vlandmarkInCamera1, 
+                         const std::vector<Landmark> & vlandmarkInCamera2,
+                         Eigen::Matrix3d &rotation1,Eigen::Vector3d & translation1,
+                         Eigen::Matrix3d &rotation2,Eigen::Vector3d & translation2)
+{
+    for(auto & landmark1:vlandmarkInCamera1)
+    {
+        for(auto & landmark2:vlandmarkInCamera2)
+        {
+            if(landmark1.label_ == landmark2.label_)
+            {
+                Triangulate(landmark1,landmark2,
+                            rotation1,translation1,
+                            rotation2,translation2);
+            }
+        }
+    }
+}
 
 
 int main()
@@ -66,10 +80,23 @@ int main()
     float hfov=120.0/180.0*M_PI/2.0,vfov = 75.0/180.0*M_PI/2.0;    
     std::vector<Landmark> vlandkInCamera;
     std::vector<unsigned int> vindex;
-    findPointInCamera(hfov,vfov,vLandmark,Eigen::Matrix3d::Identity(),Eigen::Vector3d::Ones()*3,&vlandkInCamera,vindex);
+    Eigen::Matrix3d rotation1 = Eigen::Matrix3d::Identity();
+    Eigen::Vector3d translation1 = Eigen::Vector3d::Ones()*3;
+    findPointInCamera(hfov,vfov,vLandmark,rotation1,translation1,&vlandkInCamera,vindex);
     cout<<"print landmark in camera"<<endl;
     for(auto & landmark:vlandkInCamera)
     {
         cout<<landmark.position_(0)<<"  "<<landmark.position_(1)<<"  "<<landmark.position_(2)<<endl;
     }
+    std::vector<Landmark> vlandkInCamera2;
+    std::vector<unsigned int> vindex2;
+    Eigen::AngleAxisd angle_axis(0.3,Eigen::Vector3d(0,0,1.0));
+    Eigen::Matrix3d rotation2 = angle_axis.matrix();
+    Eigen::Vector3d translation2 = Eigen::Vector3d::Zero();
+    findPointInCamera(hfov,vfov,vLandmark,rotation2,translation2,&vlandkInCamera2,vindex2);
+
+    TriangulateTwoFrame(vlandkInCamera,vlandkInCamera2,
+                        rotation1,translation1,
+                        rotation2,translation2);
+
 }

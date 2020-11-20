@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-11 09:27:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-11-17 16:35:31
+ * @LastEditTime: 2020-11-19 16:27:51
  * @FilePath: /3rd-test-learning/25. slam_demo/build_test_environment.h
  * @Description: 用于建立测试环境 拥有数据一致性
  */
@@ -66,7 +66,8 @@ bool buildEnvironment(double x_min,double y_min,double z_min ,
 // 这里的fov 是半视场角 而不是全视场 R_c_w t_c_w
 bool findPointInCamera(double fov_width,double fov_height,const std::vector<Landmark>& landmark_array, 
                         const Eigen::Matrix3d &rotation, const Eigen::Vector3d & translation,
-                        std::vector<Landmark> * landmark_in_camera,std::vector<unsigned int> & index)
+                        std::vector<Landmark> * landmark_in_camera,std::vector<unsigned int> & index,
+                        bool transformed = true)
 {   
     if(fov_width<0 || fov_height<0)
     {
@@ -101,7 +102,13 @@ bool findPointInCamera(double fov_width,double fov_height,const std::vector<Land
         // }
         if(fabs(z_angle)<fov_width && fabs(y_angle)<fov_height)
         {
+            if(transformed== true)
+            {
+            landmark_in_camera->push_back(landmark_in_camera_frame[i]);
+            }
+            else{
             landmark_in_camera->push_back(landmark_array[i]);
+            }
         }
         index.push_back(i);
     }
