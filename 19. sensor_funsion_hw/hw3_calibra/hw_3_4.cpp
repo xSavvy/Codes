@@ -2,9 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-14 22:25:00
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-22 17:37:19
+ * @LastEditTime: 2020-11-22 18:16:55
  * @Description: 位姿递推
  *               sample 1. 匀速模型
+ *               很奇怪跑
  */
 
 #include "read_csv.h"
@@ -189,7 +190,7 @@ int main()
     transformIntoVector(accel_data,accel_in_vector);
 
 
-    double hz = 100.0;
+    double hz = 30.0;
 
     PoseExtrapolator tmp(&accel_in_vector,&gyro_real_in_vector,hz);
 
