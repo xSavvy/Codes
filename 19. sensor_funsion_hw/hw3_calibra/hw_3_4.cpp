@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-14 22:25:00
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-15 16:39:22
+ * @LastEditTime: 2020-11-22 17:37:19
  * @Description: 位姿递推
  *               sample 1. 匀速模型
  */
@@ -188,18 +188,21 @@ int main()
     transformIntoVector(data_gravity,gravity_in_vector);
     transformIntoVector(accel_data,accel_in_vector);
 
-    PoseExtrapolator tmp(&accel_in_vector,&gyro_real_in_vector,30.0);
+
+    double hz = 100.0;
+
+    PoseExtrapolator tmp(&accel_in_vector,&gyro_real_in_vector,hz);
 
     tmp.buildProblem();
 
-    Eigen::Quaterniond tmp_q(3.124954727947144573e-01,-3.391011025459317874e-01,-5.090815295110348027e-01,-7.267688890188177542e-01);
+    Eigen::Quaterniond tmp_q(8.376852109105588085e-01,3.161446979674942814e-01,4.401753629742948815e-01,6.768801370421564934e-02);
     Eigen::AngleAxisd dream_result(tmp_q);
     cout<<"the dream result is "<<endl
         << dream_result.angle()*dream_result.axis()<<endl
-        <<"the matrix is "<<endl
+        <<"the dream matrix is "<<endl
         << dream_result.matrix()<<endl;
     std::vector<Matrix3d> result_1,result_2,result_3,result_4;
-    IntegrationEuler(gyro_real_in_vector,1.0/30.0,result_1);
+    IntegrationEuler(gyro_real_in_vector,1.0/hz,result_1);
     cout <<"the estimated result is "<<endl
         << result_1.back()<<endl;
 }

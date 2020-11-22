@@ -60,6 +60,18 @@ public:
             const float &b_ang_vel_x, const float &b_ang_vel_y, const float &b_ang_vel_z):
             bax(b_acc_x), bay(b_acc_y), baz(b_acc_z), bwx(b_ang_vel_x), bwy(b_ang_vel_y), bwz(b_ang_vel_z){}
     void CopyFrom(Bias &b);
+
+    Bias & operator+(const Bias & rv)
+    {
+        this->bax += rv.bax;
+        this->bay += rv.bay;
+        this->baz += rv.baz;
+        this->bwx += rv.bwx;
+        this->bwy += rv.bwy;
+        this->bwz += rv.bwz;
+        return *this;
+    }
+
     friend std::ostream& operator<< (std::ostream &out, const Bias &b);
 
 public:
@@ -174,7 +186,7 @@ cv::Mat InverseRightJacobianSO3(const float &x, const float &y, const float &z);
 cv::Mat InverseRightJacobianSO3(const cv::Mat &v);
 cv::Mat Skew(const cv::Mat &v);
 cv::Mat NormalizeRotation(const cv::Mat &R);
-
+Eigen::MatrixXd TypeTransform(const cv::Mat & m);
 }
 
 
