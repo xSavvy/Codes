@@ -1,4 +1,3 @@
-
 ## VIO 好效果重点
 
 ### FrontEnd Feature
@@ -7,7 +6,11 @@
    1. "Closed-form solution of visual-inertial structure from
 motion" <br> 
 按照VI-DSO Mono-IMU 初始化的问题已经是一个研究的很好的问题了，那么现在进行初始化的方向就是看哪个初始化的快？<br>
-
+   2. IMU 初始化的顺序<br>
+      <font color="Green">猜想：</font><br>
+      a. IMU的初始化顺序应该是和算法的可观性有关，有大可观性开始标定<br>原因是小可观性的参数波动过大。和大可观性的参数一起标定，很容易得到一个illed-systemed。<br>
+      这也是为什么IMU初始化需要分开优化。
+   3. keyframe之间需要有足够大的视差
 
 
 #### Point Feature-Based
@@ -42,6 +45,8 @@ motion" <br>
       如果有平移的话 通过极线做RANSAC，去除外点。<br>
       如果没有平移，极线约束退化，直接使用点的旋转来进行外点去除<br>
       RANSAC在内部左右图像匹配使用，和前后帧匹配上使用了2-Point Ransac<br>
+      e. 利用描述子再进行一次筛选(LARVIO)
+         ie. LK + ORB refine
    2. FAST和gradient的选择<br>
       追踪可以是FAST又可以是gradient 的点<br>
       关于如何选择，如何混合，选择多少，DSO的 Parameter Study可以提供一些思路
@@ -67,7 +72,19 @@ HDR Environments<br>
    5. 融合时 更好的光度误差模型建模<br>
       将论文中需要调参的lamda 换成一个从误差模型得到的参数会不会更好？<br>
  
-   
+### 综合类
+   1. Point Manage<br>
+      <font color="Red">框架实现：</font><br>
+      a. (SVO/DSO) 点的深度之后在不断更新，直到相对收敛之后，才会被加入系统。用于之后新帧的估计。<br>
+      相反的，ORB只要从新帧中抽取了Feature就会被加入系统，直接用于匹配。<br>
+      这里怀疑是一个鸡生蛋，蛋生鸡的逻辑。
+   2. Depth 使用逆深度
+   3. 均匀撒点
+   4. 离散误差<br>
+      <font color="Red">框架实现：</font><br>
+      a. DSO 是使用基线搜索，是一个亚像素精度的方法，但是ORB是按一个pixel一个pixel 的分离，所以会有更大的离散误差。可以使用LK+ORB refine 的方式进行克服。
+
+
 ### FrontEnd SlideWindow
 
    1. SlideWindow的策略制定会对算法有影响
