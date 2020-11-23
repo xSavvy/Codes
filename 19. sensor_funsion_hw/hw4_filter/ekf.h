@@ -2,9 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-18 07:23:29
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-22 16:47:47
+ * @LastEditTime: 2020-11-23 08:07:30
  * @Description:  因为IEKF 和 固定xk-1 估计 xk 的优化是等价的 所以这里直接使用 预积分+观测一起进行优化的形式在实现EKF
  */
+#pragma once
 
 #include "ImuTypes.h"
 
@@ -221,7 +222,7 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
         Eigen::Matrix<double,6,6> jacobian_matrix = Eigen::Matrix<double,6,6>::Identity();
         Eigen::Vector3d so3_T = Sophus::SO3d::exp(delta_rotation_).log();
         auto so3_whole = (Sophus::SO3d::exp(-1*rotation_map)*Sophus::SO3d::exp(so3_T)).log();
-        Eigen::Matrix3d Jr_inverse = IMU::TypeTransform(
+        Eigen::MatrixXd Jr_inverse = IMU::TypeTransform(
                               IMU::InverseRightJacobianSO3(
                               so3_whole.x(),so3_whole.y(),so3_whole.z()
                               ));
@@ -249,8 +250,7 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
                                         Eigen::Vector3d delta_rotation_meas, 
                                         Eigen::Vector3d delta_translation_meas)
     {
-        return new ceres::AutoDiffCostFunction<EKFObserError,6,3,3>(new EKFObserError(laser_measurement_covar,
-                                                                    delta_rotation_meas,delta_translation_meas));
+        return new EKFObserError(laser_measurement_covar,delta_rotation_meas,delta_translation_meas);
     }
 
     private:
@@ -269,7 +269,7 @@ class SO3LocalParameterization: public ceres::LocalParameterization
     {
         Eigen::Map<const Eigen::Vector3d> delta_x_map(delta);
         Eigen::Map<const Eigen::Vector3d> x_map(x);
-        Eigen::Map<const Eigen::Vector3d> new_so3(x_plus_delta);
+        Eigen::Map<Eigen::Vector3d> new_so3(x_plus_delta);
 
         auto x_SO3 = Sophus::SO3d::exp(x_map);
         auto delta_x_SO3 = Sophus::SO3d::exp(delta_x_map);
@@ -314,7 +314,7 @@ class SO3PlusOnlyLocalParameterization: public ceres::LocalParameterization
     {
         Eigen::Map<const Eigen::Vector3d> delta_x_map(delta);
         Eigen::Map<const Eigen::Vector3d> x_map(x);
-        Eigen::Map<const Eigen::Vector3d> new_so3(x_plus_delta);
+        Eigen::Map< Eigen::Vector3d> new_so3(x_plus_delta);
 
         auto x_SO3 = Sophus::SO3d::exp(x_map);
         auto delta_x_SO3 = Sophus::SO3d::exp(delta_x_map);

@@ -2,78 +2,90 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 10:47:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-22 16:49:21
+ * @LastEditTime: 2020-11-23 08:10:51
  * @Description: EKF 测试代码 从gnss-ins-sim 之中提取真值加上噪声之后，
  *                           对激光得到数值进行模拟
  */
+
 #include "ekf.h"
 #include "common.h"
+#include "read_csv.h"
 #include <iostream>
 
 using namespace std;
-
-void prepareLaserSimData(const std::vector<Eigen::Vector3d> & real_rotation_data,
-                         const std::vector<Eigen::Vector3d> & real_translation_data,
-                         std::vector<Eigen::Vector3d> & noise_rotation_data,
-                         std::vector<Eigen::Vector3d> & noise_translation_data,
-                         double IMU_hz , double measure_hz)
-{ 
-    // 尽量使用 可以整除 的 IMU_hz 和 measure_hz
-    
-    int gap = IMU_hz/measure_hz;
-    int size_translation = static_cast<double>(real_translation_data.size())/
-                           static_cast<double>(gap)+3;
-    int size_rotation = size_translation;
-    noise_rotation_data.reserve(size_translation);
-    noise_translation_data.reserve(size_rotation);
-    auto pre_position = real_translation_data.front();
-    auto pre_rotation = real_rotation_data.front();
-    
-    Eigen::Matrix4d T_i_w = Eigen::Matrix4d::Identity();
-    T_i_w.block(0,0,3,3) = Sophus::SO3d::exp(pre_rotation).matrix();
-    T_i_w.block(0,3,3,1) = pre_position;
-    Eigen::Matrix4d T_j_w = Eigen::Matrix4d::Identity();
-    for(int j= gap-1;j<real_rotation_data.size();j=j+gap)
-    {
-        T_j_w.block(0,0,3,3) = Sophus::SO3d::exp(real_rotation_data.at(j)).matrix();
-        T_j_w.block(0,3,3,1) = real_translation_data.at(j);
-        auto T_j_i = T_i_w.inverse()*T_j_w;
-        Eigen::AngleAxisd tmp_angleaxis(T_j_i.block(0,0,3,3));
-        noise_rotation_data.push_back(Eigen::Vector3d(T_j_i.block(0,3,3,1)));
-        T_i_w = T_j_w;   
-    }
-    AddNoise(noise_translation_data);
-    AddNoiseSO3(noise_rotation_data);
-
-}
 
 int main()
 {
 
     // ====================================   数据提取 ====================================================
-    std::string gyro_real_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_gyro.csv";
-    std::string gyro_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/gyro-0.csv";
-    std::string gravity_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_accel.csv";
-    std::string accel_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/accel-0.csv";
-    std::string real_position = "";
-    std::string real_rotation = " ";
-
+    std::string gyro_real_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_gyro.csv";
+    std::string gyro_measurement_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/gyro-0.csv";
+    std::string accel_real_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_accel.csv";
+    std::string accel_measurement_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/accel-0.csv";
+    std::string real_position_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_pos.csv";
+    std::string real_rotation_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw1/ref_att_quat.csv";
     
-    std::vector<std::string> headers_real;
-    std::vector<std::vector<double>> data_real;
-    std::vector<std::string> headers;
-    std::vector<std::vector<double>> data;
-    std::vector<std::string> headers_gravity;
-    std::vector<std::vector<double>> data_gravity;
-    std::vector<std::string> headers_accel;
-    std::vector<std::vector<double>> accel_data;
+    std::vector<std::string> gyro_real_headers;
+    std::vector<std::vector<double>> gyro_real;
+    std::vector<std::string> gyro_meas_headers;
+    std::vector<std::vector<double>> gyro_meas;
+    std::vector<std::string> accel_real_headers;
+    std::vector<std::vector<double>> accel_real;
+    std::vector<std::string> accel_meas_headers;
+    std::vector<std::vector<double>> accel_meas;
+    std::vector<std::string> pos_real_headers;
+    std::vector<std::vector<double>> pos_real;
+    std::vector<std::string> rot_real_headers;
+    std::vector<std::vector<double>> rot_real;
 
-    std::vector<Eigen::Vector3d> gyro_in_vector;
-    std::vector<Eigen::Vector3d> gyro_real_in_vector;
-    std::vector<Eigen::Vector3d> accel_in_vector;
-    std::vector<Eigen::Vector3d> gravity_in_vector;
+    std::vector<Eigen::Matrix<double,3,1>> gyro_in_vector;
+    std::vector<Eigen::Matrix<double,3,1>> gyro_real_in_vector;
+    std::vector<Eigen::Matrix<double,3,1>> accel_in_vector;
+    std::vector<Eigen::Matrix<double,3,1>> accel_real_in_vector;
+    std::vector<Eigen::Matrix<double,3,1>> pos_real_in_vector;
+    std::vector<Eigen::Matrix<double,4,1>> rot_real_in_vector;
 
+    {    
+        if(!readCSV(gyro_real_headers,gyro_real,gyro_real_p,3))
+        {
+            std::abort();
+        };
+        if(!readCSV(gyro_meas_headers,gyro_meas,gyro_measurement_p,3))
+        {
+            std::abort();
+        };
+        if(!readCSV(accel_real_headers,accel_real,accel_real_p,3))
+        {
+            std::abort();
+        };
+        if(!readCSV(accel_meas_headers,accel_meas,accel_measurement_p,3))
+        {
+            std::abort();
+        };
+        if(!readCSV(pos_real_headers,pos_real,real_position_p,3))
+        {
+            std::abort();
+        };
+        if(!readCSV(rot_real_headers,rot_real,real_rotation_p,3))
+        {
+            std::abort();
+        };
+    }
 
-    
+    {
+        transformIntoVector(gyro_meas,gyro_in_vector);
+        transformIntoVector(gyro_real,gyro_real_in_vector);
+        transformIntoVector(accel_meas,accel_in_vector);
+        transformIntoVector(accel_real,accel_real_in_vector);
+        transformIntoVector(pos_real,pos_real_in_vector);
+        transformIntoVector(rot_real,rot_real_in_vector);
+    }
+
+    for(auto & element: rot_real_in_vector)
+    {
+        std::cout<<element.transpose()<<std::endl;
+    }
+
+    return 0;
 }
 
