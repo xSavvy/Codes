@@ -15,24 +15,17 @@ endif()
 
 # gcc 编译标记 需要添加 -fopenmp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+link_libraries(OpenMP::OpenMP_CXX)
 
-add_executable(hello_world omp_exercise1.cpp)
-target_link_libraries(hello_world PUBLIC OpenMP::OpenMP_CXX)
+# add_executable(hello_world omp_exercise1.cpp)
+# add_executable(integratePi omp_exercise2.cpp)
+# add_executable(critical_and_atomic omp_exercise3.cpp)
+# add_executable(parallel_for omp_exercise4.cpp)
+# add_executable(share_and_private omp_exercise4_private_shared.cpp)
+# add_executable(barrier_nowait omp_exercise5.cpp)
 
-add_executable(integratePi omp_exercise2.cpp)
-target_link_libraries(integratePi PUBLIC OpenMP::OpenMP_CXX)
+add_executable(sections omp_exercise8_section.cpp)
 
-add_executable(critical_and_atomic omp_exercise3.cpp)
-target_link_libraries(critical_and_atomic PUBLIC OpenMP::OpenMP_CXX)
-
-add_executable(parallel_for omp_exercise4.cpp)
-target_link_libraries(parallel_for PUBLIC OpenMP::OpenMP_CXX)
-
-add_executable(share_and_private omp_exercise4_private_shared.cpp)
-target_link_libraries(share_and_private PUBLIC OpenMP::OpenMP_CXX)
-
-add_executable(barrier_nowait omp_exercise5.cpp)
-target_link_libraries(barrier_nowait PUBLIC OpenMP::OpenMP_CXX)
 ############## 对于cmake 3.9 + 有了更好的处理方法
 
 # cmake_minimum_required(VERSION 3.9 FATAL_ERROR)

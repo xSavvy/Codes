@@ -27,6 +27,7 @@
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <mutex>
+#include "common.h"
 
 
 
@@ -140,6 +141,8 @@ public:
     cv::Mat GetDeltaBias();
     Bias GetOriginalBias();
     Bias GetUpdatedBias();
+    void setPreV(const Eigen::Vector3d & pre_V) {pre_V_ =pre_V;}
+    Eigen::Vector3d getPreV() const{return pre_V_;}
 
 public:
     float dT;
@@ -169,6 +172,8 @@ private:
         cv::Point3f w;
         float t;
     };
+
+    Eigen::Vector3d pre_V_;
 
     std::vector<integrable> mvMeasurements;
 

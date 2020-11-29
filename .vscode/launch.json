@@ -8,7 +8,11 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
+<<<<<<< HEAD
+            "program": "/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/build/ekf_test",
+=======
             "program": "/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/build/pose_extrapolation",
+>>>>>>> dea03895de9003b39f4d3244d5b32fe33c925837
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
