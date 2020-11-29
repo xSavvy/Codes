@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-18 07:23:29
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-29 22:06:00
+ * @LastEditTime: 2020-11-29 23:12:52
  * @Description:  因为IEKF 和 固定xk-1 估计 xk 的优化是等价的 所以这里直接使用 预积分+观测一起进行优化的形式在实现EKF
  */
 #pragma once
@@ -106,8 +106,7 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         residual_map.block(12,0,3,1) = Bias_a_map;
         
         // R更新
-        Eigen::Vector3d so3 = TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
-        Eigen::Vector3d dR_so3_measure = TypeTransform(IMU::LogSO3(IMU_preintegration_->dR));
+        Eigen::Vector3d dR_so3_measure = TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
         auto delta_so3 = Sophus::SO3d::exp(R_map)* Sophus::SO3d::exp(-1*dR_so3_measure);
         residual_map.block(0,0,3,1) = delta_so3.log();
 
@@ -139,33 +138,20 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         
         Eigen::Matrix<double,15,15> jacobian_matrix = Eigen::Matrix<double,15,15>::Identity();
         
-        // R 更新 R_residual = R_var.inverse() * (R_meas * exp(JRg * dbg)) 
-        //       对R_var 求导
-        //       R_var.inverse()* exp(del_R) * (R_meas * exp(JRg * dbg))
-        //       exp(delR)*C_T = C_T*exp(C*delR) 
-        //       R_var.inverse()*C_T*exp(C*delR)
-        //       R_whole*exp(C*delR)
-        //       exp(so3_whole + Jr_-1*C*delR)
+        // R 更新 R_residual = exp(R_map)*(exp(dR)*exp(JRg*dbg)).inverse()
         
-        Eigen::Vector3d so3_T = TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
-        auto so3_whole = (Sophus::SO3d::exp(-1*R_map)*Sophus::SO3d::exp(so3_T)).log();
+        auto so3_whole = (Sophus::SO3d::exp(R_map)*Sophus::SO3d::exp(-1*dR_so3_measure)).log();
+        
         Eigen::Matrix3d Jr_inverse = TypeTransform(
                                     IMU::InverseRightJacobianSO3(
                                     so3_whole.x(),so3_whole.y(),so3_whole.z()
                                     ));
 
-        jacobian_matrix.block(0,0,3,3) = Jr_inverse*Sophus::SO3d::exp(-1*so3_T).matrix();
+        jacobian_matrix.block(0,0,3,3) = Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
         
         //       对 dbg 求导
-        //       R_var.inverse() * (R_meas * exp(JRg * (dbg))) 
-        //       R_var.inverse()*C_T*exp(delR)
-        //       R_whole*exp(delR)
-        //       exp(so3_whole + Jr_-1*delR)
-
-        Eigen::Vector3d dr_rdbg_so3 = TypeTransform(
-                                      IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
         
-        jacobian_matrix.block(0,9,3,3) = Jr_inverse;
+        jacobian_matrix.block(0,9,3,3) = -1*Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
 
         // PV 更新 P_residual  = P_var - (P_meas+ JPg * dbg_var + JPa * dba_var)
         //        V_residual = V_var - (V_meas + JVg * dbg_var + JVa * dba_var) 

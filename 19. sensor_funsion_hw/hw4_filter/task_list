@@ -21,6 +21,6 @@
     |__ ESKFObservation测试 完成             之后可以拿出来用于PoseGraph 的编写
     |__ ESKFPredictor  测试 失败
         |__ 推出的方差感觉有些问题              
-        |__ 重新修改一下误差方程
+        |__ 重新修改一下误差方程               完成
 4. 进行ESKF 的Laser 仿真测试
 5. 进行ESKF 的GPS 测试分析 
