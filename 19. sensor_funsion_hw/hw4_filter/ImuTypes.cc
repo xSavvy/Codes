@@ -148,19 +148,6 @@ cv::Mat InverseRightJacobianSO3(const cv::Mat &v)
     return InverseRightJacobianSO3(v.at<float>(0),v.at<float>(1),v.at<float>(2));
 }
 
-Eigen::MatrixXd TypeTransform(const cv::Mat & m)
-{    
-    Eigen::MatrixXd m_eigen(m.rows,m.cols);
-    for(int i =0;i<m.rows;i++)
-    {
-        for(int j =0;j<m.cols;j++)
-        {
-            m_eigen(i,j) = m.at<float>(i,j);
-        }
-    }
-    return m_eigen;
-}
-
 IntegratedRotation::IntegratedRotation(const cv::Point3f &angVel, const Bias &imuBias, const float &time):
     deltaT(time)
 {

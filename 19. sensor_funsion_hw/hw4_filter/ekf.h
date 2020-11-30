@@ -2,11 +2,12 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-18 07:23:29
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-23 08:07:30
+ * @LastEditTime: 2020-11-29 23:12:52
  * @Description:  因为IEKF 和 固定xk-1 估计 xk 的优化是等价的 所以这里直接使用 预积分+观测一起进行优化的形式在实现EKF
  */
 #pragma once
-
+#define TEST
+#define TEST_PRINT
 #include "ImuTypes.h"
 
 #include "Eigen/Eigen"
@@ -19,10 +20,11 @@ using namespace std;
 class EKF
 {
     public:
-    EKF(Eigen::Matrix<double,15,1> initial_state, 
-        Eigen::Matrix<double,15,15> initial_covar,
-        Eigen::Matrix<double,6,6> laser_measurement_covar,
-        IMU::Bias bias,IMU::Calib calib):
+    EKF(Eigen::Matrix<double,6,6> laser_measurement_covar,
+        IMU::Bias bias,
+        IMU::Calib calib,
+        Eigen::Matrix<double,15,1> initial_state = Eigen::Matrix<double,15,1>::Zero(), 
+        Eigen::Matrix<double,15,15> initial_covar = Eigen::Matrix<double,15,15>::Zero()):
         imu_preintegrated_(bias,calib),
         cur_state_(Eigen::Matrix<double,15,1>::Zero()),
         cur_covar_(initial_covar),
@@ -31,18 +33,20 @@ class EKF
         {}
 
     // interface
-    void addImuMeasurement(const cv::Point3f &acceleration, const cv::Point3f &angVel, const float &dt);
+    void addImuMeasurement(const Eigen::Vector3d &acceleration, const Eigen::Vector3d &angVel, const float &dt);
     void addLaserMeasurement(Eigen::Vector3d delta_rotation, Eigen::Vector3d delta_translation);
     
     auto getResult() const;
+    Eigen::Vector3d getPosition() const;
+    Eigen::Matrix<double,6,1> getBias() const;
     
-    protected:
+   
     // internal
     void updateImuPreintegration(IMU::Bias bias,IMU::Calib calib);
     void buildProblem(Eigen::Vector3d rotation, Eigen::Vector3d translation);
     void Update();
     void UpdateCovar(ceres::Problem & problem);
-    private:
+    
 
     IMU::Preintegrated imu_preintegrated_;
     Eigen::Matrix<double,15,1>  pre_state_;
@@ -68,13 +72,17 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
 {
     public:
     EKFPredictError(IMU::Preintegrated * IMU_preintegration,
-                    Eigen::Matrix<double,15,15> & piror_covar):
+                    Eigen::Matrix<double,15,15> & piror_covar,
+                    Eigen::Matrix<double,15,1> & pre_state):
                     IMU_preintegration_(IMU_preintegration),
-                    piror_covar_(piror_covar)
+                    piror_covar_(piror_covar),
+                    pre_state_(pre_state)
     {
-        Eigen::Matrix<double,15,15> Covar = piror_covar + IMU::TypeTransform(IMU_preintegration_->C);
+        Eigen::Matrix<double,15,15> Covar = TypeTransform(IMU_preintegration_->C);
         Eigen::LLT<Eigen::Matrix<double,15,15>> LLTSolver(Covar.inverse());
         Lt_=LLTSolver.matrixL().transpose();
+        // cout<<"the INFO of IMU Prediction is "<< endl
+        // << Lt_<<endl;
     }
 
     bool Evaluate(const double *const * params,
@@ -97,19 +105,31 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         residual_map.block(9,0,3,1) = Bias_g_map;
         residual_map.block(12,0,3,1) = Bias_a_map;
         
-        // RVP  更新
-        Eigen::Vector3d so3 = IMU::TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
-        
-        // // TODO 周天进行一下 这个部分
-
-        auto delta_so3 = Sophus::SO3d::exp(-1*R_map)*Sophus::SO3d::exp(so3);
-
+        // R更新
+        Eigen::Vector3d dR_so3_measure = TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
+        auto delta_so3 = Sophus::SO3d::exp(R_map)* Sophus::SO3d::exp(-1*dR_so3_measure);
         residual_map.block(0,0,3,1) = delta_so3.log();
 
-        residual_map.block(3,0,3,1) = V_map - IMU::TypeTransform(IMU_preintegration_->GetDeltaVelocity(new_bias));
-
-        residual_map.block(6,0,3,1) = P_map - IMU::TypeTransform(IMU_preintegration_->GetDeltaPosition(new_bias));
+        // V更新
+        residual_map.block(3,0,3,1) = V_map - TypeTransform(IMU_preintegration_->GetDeltaVelocity(new_bias));
         
+        // P更新
+        Eigen::Vector3d velocity_w = pre_state_.block(3,0,3,1);
+        Eigen::Vector3d so3_i_w = pre_state_.block(0,0,3,1);
+        Sophus::SO3d rotatoin_w_i = Sophus::SO3d::exp(-1*so3_i_w);
+        Eigen::Vector3d velocity_i = rotatoin_w_i * velocity_w;
+
+        Eigen::Vector3d dP_whole =  TypeTransform(IMU_preintegration_->GetDeltaPosition(new_bias)) +
+                                    velocity_i*IMU_preintegration_->dT;
+
+        residual_map.block(6,0,3,1) = P_map -dP_whole;
+
+#ifdef TEST_PRINT
+        cout<<"the residual is "<<endl;
+        cout<<residual_map.transpose()<<endl;
+#endif 
+        
+        // 添加协方差
         residual_map = Lt_ * residual_map;
 
         if (!jacobians) return true;
@@ -118,40 +138,27 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         
         Eigen::Matrix<double,15,15> jacobian_matrix = Eigen::Matrix<double,15,15>::Identity();
         
-        // R 更新 R_residual = R_var.inverse() * (R_meas * exp(JRg * dbg)) 
-        //       对R_var 求导
-        //       R_var.inverse()* exp(del_R) * (R_meas * exp(JRg * dbg))
-        //       exp(delR)*C_T = C_T*exp(C*delR) 
-        //       R_var.inverse()*C_T*exp(C*delR)
-        //       R_whole*exp(C*delR)
-        //       exp(so3_whole + Jr_-1*C*delR)
+        // R 更新 R_residual = exp(R_map)*(exp(dR)*exp(JRg*dbg)).inverse()
         
-        Eigen::Vector3d so3_T = IMU::TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
-        auto so3_whole = (Sophus::SO3d::exp(-1*R_map)*Sophus::SO3d::exp(so3_T)).log();
-        Eigen::Matrix3d Jr_inverse = IMU::TypeTransform(
+        auto so3_whole = (Sophus::SO3d::exp(R_map)*Sophus::SO3d::exp(-1*dR_so3_measure)).log();
+        
+        Eigen::Matrix3d Jr_inverse = TypeTransform(
                                     IMU::InverseRightJacobianSO3(
                                     so3_whole.x(),so3_whole.y(),so3_whole.z()
                                     ));
 
-        jacobian_matrix.block(0,0,3,3) = Jr_inverse*Sophus::SO3d::exp(-1*so3_T).matrix();
+        jacobian_matrix.block(0,0,3,3) = Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
         
         //       对 dbg 求导
-        //       R_var.inverse() * (R_meas * exp(JRg * (dbg))) 
-        //       R_var.inverse()*C_T*exp(delR)
-        //       R_whole*exp(delR)
-        //       exp(so3_whole + Jr_-1*delR)
-
-        Eigen::Vector3d dr_rdbg_so3 = IMU::TypeTransform(
-                                      IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
         
-        jacobian_matrix.block(0,9,3,3) = Jr_inverse;
+        jacobian_matrix.block(0,9,3,3) = -1*Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
 
         // PV 更新 P_residual  = P_var - (P_meas+ JPg * dbg_var + JPa * dba_var)
         //        V_residual = V_var - (V_meas + JVg * dbg_var + JVa * dba_var) 
-        jacobian_matrix.block(3,9,3,3) = -1* IMU::TypeTransform(IMU_preintegration_->JVg);
-        jacobian_matrix.block(3,12,3,3)= -1* IMU::TypeTransform(IMU_preintegration_->JVa);
-        jacobian_matrix.block(6,9,3,3) = -1* IMU::TypeTransform(IMU_preintegration_->JPg);
-        jacobian_matrix.block(6,12,3,3)= -1* IMU::TypeTransform(IMU_preintegration_->JPa);
+        jacobian_matrix.block(3,9,3,3) = -1* TypeTransform(IMU_preintegration_->JVg);
+        jacobian_matrix.block(3,12,3,3)= -1* TypeTransform(IMU_preintegration_->JVa);
+        jacobian_matrix.block(6,9,3,3) = -1* TypeTransform(IMU_preintegration_->JPg);
+        jacobian_matrix.block(6,12,3,3)= -1* TypeTransform(IMU_preintegration_->JPa);
 
         int count =0;
         for(int k =0;k<5;k++)
@@ -171,14 +178,16 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
     }
  
     static ceres::CostFunction * Create(IMU::Preintegrated * IMU_preintegration,
-                                        Eigen::Matrix<double,15,15> & piror_covar)
+                                        Eigen::Matrix<double,15,15> & piror_covar,
+                                        Eigen::Matrix<double,15,1> & pre_state)
     {
-        return new EKFPredictError(IMU_preintegration,piror_covar);
+        return new EKFPredictError(IMU_preintegration,piror_covar,pre_state);
     }
 
     private:
     IMU::Preintegrated * IMU_preintegration_;
     Eigen::Matrix<double,15,15> piror_covar_;
+    Eigen::Matrix<double,15,1> pre_state_;
     Eigen::Matrix<double,15,15> Lt_;
 };
 
@@ -200,6 +209,8 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
     {
         Eigen::LLT<Eigen::Matrix<double,6,6>> LLTSolver(laser_measurement_covar_.inverse());
         Lt_=LLTSolver.matrixL().transpose();
+        // cout<<"the Laser Measure INFO is "<<endl
+        // <<Lt_<<endl;
     }
     
     bool Evaluate(const double *const * params,
@@ -210,7 +221,7 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
         Eigen::Map<const Eigen::Vector3d> translation_map(params[1]);
         Eigen::Map<Eigen::Matrix<double,6,1>> residual_map(residual);
         
-        Eigen::Vector3d delta_so3 = (Sophus::SO3d::exp(-1*rotation_map)*Sophus::SO3d::exp(delta_rotation_)).log();
+        Eigen::Vector3d delta_so3 = (Sophus::SO3d::exp(rotation_map)*Sophus::SO3d::exp(-1*delta_rotation_)).log();
         
         residual_map.block(0,0,3,1) = delta_so3;
         residual_map.block(3,0,3,1) = translation_map - delta_translation_;
@@ -220,9 +231,9 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
         if (!jacobian) return true;
 
         Eigen::Matrix<double,6,6> jacobian_matrix = Eigen::Matrix<double,6,6>::Identity();
-        Eigen::Vector3d so3_T = Sophus::SO3d::exp(delta_rotation_).log();
-        auto so3_whole = (Sophus::SO3d::exp(-1*rotation_map)*Sophus::SO3d::exp(so3_T)).log();
-        Eigen::MatrixXd Jr_inverse = IMU::TypeTransform(
+        Eigen::Vector3d so3_T = Sophus::SO3d::exp(-1*delta_rotation_).log();
+        auto so3_whole = (Sophus::SO3d::exp(rotation_map)*Sophus::SO3d::exp(so3_T)).log();
+        Eigen::MatrixXd Jr_inverse = TypeTransform(
                               IMU::InverseRightJacobianSO3(
                               so3_whole.x(),so3_whole.y(),so3_whole.z()
                               ));
@@ -327,7 +338,7 @@ class SO3PlusOnlyLocalParameterization: public ceres::LocalParameterization
     virtual bool ComputeJacobian(const double* x, double* jacobian) const
     {
         ceres::MatrixRef(jacobian, 3, 3) = ceres::Matrix::Identity(3, 3);
-        return 0;
+        return true;
     }
 
     virtual int GlobalSize() const { return 3; }

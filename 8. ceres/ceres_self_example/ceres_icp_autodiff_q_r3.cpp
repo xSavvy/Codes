@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-02 07:59:53
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-03 07:42:55
+ * @LastEditTime: 2020-11-29 21:21:23
  * @Description: 
  *                Auto Diff Quternion + R3 上的优化 
  *                ceres 的 EigenQuternionLocalParameterization 
@@ -130,9 +130,7 @@ int main()
     const double transform_lie [6] {0.4,0.6,0.7,0.6,0.7,0.8};
     Eigen::Map<const Eigen::Matrix<double,6,1>> transform_map(transform_lie);
     Sophus::SE3<double> transform_se3 = Sophus::SE3d::exp(transform_map);
-
-
-
+    
     std::vector<Eigen::Vector4d> point_in_camera;
     transformPointCloud(transform_se3,point_cloud,point_in_camera);
     AddNoise(point_in_camera);
@@ -155,7 +153,7 @@ int main()
     Eigen::Translation3d translation(show_lie.translation());
 
     
-    cout<<" the right SE3 is "<<endl
+    cout<<" the init SE3 is "<<endl
         << show_lie.matrix()<<endl;
     // 现在这么看的的确是节省了一些添加 LocalParameterization 的代码
     problem.AddParameterBlock(quternion.coeffs().data(),4,new ceres::EigenQuaternionParameterization());
@@ -179,8 +177,8 @@ int main()
     ceres::Solve(options,&problem,&summary);
 
     cout<<summary.BriefReport()<<endl;
-    cout<<"the rotation matrix is "<<quternion.toRotationMatrix()<<endl
-        <<"the translation  is "<< translation.translation().transpose()<<endl;
+    cout<<"the rotation matrix is "<<std::endl<< quternion.toRotationMatrix()<<endl
+        <<"the translation  is "<<std::endl<< translation.translation().transpose()<<endl;
     
     cout<<"the right se3 is "<<endl<<transform_se3.matrix3x4()<<endl;
     
