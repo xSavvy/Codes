@@ -14,3 +14,5 @@
 7. lidar_localization 紧耦合
 8. lidar_localization 位姿图替换
 9. 修改一个实用的ICP
+   LOAM 基底打KITTI F-LOAM+LLS-LOAM 基于环境进行特别的修改也没有关系
+10.

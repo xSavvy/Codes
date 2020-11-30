@@ -1,3 +1,5 @@
+
+
 ## VIO 好效果重点
 
 ### FrontEnd Feature
@@ -75,14 +77,17 @@ HDR Environments<br>
 ### 综合类
    1. Point Manage<br>
       <font color="Red">框架实现：</font><br>
-      a. (SVO/DSO) 点的深度之后在不断更新，直到相对收敛之后，才会被加入系统。用于之后新帧的估计。<br>
+      a. (SVO/DSO) 点的深度之后在不断更新，直到相对收敛之后，才会被加入系统。用于之后新帧的估计。(inleir select)<br>
       相反的，ORB只要从新帧中抽取了Feature就会被加入系统，直接用于匹配。<br>
       这里怀疑是一个鸡生蛋，蛋生鸡的逻辑。
+      b. Conventionally, 就是RANSAC-like 的方法(inlier select)
+      c. 
    2. Depth 使用逆深度
    3. 均匀撒点
    4. 离散误差<br>
       <font color="Red">框架实现：</font><br>
       a. DSO 是使用基线搜索，是一个亚像素精度的方法，但是ORB是按一个pixel一个pixel 的分离，所以会有更大的离散误差。可以使用LK+ORB refine 的方式进行克服。
+   5. 参数模型->快速收敛
 
 
 ### FrontEnd SlideWindow
@@ -95,5 +100,13 @@ HDR Environments<br>
 ### FrontEnd
    1. 点云匹配之后，再加一个IMU修正。<br>
       据说效果会更好?没有理明白这个逻辑     
-   2. 在进行点云匹配的时候，其实应该添加一个imu预测。
+   2. 在进行点云匹配的时候，其实应该添加一个imu预测。<br>
       特别是在旋转上，在剧烈旋转的时候，不添加IMU 的旋转预测，一定会出问题
+
+
+## 哲学
+a. 匹配的初值预测<br>
+b. 误差模型的分析<br>
+c. 参数的表示<br>
+d. 深度学习<br>
+e. 因子的设置<br>
