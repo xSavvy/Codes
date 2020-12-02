@@ -2,13 +2,19 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-09 23:06:06
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-15 12:12:53
+ * @LastEditTime: 2020-11-30 20:51:39
  * @Description: 半系统级 imu 标定
  *               先是gyro 的标定 1. 造误差数据 debug 没有问题
  *                             2. 找间隔     debug 没有问题
  *                             4. 积分的问题  目前看起来是有问题的 之前的内容太暴力 已经更改成细腻一点的版本
  *                             3. 做优化     目前怀疑是优化有问题
  *               半系统级 accel 标定
+ *               
+ *  
+ *               2020.11.30 当时做的时候仅仅是对 accel 的 KS Bias 和
+ *                                            gyro 的KS  进行标定
+ *                                            但是没有标定 gyro的bias
+ *                          之后应该重新写一下
  */
 #include "read_csv.h"
 #include "sophus/so3.hpp"
@@ -583,15 +589,15 @@ int main()
 
     // ================================= 优化测试 gyro ============================================
 
-    // CalibGyro calib_gyro(&gyro_in_vector,&gyro_real_in_vector,&gravity_in_vector,100.0);
-    // calib_gyro.buildProblem();
+    CalibGyro calib_gyro(&gyro_in_vector,&gyro_real_in_vector,&gravity_in_vector,100.0);
+    calib_gyro.buildProblem();
 
-    // std::cout<<"show the target error model is "<<endl
-    //          << error_matrix<<endl;
-    // std::cout<<"show error matrix inverse"<<endl
-    //          << error_matrix_inv<<endl;
-    // std::cout<<"show the estimation error matrix is "<<endl
-    //          << calib_gyro.getErrorMatrix()<<endl;
+    std::cout<<"show the target error model is "<<endl
+             << error_matrix<<endl;
+    std::cout<<"show error matrix inverse"<<endl
+             << error_matrix_inv<<endl;
+    std::cout<<"show the estimation error matrix is "<<endl
+             << calib_gyro.getErrorMatrix()<<endl;
 
     // ================================= 优化测试 accel ===========================================
 

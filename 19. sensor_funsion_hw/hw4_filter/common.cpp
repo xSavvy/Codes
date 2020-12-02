@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-26 19:43:14
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-26 19:43:16
+ * @LastEditTime: 2020-11-30 21:02:23
  * @Description: 
  */
 #include "common.h"
@@ -87,4 +87,10 @@ void prepareLaserSimData(const std::vector<Eigen::Vector3d> & real_rotation_data
     }
     AddNoise(noise_translation_data);
     AddNoiseSO3(noise_rotation_data);
+}
+
+void showMat(cv::Mat & mat)
+{
+    std::cout<<"the desired Mat is "<<std::endl<<
+    TypeTransform(mat)<<std::endl;
 }

@@ -37,11 +37,37 @@ void EKF::buildProblem(Eigen::Vector3d delta_rotation_measure, Eigen::Vector3d d
     
     problem.AddParameterBlock(cur_state_.data(),3,new SO3PlusOnlyLocalParameterization());
     problem.AddParameterBlock(cur_state_.data()+6,3);
-    // auto cf1 = EKFObserError::Create(laser_meassurement_covar_,delta_rotation_measure,delta_translation_measure);
-    // problem.AddResidualBlock(cf1,NULL,cur_state_.data(),cur_state_.data()+6);
-    
+    auto cf1 = EKFObserError::Create(laser_meassurement_covar_,delta_rotation_measure,delta_translation_measure);
+    problem.AddResidualBlock(cf1,NULL,cur_state_.data(),cur_state_.data()+6);
+#ifdef TEST_OPT
+
+    Eigen::Matrix<double,15,15> whole_covar = Eigen::Matrix<double,15,15>::Identity();
+    whole_covar.block(0,0,9,9) = whole_covar.block(0,0,9,9)*1e-4;
+
+    // {
+    // cur_state_.block(0,0,3,1) = TypeTransform(IMU::LogSO3(imu_preintegrated_.GetOriginalDeltaRotation()));
+    // cur_state_.block(3,0,3,1) = TypeTransform(imu_preintegrated_.GetOriginalDeltaVelocity());
+    // Eigen::Vector3d velocity_w = pre_state_.block(3,0,3,1);
+    // Eigen::Vector3d so3_i_w = pre_state_.block(0,0,3,1);
+    // Sophus::SO3d rotatoin_w_i = Sophus::SO3d::exp(-1*so3_i_w);
+    // Eigen::Vector3d velocity_i = rotatoin_w_i * velocity_w;
+
+    // Eigen::Vector3d dP_whole =  TypeTransform(imu_preintegrated_.GetOriginalDeltaPosition()) +
+    //                             velocity_i*imu_preintegrated_.dT;
+    // cur_state_.block(6,0,3,1) = dP_whole;
+    // }
+
+    // cur_state_.block(3,0,6,1) -= Eigen::Matrix<double,6,1>::Ones()*0.6;
+    // cur_state_.block(9,0,6,1) += Eigen::Matrix<double,6,1>::Zero()*0.5;
+
+
+
+#elif
+    showMat(imu_preintegrated_.C);
     Eigen::Matrix<double,15,15> whole_covar = TypeTransform(imu_preintegrated_.C);
+#endif
     auto cf2 = EKFPredictError::Create(&imu_preintegrated_,whole_covar,pre_state_);
+    
     problem.AddResidualBlock(cf2,NULL,cur_state_.data(),cur_state_.data()+3,
                                       cur_state_.data()+6,cur_state_.data()+9,
                                       cur_state_.data()+12);

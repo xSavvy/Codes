@@ -2,10 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-08 10:28:52
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-11 19:50:47
+ * @LastEditTime: 2020-12-02 07:28:35
  * @Description: 代码用于求解分立式标定
  *               代码分成两个部分一个IMU_accel
  *                                IMU_gyro
+ *      增加一个积分环节 虽然结果可以但是感觉这里做的有问题这里并不是一个SO3上的积分
+     虽然不是 但是 因为数值比较小，所以采用泰勒一阶展开结果也还行
+    2020.12.3 这个结果目前感觉还是有一些问题的之后需要具体看一下
  */
 #include <iostream>
 #include <ceres/ceres.h>
@@ -135,8 +138,7 @@ int main()
         new_gyro_measure.push_back(error_matrix*tmp_real + bias_and_noise);
     }
 
-    // 增加一个积分环节 虽然结果可以但是感觉这里做的有问题这里并不是一个SO3上的积分
-    // 虽然不是 但是 因为数值比较小，所以采用泰勒一阶展开结果也还行
+
     double interval = 1.0/100.0;
     
     std::vector<Eigen::Vector3d> gyro_integration;

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 16:04:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-26 19:44:12
+ * @LastEditTime: 2020-11-30 21:01:49
  * @Description: 
  */
 #pragma once
@@ -10,6 +10,7 @@
 #include <g2o/stuff/sampler.h>
 #include "sophus/so3.hpp"
 #include "opencv2/core/core.hpp"
+#include <iostream>
 
 bool AddNoise(std::vector<Eigen::Vector3d> & point_cloud);
 
@@ -21,7 +22,7 @@ void prepareLaserSimData(const std::vector<Eigen::Vector3d> & real_rotation_data
                          std::vector<Eigen::Vector3d> & noise_translation_data,
                          double IMU_hz , double measure_hz);
 
-
+void showMat(cv::Mat & mat);
 
 
 template<typename T,int rows>
@@ -57,3 +58,4 @@ cv::Mat TypeTransformInv(const Eigen::Matrix<T,rows,cols> & matrix)
 
     return matrix_result;
 }
+

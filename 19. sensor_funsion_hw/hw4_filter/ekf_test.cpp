@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 10:47:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-29 01:15:59
+ * @LastEditTime: 2020-11-30 22:19:43
  * @Description: EKF 测试代码 从gnss-ins-sim 之中提取真值加上噪声之后，
  *                           对激光得到数值进行模拟
  */
@@ -178,11 +178,11 @@ int main()
     Eigen::Matrix<double,6,6> laser_obs_covar = Eigen::Matrix<double,6,6>::Identity() * 0.04;
     IMU::Bias init_bias;
     Eigen::Matrix<double,4,4> Tbc = Eigen::Matrix<double,4,4>::Identity();
-    IMU::Calib init_calib(TypeTransformInv(Tbc),1e-6,1e-6,1e-6,1e-6);
+    IMU::Calib init_calib(TypeTransformInv(Tbc),1e-4,1e-4,1e-4,1e-4);
     EKF ekf(laser_obs_covar,init_bias,init_calib);
     
     // 往EKF里面放数据
-    int interval = 2000;
+    int interval = 1000;
     int count = 0;
     double hz = 100.0;
     assert(pos_obs_in_vector.size() == rot_obs_in_vector.size());

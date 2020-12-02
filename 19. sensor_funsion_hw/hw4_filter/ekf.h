@@ -2,12 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-18 07:23:29
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-29 23:12:52
+ * @LastEditTime: 2020-12-02 08:14:41
  * @Description:  因为IEKF 和 固定xk-1 估计 xk 的优化是等价的 所以这里直接使用 预积分+观测一起进行优化的形式在实现EKF
  */
 #pragma once
 #define TEST
 #define TEST_PRINT
+#define TEST_OPT
 #include "ImuTypes.h"
 
 #include "Eigen/Eigen"
@@ -107,13 +108,14 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         
         // R更新
         Eigen::Vector3d dR_so3_measure = TypeTransform( IMU::LogSO3(IMU_preintegration_->GetDeltaRotation(new_bias)));
-        auto delta_so3 = Sophus::SO3d::exp(R_map)* Sophus::SO3d::exp(-1*dR_so3_measure);
-        residual_map.block(0,0,3,1) = delta_so3.log();
+        Eigen::Vector3d delta_so3 = (Sophus::SO3d::exp(R_map)* Sophus::SO3d::exp(-1*dR_so3_measure)).log();
+        residual_map.block(0,0,3,1) = delta_so3;
 
         // V更新
         residual_map.block(3,0,3,1) = V_map - TypeTransform(IMU_preintegration_->GetDeltaVelocity(new_bias));
         
         // P更新
+        
         Eigen::Vector3d velocity_w = pre_state_.block(3,0,3,1);
         Eigen::Vector3d so3_i_w = pre_state_.block(0,0,3,1);
         Sophus::SO3d rotatoin_w_i = Sophus::SO3d::exp(-1*so3_i_w);
@@ -121,12 +123,12 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
 
         Eigen::Vector3d dP_whole =  TypeTransform(IMU_preintegration_->GetDeltaPosition(new_bias)) +
                                     velocity_i*IMU_preintegration_->dT;
-
+        
         residual_map.block(6,0,3,1) = P_map -dP_whole;
 
 #ifdef TEST_PRINT
-        cout<<"the residual is "<<endl;
-        cout<<residual_map.transpose()<<endl;
+        // cout<<"the residual is "<<endl;
+        // cout<<residual_map.transpose()<<endl;
 #endif 
         
         // 添加协方差
@@ -140,18 +142,20 @@ class EKFPredictError:public ceres::SizedCostFunction<15,3,3,3,3,3>
         
         // R 更新 R_residual = exp(R_map)*(exp(dR)*exp(JRg*dbg)).inverse()
         
-        auto so3_whole = (Sophus::SO3d::exp(R_map)*Sophus::SO3d::exp(-1*dR_so3_measure)).log();
+        // auto so3_whole = (Sophus::SO3d::exp(R_map)*Sophus::SO3d::exp(-1*dR_so3_measure)).log();
         
         Eigen::Matrix3d Jr_inverse = TypeTransform(
                                     IMU::InverseRightJacobianSO3(
-                                    so3_whole.x(),so3_whole.y(),so3_whole.z()
+                                    delta_so3.x(),delta_so3.y(),delta_so3.z()
                                     ));
 
         jacobian_matrix.block(0,0,3,3) = Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
         
         //       对 dbg 求导
         
-        jacobian_matrix.block(0,9,3,3) = -1*Jr_inverse*Sophus::SO3d::exp(dR_so3_measure).matrix();
+        jacobian_matrix.block(0,9,3,3) = -1*Jr_inverse*
+                                            Sophus::SO3d::exp(dR_so3_measure).matrix()*
+                                            TypeTransform(IMU_preintegration_->JRg);
 
         // PV 更新 P_residual  = P_var - (P_meas+ JPg * dbg_var + JPa * dba_var)
         //        V_residual = V_var - (V_meas + JVg * dbg_var + JVa * dba_var) 
@@ -231,14 +235,14 @@ class EKFObserError: public ceres::SizedCostFunction<6,3,3>
         if (!jacobian) return true;
 
         Eigen::Matrix<double,6,6> jacobian_matrix = Eigen::Matrix<double,6,6>::Identity();
-        Eigen::Vector3d so3_T = Sophus::SO3d::exp(-1*delta_rotation_).log();
-        auto so3_whole = (Sophus::SO3d::exp(rotation_map)*Sophus::SO3d::exp(so3_T)).log();
+        // Eigen::Vector3d so3_T = Sophus::SO3d::exp(-1*delta_rotation_).log();
+        // auto so3_whole = (Sophus::SO3d::exp(rotation_map)*Sophus::SO3d::exp(so3_T)).log();
         Eigen::MatrixXd Jr_inverse = TypeTransform(
                               IMU::InverseRightJacobianSO3(
-                              so3_whole.x(),so3_whole.y(),so3_whole.z()
+                              delta_so3.x(),delta_so3.y(),delta_so3.z()
                               ));
 
-        jacobian_matrix.block(0,0,3,3) = Jr_inverse * Sophus::SO3d::exp(-1*so3_T).matrix();  
+        jacobian_matrix.block(0,0,3,3) = Jr_inverse * Sophus::SO3d::exp(delta_rotation_).matrix();  
 
         int count =0;
         for(int k =0;k<2;k++)
