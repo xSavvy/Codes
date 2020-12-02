@@ -81,7 +81,9 @@ HDR Environments<br>
       相反的，ORB只要从新帧中抽取了Feature就会被加入系统，直接用于匹配。<br>
       这里怀疑是一个鸡生蛋，蛋生鸡的逻辑。
       b. Conventionally, 就是RANSAC-like 的方法(inlier select)
-      c. 
+      c. <font color="Red">ZhaoYiPu Good 三篇</font><br>
+         +Optimally observable and minimal cardinality monocular slam<br>
+         + Attention and anticipation in fast visualinertial navigation<br>
    2. Depth 使用逆深度
    3. 均匀撒点
    4. 离散误差<br>
@@ -94,6 +96,11 @@ HDR Environments<br>
 
    1. SlideWindow的策略制定会对算法有影响
       DSO   
+
+
+### 硬件
+1. 关于自动曝光
+2. 关于图像rect与否
 
 ## Lidar 好效果重点
 
