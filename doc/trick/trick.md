@@ -90,7 +90,9 @@ HDR Environments<br>
       <font color="Red">框架实现：</font><br>
       a. DSO 是使用基线搜索，是一个亚像素精度的方法，但是ORB是按一个pixel一个pixel 的分离，所以会有更大的离散误差。可以使用LK+ORB refine 的方式进行克服。
    5. 参数模型->快速收敛
-
+   6. 子图管理<br>
+      Good Graph to Optimize: Cost-Effective,
+Budget-Aware Bundle Adjustment in Visual SLAM
 
 ### FrontEnd SlideWindow
 

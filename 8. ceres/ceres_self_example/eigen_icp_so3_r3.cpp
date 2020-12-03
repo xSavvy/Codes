@@ -1,10 +1,15 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-11-03 07:19:03
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-03 19:55:58
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-12-03 14:39:45
  * @Description:  基于Eigen 实现的ICP 算法 据说是又快又好  目前还是有问题  告一段落
+ *                
+ *                BUG 在for 的内容
+ *                并且没有对transform 进行迭代
+ * 
  */
+
 #include <vector>
 #include <iostream>
 #include <random>
@@ -100,7 +105,7 @@ int main()
     buildPointCloud();
 
     // ================================ 生成变化 ================================
-    double transform_lie [6] {0.2,0.5,0.6,0.7,0.7,0.8};
+    double transform_lie [6] {0.2,0.5,0.6,0.0,0.0,0.0};
     Eigen::Map<Eigen::Matrix<double,6,1>> lie_map(transform_lie);
     Sophus::SE3d transform_se3 = Sophus::SE3d::exp(lie_map);
     
@@ -111,7 +116,7 @@ int main()
 
     std::vector<Eigen::Vector4d> point_in_camera;
     transformPointCloud(transform_se3,point_cloud,point_in_camera);
-    AddNoise(point_in_camera);
+    // AddNoise(point_in_camera);
 
     // ================================ 变换到pcl类型并存入Kdtree ================
 
@@ -143,7 +148,8 @@ int main()
     std::vector<Eigen::Vector3f> target_match;
     std::vector<Eigen::Vector3f> source_match;
     kdtree.setInputCloud(point_cloud_in_world);
-
+    Eigen::Matrix4f result_transform = Eigen::Matrix4f::Identity();
+    pcl::PointCloud<pcl::PointXYZ>::Ptr tmp_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
     for(int i=0;i<max_iter;i++)
     {
         double sum_squared_dist = 0.0;
@@ -156,8 +162,11 @@ int main()
         Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
         transform.block(0,0,3,3)=R;
         transform.block(0,3,3,1)=t;
+        result_transform = transform*result_transform;
 
-        pcl::transformPointCloud(*point_cloud_in_camera,*point_cloud_in_camera,transform);
+        
+
+        pcl::transformPointCloud(*point_cloud_in_camera,*tmp_point_cloud,result_transform);
 
         for(auto & point:point_cloud_in_camera->points)
         {
@@ -167,44 +176,53 @@ int main()
             }
             if(search_dis[0] < squared_distance_th)
             {
-                sum_squared_dist = search_dis[0];
+                sum_squared_dist += search_dis[0];
                 auto & points = point_cloud_in_world->points;
                 int index = search_index[0];
                 target_match.emplace_back(points[index].x,points[index].y,points[index].z);
                 source_match.emplace_back(point.x,point.y,point.z);
             }
-
-            for(int i = 0;i<target_match.size();i++)
-            {
-                target_center += target_match[i];
-                source_center += source_match[i];
-            }
-            target_center = target_center/float(target_match.size());
-            source_center = source_center/float(source_match.size());        
-            
-            Eigen::Matrix3f W = Eigen::Matrix3f::Zero();
-            for(int i = 0;i<source_match.size();i++)
-            {
-                W += (target_match.at(i) -target_center) *(source_match.at(i)-source_center).transpose();
-            }            
-            Eigen::JacobiSVD<Eigen::Matrix3f> svd(W,Eigen::ComputeFullU|Eigen::ComputeFullV);
-            R = svd.matrixU() * svd.matrixV().transpose();
-            t = target_center - R*source_center;
-
-            cur_squared_dist = sum_squared_dist/float(source_match.size());
-            double squared_dist_change = last_squared_dist - cur_squared_dist;
-            if(squared_dist_change<euclidean_change*euclidean_change || cur_squared_dist < euclidean_eps * euclidean_eps)
-            {
-                break;
-            }
         }
-    }
 
+        for(int i = 0;i<target_match.size();i++)
+        {
+            target_center += target_match[i];
+            source_center += source_match[i];
+        }
+
+        if(target_match.size()==0)
+        {
+            std::cerr<<"no match exist!"<<std::endl;
+            abort();
+        }
+
+        target_center = target_center/float(target_match.size());
+        source_center = source_center/float(source_match.size());        
+        
+        Eigen::Matrix3f W = Eigen::Matrix3f::Zero();
+        for(int i = 0;i<source_match.size();i++)
+        {
+            W += (target_match.at(i) -target_center) *(source_match.at(i)-source_center).transpose();
+        }
+                    
+        Eigen::JacobiSVD<Eigen::Matrix3f> svd(W,Eigen::ComputeFullU|Eigen::ComputeFullV);
+        R = svd.matrixU() * svd.matrixV().transpose();
+        t = target_center - R*source_center;
+
+        cur_squared_dist = sum_squared_dist/float(source_match.size());
+        double squared_dist_change = last_squared_dist - cur_squared_dist;
+        if(squared_dist_change<euclidean_change*euclidean_change || cur_squared_dist < euclidean_eps * euclidean_eps)
+        {
+            break;
+        }
+        
+    }
 
         Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
         transform.block(0,0,3,3)=R;
         transform.block(0,3,3,1)=t;
+        result_transform = transform*result_transform;
         std::cout<<"the esitimation is "<<std::endl
-                 <<transform<<std::endl;
+                 <<result_transform<<std::endl;
 
 }
