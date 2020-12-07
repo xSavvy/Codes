@@ -1,5 +1,4 @@
 
-
 #ifndef IMUTYPES_H
 #define IMUTYPES_H
 
@@ -11,7 +10,6 @@
 #include <Eigen/Dense>
 #include <mutex>
 #include "common.h"
-
 
 
 // Lie Algebra Functions
@@ -26,7 +24,5 @@ cv::Mat InverseRightJacobianSO3(const cv::Mat &v);
 cv::Mat Skew(const cv::Mat &v);
 cv::Mat NormalizeRotation(const cv::Mat &R);
 Eigen::MatrixXd TypeTransform(const cv::Mat & m);
-
-
 
 #endif // IMUTYPES_H

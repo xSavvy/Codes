@@ -2,10 +2,24 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-26 19:43:14
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 14:55:08
+ * @LastEditTime: 2020-12-04 22:10:59
  * @Description: 
  */
 #include "common.h"
+
+
+Eigen::MatrixXd TypeTransform(const cv::Mat & m)
+{    
+    Eigen::MatrixXd m_eigen(m.rows,m.cols);
+    for(int i =0;i<m.rows;i++)
+    {
+        for(int j =0;j<m.cols;j++)
+        {
+            m_eigen(i,j) = m.at<float>(i,j);
+        }
+    }
+    return m_eigen;
+}
 
 bool AddNoise(std::vector<Eigen::Vector3d> & point_cloud)
 {
@@ -75,8 +89,13 @@ void prepareLaserSimData(const std::vector<Eigen::Vector3d> & real_rotation_data
     AddNoiseSO3(noise_rotation_data);
 }
 
+void showMat(cv::Mat & mat)
+{
+    std::cout<<"the desired Mat is "<<std::endl<<
+    TypeTransform(mat)<<std::endl;
+}
 
-void transformIntoVector(const std::vector<std::vector<double>> & data,
+void transformIntoVector1(const std::vector<std::vector<double>> & data,
                          std::vector<double> & output)
 {
     if(data.size()!=0)
@@ -84,5 +103,5 @@ void transformIntoVector(const std::vector<std::vector<double>> & data,
         std::cerr<<"[ERROR]: in transformIntoVector there is something wrong with the input data!"<<std::endl;
         std::abort();
     }
-    std::copy(data.front().begin(),data.front().end(),output.begin());
+    std::copy(data.begin(),data.end(),output.begin());
 }

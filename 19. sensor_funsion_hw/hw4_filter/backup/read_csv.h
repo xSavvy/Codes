@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-07 16:12:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 02:30:30
+ * @LastEditTime: 2020-11-07 17:42:03
  * @Description:  
  *               为了给imu 进行性能分析 所以需要把csv 转换成 rosbag 的形式
  *               这里主要是使用 C++ 原声的io  对 csv 文件进行读取
@@ -15,7 +15,6 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include "Eigen/Eigen"
  
 using namespace std;
 
@@ -85,16 +84,7 @@ bool readCSV(vector<std::string> & header,
     
 }
 
-template<typename T,int rows>
-bool saveCSV(string path, const vector<Eigen::Matrix<T,rows,1>> & data,char interval_char = ' ')
-{
-    ofstream fs(path.c_str());
-    if(!fs.is_open())
-    {
-        std::cerr<<"[ERROR]:there might be something wrong with the csv path!"<<endl;
-        std::abort();
-    }
-}
+
  
 // int main(int argc, char** argv)
 // {

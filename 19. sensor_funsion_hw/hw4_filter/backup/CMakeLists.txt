@@ -8,11 +8,9 @@ include(../../cmake/sophus.cmake)
 include(../../cmake/ceres.cmake)
 include(../../cmake/g2o.cmake)
 include(../../cmake/omp.cmake)
-include(../../cmake/yaml.cmake)
+
 
 add_executable(ekf_test ekf_test.cpp
-                        common.cpp
-                        error_state_kalman_filter.cpp
-                        kalman_filter.cpp
-                        ImuTypes.cc)
-
+                        ekf.cpp
+                        ImuTypes.cc
+                        common.cpp)

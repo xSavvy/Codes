@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 16:04:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 12:45:36
+ * @LastEditTime: 2020-12-04 22:11:31
  * @Description: 
  */
 #pragma once
@@ -22,6 +22,9 @@ void prepareLaserSimData(const std::vector<Eigen::Vector3d> & real_rotation_data
                          std::vector<Eigen::Vector3d> & noise_translation_data,
                          double IMU_hz , double measure_hz);
 
+void showMat(cv::Mat & mat);
+
+
 template<typename T,int rows>
 void transformIntoVector(const std::vector<std::vector<double>> & data,
                          std::vector<Eigen::Matrix<T,rows,1>> & output)
@@ -40,11 +43,11 @@ void transformIntoVector(const std::vector<std::vector<double>> & data,
         output.push_back(element);
     }
 }
-void transformIntoVector(const std::vector<std::vector<double>> & data,
+
+void transformIntoVector1(const std::vector<std::vector<double>> & data,
                          std::vector<double> & output);
 
-
-
+Eigen::MatrixXd TypeTransform(const cv::Mat & m);
 
 // 这里固定返回的值是 CV_32F 的数值类型
 template<typename T,int rows,int cols>

@@ -1,0 +1,12 @@
+line_count: 30000
+interval: 1000
+
+IMUNoise:
+  Ng: 1e-4
+  Na: 1e-5
+  Ngwalk: 1e-7
+  Nawalk: 1e-7
+
+LaserNoise:
+  NRot: 1e-4
+  NTra: 1e-4

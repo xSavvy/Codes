@@ -37,35 +37,45 @@ void EKF::buildProblem(Eigen::Vector3d delta_rotation_measure, Eigen::Vector3d d
     
     problem.AddParameterBlock(cur_state_.data(),3,new SO3PlusOnlyLocalParameterization());
     problem.AddParameterBlock(cur_state_.data()+6,3);
-    auto cf1 = EKFObserError::Create(laser_meassurement_covar_,delta_rotation_measure,delta_translation_measure);
-    problem.AddResidualBlock(cf1,NULL,cur_state_.data(),cur_state_.data()+6);
-#ifdef TEST_OPT
+    // auto cf1 = EKFObserError::Create(laser_meassurement_covar_,delta_rotation_measure,delta_translation_measure);
+    // problem.AddResidualBlock(cf1,NULL,cur_state_.data(),cur_state_.data()+6);
+
+#ifdef AAA
 
     Eigen::Matrix<double,15,15> whole_covar = Eigen::Matrix<double,15,15>::Identity();
     whole_covar.block(0,0,9,9) = whole_covar.block(0,0,9,9)*1e-4;
 
-    // {
-    // cur_state_.block(0,0,3,1) = TypeTransform(IMU::LogSO3(imu_preintegrated_.GetOriginalDeltaRotation()));
-    // cur_state_.block(3,0,3,1) = TypeTransform(imu_preintegrated_.GetOriginalDeltaVelocity());
-    // Eigen::Vector3d velocity_w = pre_state_.block(3,0,3,1);
-    // Eigen::Vector3d so3_i_w = pre_state_.block(0,0,3,1);
-    // Sophus::SO3d rotatoin_w_i = Sophus::SO3d::exp(-1*so3_i_w);
-    // Eigen::Vector3d velocity_i = rotatoin_w_i * velocity_w;
+    {
+    cur_state_.block(0,0,3,1) = TypeTransform(IMU::LogSO3(imu_preintegrated_.GetOriginalDeltaRotation()));
+    cur_state_.block(3,0,3,1) = TypeTransform(imu_preintegrated_.GetOriginalDeltaVelocity());
+    Eigen::Vector3d velocity_w = pre_state_.block(3,0,3,1);
+    Eigen::Vector3d so3_i_w = pre_state_.block(0,0,3,1);
+    Sophus::SO3d rotatoin_w_i = Sophus::SO3d::exp(-1*so3_i_w);
+    Eigen::Vector3d velocity_i = rotatoin_w_i * velocity_w;
 
-    // Eigen::Vector3d dP_whole =  TypeTransform(imu_preintegrated_.GetOriginalDeltaPosition()) +
-    //                             velocity_i*imu_preintegrated_.dT;
-    // cur_state_.block(6,0,3,1) = dP_whole;
-    // }
+    Eigen::Vector3d dP_whole =  TypeTransform(imu_preintegrated_.GetOriginalDeltaPosition()) +
+                                velocity_i*imu_preintegrated_.dT;
+    cur_state_.block(6,0,3,1) = dP_whole;
+    }
 
-    // cur_state_.block(3,0,6,1) -= Eigen::Matrix<double,6,1>::Ones()*0.6;
-    // cur_state_.block(9,0,6,1) += Eigen::Matrix<double,6,1>::Zero()*0.5;
+    cur_state_.block(3,0,3,1) = TypeTransform(imu_preintegrated_.avgA*imu_preintegrated_.dT);
+    cur_state_.block(6,0,3,1) = TypeTransform(imu_preintegrated_.avgA*imu_preintegrated_.dT*imu_preintegrated_.dT)
+                                + pre_state_.block(3,0,3,1) * imu_preintegrated_.dT;
+    cur_state_.block(0,0,3,1) = TypeTransform(imu_preintegrated_.avgW)*imu_preintegrated_.dT;
 
 
+#else
 
-#elif
+    cur_state_.setZero();
+    cur_state_.block(3,0,3,1) = TypeTransform(imu_preintegrated_.avgA*imu_preintegrated_.dT);
+    cur_state_.block(6,0,3,1) = TypeTransform(imu_preintegrated_.avgA*imu_preintegrated_.dT*imu_preintegrated_.dT)
+                                + pre_state_.block(3,0,3,1) * imu_preintegrated_.dT;
+    cur_state_.block(0,0,3,1) = TypeTransform(imu_preintegrated_.avgW)*imu_preintegrated_.dT;
     showMat(imu_preintegrated_.C);
     Eigen::Matrix<double,15,15> whole_covar = TypeTransform(imu_preintegrated_.C);
+
 #endif
+
     auto cf2 = EKFPredictError::Create(&imu_preintegrated_,whole_covar,pre_state_);
     
     problem.AddResidualBlock(cf2,NULL,cur_state_.data(),cur_state_.data()+3,
@@ -77,7 +87,8 @@ void EKF::buildProblem(Eigen::Vector3d delta_rotation_measure, Eigen::Vector3d d
     options.linear_solver_type = ceres::DENSE_QR;
     options.minimizer_type = ceres::TRUST_REGION;
     options.trust_region_strategy_type = ceres::DOGLEG;
-
+    options.max_num_iterations = 100;
+    
     // 这个Solve 和那个不能用的solve 看起来还是有区分度的
     ceres::Solve(options,&problem,&summary);
 
@@ -148,9 +159,9 @@ void EKF::Update()
 
     // IMU Covar 进行更新
     cv::Mat new_C = cv::Mat::zeros(15,15,CV_32F);
-    // for(int i=0;i<15;i++)
-    // for(int j=0;j<15;j++)
-    //     new_C.at<float>(i,j)=cur_covar_(i,j);
+    for(int i=0;i<15;i++)
+    for(int j=0;j<15;j++)
+        new_C.at<float>(i,j)=cur_covar_(i,j);
     imu_preintegrated_.C = new_C;
     cur_state_.setZero();
 }
