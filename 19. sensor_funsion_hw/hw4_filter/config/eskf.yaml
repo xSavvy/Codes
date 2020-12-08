@@ -2,10 +2,10 @@ line_count: 30000
 interval: 1000
 
 IMUNoise:
-  Ng: 1e-4
-  Na: 1e-5
-  Ngwalk: 1e-7
-  Nawalk: 1e-7
+  Ng: 5e-2
+  Na: 5e-2
+  Ngwalk: 1e-4
+  Nawalk: 1e-4
 
 LaserNoise:
   NRot: 1e-4

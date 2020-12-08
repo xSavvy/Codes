@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 11:35:04
+ * @LastEditTime: 2020-12-07 21:17:55
  * @Description:  ESKF 内部函数实现
  */
 
@@ -116,7 +116,7 @@ void ESKF::Correct(const Laser & z)
     // Eigen::Matrix<double,6,1> ddState = vz-H*(dState);
     // so3_n_old = Sophus::SO3d::exp(-1*vz.block<3,1>(PHI_IDX,0));
     // so3_new_n = Sophus::SO3d::exp(ddState.block<3,1>(PHI_IDX,0));
-    mdState = K*(vz-H*(dState));
+    // mdState = K*(vz-H*(dState));
     cout<< "the residual is "<<endl
     <<(vz-H*(dState)).transpose()<<endl;
     cout<<"the K is "<<endl

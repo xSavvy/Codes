@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-04 23:13:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 12:58:41
+ * @LastEditTime: 2020-12-07 21:46:59
  * @Description: 之前对于问题粗浅的理解导致现在代码写得非常难受
  */
 #include "kalman_filter_interface.h"
@@ -20,6 +20,7 @@ using namespace std;
 // #define UPDATESO3
 
 #define SIMULATION
+#define CTODW
 
 #define PHI_IDX 0
 #define VEL_IDX 3
