@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-07 22:34:14
+ * @LastEditTime: 2020-12-09 08:11:13
  * @Description:  ESKF 内部函数实现
  */
 
@@ -107,7 +107,9 @@ void EKF::Predict(const IMU & u)
     F.block<3,3>(VEL_IDX,BA_IDX) = C_b_n;
     F.block<3,3>(VEL_IDX,PHI_IDX) = -1 * C_b_n * Sophus::SO3d::hat(u.mAccel);
     F.block<3,3>(PHI_IDX,PHI_IDX) = -0.5*Sophus::SO3d::hat(u.mGyro);
-    F.block<3,3>(PHI_IDX,BG_IDX) = Eigen::Matrix3d::Identity() + 0.5*Sophus::SO3d::hat(mPreK.block<3,1>(PHI_IDX,0));
+    F.block<3,3>(PHI_IDX,BG_IDX) = - Eigen::Matrix3d::Identity() - 0.5*Sophus::SO3d::hat(mPreK.block<3,1>(PHI_IDX,0));
+
+    mcrF = F;
 
     G.block<3,3>(VEL_IDX,NA_IDX) = C_b_n;
     G.block<3,3>(PHI_IDX,NG_IDX) = F.block<3,3>(PHI_IDX,BG_IDX);
@@ -178,11 +180,72 @@ void EKF::Correct(const Laser & z)
     delta_so3 = Sophus::SO3d::exp(dx.block<3,1>(PHI_IDX,0));
     mState.block<3,1>(PHI_IDX,0) = (old_so3*delta_so3).log();
     mPreK = mState;
+    Eigen::MatrixXd Ob = obser;
+    mvOb.push_back(Ob);
+    UpdateOM();
     // cout<<"the delta position of mState is "<<endl<<dState.block<3,1>(POS_IDX,0).transpose()<<endl;
     // cout<<"the postion of mState is "<< endl<< mState.block<3,1>(POS_IDX,0).transpose()<<endl;
 }
 
 Eigen::MatrixXd EKF::GetOM()const
 {
-    Eigen::Matrix3d 
+    int n = mvOM.size();
+    Eigen::MatrixXd SOM(n*mvOM.front().rows(),15);
+    Eigen::MatrixXd Y_all(15*n,1);
+    SOM.setZero();
+    Y_all.setZero();
+    for(int i =0;i<n;i++)
+    {
+        SOM.block(mvOM.front().rows()*i,0,mvOM.front().rows(),15) = mvOM.at(i);
+        for(int j=0;j<15;j++)
+        Y_all.block(6*j,0,6,1) = mvOb.at(i);
+    }
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(SOM, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::MatrixXd X;
+    Eigen::MatrixXd U = svd.matrixU();
+    Eigen::MatrixXd V = svd.matrixV();
+    Eigen::VectorXd EV = svd.singularValues();
+    std::vector<std::pair<double,int>> vEI;
+    for(int i = 0; i < U.cols() ;i++)
+    {
+        Eigen::VectorXd x = U.col(i).transpose()*Y_all*V.col(i)/EV(i);
+        int count = 0;
+        double max = std::numeric_limits<double>().min();
+        double ev=0;
+        for(int j =0;j<15;j++)
+        {
+            if(x(j)>max)
+            {
+                count = j;
+                max = x(j);
+            }
+            
+        }
+        vEI.push_back(std::pair<double,int>(EV(i),count));
+    }
+    
+    for(auto & ei:vEI)
+    {
+        cout<<"the singularity value is "<<ei.first<<". the corresponding index is "<< ei.second<<endl; 
+    }
+}
+
+void EKF::UpdateOM()
+{
+    Eigen::Matrix<double,6,15> G = Eigen::Matrix<double,6,15>::Zero();
+    G.block<3,3>(3,6) = Eigen::Matrix3d::Identity();
+    G.block<3,3>(0,0) = Eigen::Matrix3d::Identity();
+    Eigen::MatrixXd OM(15*6,15);
+    OM.setZero();
+    for(int i =0;i<6;i++)
+    {
+        Eigen::Matrix<double,15,15> tmp_F;
+        tmp_F.setZero();
+        for(int j=0;j<i;j++)
+        {
+            tmp_F = tmp_F*mcrF;
+        }
+        OM.block<6,15>(6*i,0) = G*tmp_F;
+    }
+    mvOM.push_back(OM);
 }

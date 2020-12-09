@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 10:47:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-07 22:26:19
+ * @LastEditTime: 2020-12-08 19:49:04
  * @Description: EKF 测试代码 从gnss-ins-sim 之中提取真值加上噪声之后，
  *                           对激光得到数值进行模拟
  */
@@ -278,7 +278,7 @@ int main()
         ekf.Predict(imuMeas);
         count++;
     }
-
+    ekf.GetOM();
     
     
     return 0;
