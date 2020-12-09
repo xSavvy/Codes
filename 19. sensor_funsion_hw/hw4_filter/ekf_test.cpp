@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 10:47:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 14:53:04
+ * @LastEditTime: 2020-12-08 19:49:04
  * @Description: EKF 测试代码 从gnss-ins-sim 之中提取真值加上噪声之后，
  *                           对激光得到数值进行模拟
  */
@@ -240,29 +240,36 @@ int main()
     for(int i =pre_laser_index;i<data_size;i++)
     {
         IMU imuMeas;
-        imuMeas.mAccel = accel_real_in_vector.at(i);
-        imuMeas.mGyro = gyro_real_in_vector.at(i);
+        imuMeas.mAccel = accel_in_vector.at(i);
+        imuMeas.mGyro = gyro_in_vector.at(i);
 
         if(count == interval)
         {
             count = 0;
             Sophus::SO3d R_w_i_SO3 = Sophus::SO3d::exp(-1*rot_obs_in_vector.at(pre_laser_index));
             Sophus::SO3d R_j_w_SO3 = Sophus::SO3d::exp(rot_obs_in_vector.at(i));
-            Sophus::SO3d R_j_i_SO3 = R_w_i_SO3 * R_j_w_SO3;
-            Eigen::Vector3d delta_translation_w = pos_real_in_vector[i] - pos_real_in_vector[pre_laser_index];
-            Eigen::Vector3d delta_translation_i = R_w_i_SO3 * delta_translation_w;
+            // Sophus::SO3d R_j_i_SO3 = R_w_i_SO3 * R_j_w_SO3;
+            // Eigen::Vector3d delta_translation_w = pos_real_in_vector[i] - pos_real_in_vector[pre_laser_index];
+            // Eigen::Vector3d delta_translation_i = R_w_i_SO3 * delta_translation_w;
+
+            // cout<<"the gps measure translation is "<<endl<<
+            // delta_translation_i.transpose()<<endl;
+            // cout<<"the gps measure rotation is"<<endl<<
+            // R_j_i_SO3.log().transpose()<<endl;
 
             Laser laserMeas;
-            laserMeas.mDRot = R_j_i_SO3.log();
-            laserMeas.mDTra = delta_translation_i;
+            laserMeas.mDRot = R_j_w_SO3.log();
+            laserMeas.mDTra = pos_real_in_vector[i]-pos_real_in_vector.front();
             
             cout<<"the gps measure translation is "<<endl<<
-            delta_translation_i.transpose()<<endl;
+            laserMeas.mDTra.transpose()<<endl;
             cout<<"the gps measure rotation is"<<endl<<
-            R_j_i_SO3.log().transpose()<<endl;
+            laserMeas.mDRot.transpose()<<endl;
 
             ekf.Correct(laserMeas);
-            cout<<"this is "<<correct_count <<"times correction!"<<endl;
+            // cout<<"this is "<<correct_count <<"times correction!"<<endl;
+            // cout<<"the current covar is "<< endl << ekf.GetCovar().transpose()<<endl;
+            cout<<"the current state is "<< endl << ekf.GetCurState().transpose()<<endl;
             pre_laser_index = i;
             correct_count ++;
             continue;
@@ -271,12 +278,7 @@ int main()
         ekf.Predict(imuMeas);
         count++;
     }
-
-
-
-    cout<<"the current covar is "<< endl << ekf.GetCovar()<<endl;
-    cout<<"the current state is "<< endl << ekf.GetCurState()<<endl;
-    
+    ekf.GetOM();
     
     
     return 0;
