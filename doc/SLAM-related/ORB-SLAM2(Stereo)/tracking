@@ -1,0 +1,17 @@
+Tracking
+    |__ 重要member var 记述
+        |__ mvpLocalKeyFrames                保存在LocalMap 匹配中保存下来的有关联的KeyFrame
+        |__ mvpLocalMapPoints                保存用于LocalMap 匹配的LocalMapPoint
+    |__ interface
+        |__ mfTrack 主体函数
+    |__ internal
+        |__ 3 Methods of tracking
+            |__ mfTrackReferenceKeyFrame     词袋加速匹配
+            |__ mfTrackWithMotionModel       匀速运动模型匹配
+            |__ mfTrackLocalMap              局部地图匹配
+        |__ LocalMap_related                 主要是和局部地图的匹配相关
+            |__ mfUpdateLocalMap             
+                |__ mfUpdateLocalKeyFrames     一个收集大量LocalKeyFrame的过程
+                |__ mfUpdateLocalPoints        一个收集大量LocalMapPoint的过程
+            |__ mfSearchLocalPoints          把LocalMPs 投影到当前帧和目前的mvMapPoints进行描述子匹配
+    

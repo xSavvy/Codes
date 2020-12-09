@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-23 16:19:04
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-10 08:48:21
+ * @LastEditTime: 2020-12-07 13:49:11
  * @FilePath: /3rd-test-learning/11. tic toc/tic_toc.hpp
  * @Description: 函数当中进行使用的计时器
  */
@@ -18,20 +18,36 @@
 #define millis(diff) std::chrono::duration_cast<std::chrono::milliseconds>(diff)
 
 
-class Tic
+class TicToc
 {
     public:
     using __tp = std::chrono::_V2::system_clock::time_point;
     using __tpp = std::pair<__tp,int64_t>;
 
 
-    explicit Tic(const std::string funcName):funcName_(funcName){
+    explicit TicToc(const std::string funcName):funcName_(funcName){
         start = std::chrono::high_resolution_clock::now();
+    }
+
+    void Tic()
+    {
+        start = std::chrono::high_resolution_clock::now();
+    }
+
+    int64_t Toc()
+    {
+       int64_t duration = checkprint_milli();
+       if(average_want)
+       {
+           average_sum+=duration;
+           count++;
+       }
+       return duration;
     }
 
     auto check(){return std::chrono::high_resolution_clock::now();}
 
-    auto checkprint_nano()
+    int64_t checkprint_nano()
     {
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff_1 = end - start;
@@ -41,7 +57,7 @@ class Tic
         return nanos(diff_1).count();
     }
 
-    auto checkprint_micro(){
+    int64_t checkprint_micro(){
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff_1 = end - start;
         std::cout<<"=============== until now "<<funcName_<<" have used ============="
@@ -50,7 +66,7 @@ class Tic
         return micros(diff_1).count();
     }
 
-    auto checkprint_milli()
+    int64_t checkprint_milli()
     {
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff_1 = end - start;
@@ -62,7 +78,7 @@ class Tic
 
     
     
-    ~Tic()
+    ~TicToc()
     {
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff = end - start;
@@ -72,5 +88,8 @@ class Tic
         " == "<<millis(diff).count()<<" milliseconds "<<std::endl;
     }
     __tp start;
+    bool average_want = false;
+    int64_t average_sum = 0;
+    unsigned int count = 0;
     const std::string funcName_;      
 };

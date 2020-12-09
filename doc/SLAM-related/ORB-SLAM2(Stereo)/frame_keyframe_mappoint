@@ -37,6 +37,7 @@ KeyFrame
         |__ mvpMapPoints                       所有的地图点
         |__ mspLoopEdges                       存储和这个关键帧相关的
                                                用于回环的关键帧
+        |__ mnTrackReferenceForFrame           包含对于哪一帧是LocalKeyFrame 的信息
     |__ mfctor(Frame，Map，KeyFrameDatabase)    转移Frame 的Grid
                                                设置位姿为Frame 的位姿
         |__ mfSetPose()
@@ -88,7 +89,7 @@ KeyFrame
             |__ clearDataInMapAndFrameDB()
     |__ others
         |__ mfGetFeaturesInArea()               和Frame 相同
-        |__ mfUnprojectStereo()                 ORB特征点投影到时间坐标系下
+        |__ mfUnprojectStereo()                 ORB特征点投影到世界坐标系下
 
 MapPoint
     |__ 重要member var 记述
@@ -100,6 +101,7 @@ MapPoint
         |__ mDescriptor          ORB 对应描述子
         |__ mpRefKF              第一个创建这个MapPoint 的KF
         |__ mObservations        map<KF*,idx> 保存KF* 和 KF内对应mvMapPoint 的idx
+        |__ mnTrackReferenceForFrame    意义同KeyFrame 中的mnTrackReferenceForFrame 在LocalMap 匹配中使用
     |__ mfctor1()
     |__ mfctor2()                
     |__ Get/Set_related

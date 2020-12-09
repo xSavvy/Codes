@@ -92,6 +92,10 @@ HDR Environments<br>
    5. 参数模型->快速收敛
    6. 子图管理<br>
       Good Graph to Optimize: Cost-Effective,
+   7. 对于图像曝光 添加 AdaptiveFAST(Cutting_line)
+      这个地方是不是可以和IMU 的运动估计信息进行融合？
+      
+   8. 图像模糊的问题  如何处理？ <br>因为较高的速度下运动模糊的情况可以说是经常发生。
 Budget-Aware Bundle Adjustment in Visual SLAM
 
 ### FrontEnd SlideWindow
