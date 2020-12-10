@@ -1,0 +1,7 @@
+LocalMapping
+    |__ 重要member var 记述
+    |__ interface
+        |__ mfRun()         主体函数    
+            |__ 
+        |__ Sync            控制接口
+            |__ 

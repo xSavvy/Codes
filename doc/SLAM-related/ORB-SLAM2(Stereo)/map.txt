@@ -5,7 +5,7 @@ Map
     |__ AddAndErase
         |__ mfAddKeyFrame
         |__ mfAddMapPoint
-        |__ mfSetReferenceMapPoints 用于Tracking里面的LocalMap匹配
+        |__ mfSetReferenceMapPoints 用于显示
         |__ mfEraseMapPoint
         |__ mfEraseKeyFrame
     |__ GetSomeThing   

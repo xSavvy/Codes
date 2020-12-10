@@ -6,7 +6,7 @@ Tracking
         |__ mfTrack 主体函数
     |__ internal
         |__ 3 Methods of tracking
-            |__ mfTrackReferenceKeyFrame     词袋加速匹配
+            |__ mfTrackReferenceKeyFrame     词袋加速匹配 ReferenceMap和 CurrentMap 的匹配
             |__ mfTrackWithMotionModel       匀速运动模型匹配
             |__ mfTrackLocalMap              局部地图匹配
         |__ LocalMap_related                 主要是和局部地图的匹配相关
@@ -14,4 +14,5 @@ Tracking
                 |__ mfUpdateLocalKeyFrames     一个收集大量LocalKeyFrame的过程
                 |__ mfUpdateLocalPoints        一个收集大量LocalMapPoint的过程
             |__ mfSearchLocalPoints          把LocalMPs 投影到当前帧和目前的mvMapPoints进行描述子匹配
+            |__ 
     
