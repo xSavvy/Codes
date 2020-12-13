@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-09 08:11:13
- * @Description:  ESKF 内部函数实现
+ * @LastEditTime: 2020-12-09 08:13:13
+ * @Description:  EKF 内部函数实现
  */
 
 #include "kalman_filter.h"
@@ -218,8 +218,7 @@ Eigen::MatrixXd EKF::GetOM()const
             {
                 count = j;
                 max = x(j);
-            }
-            
+            }          
         }
         vEI.push_back(std::pair<double,int>(EV(i),count));
     }

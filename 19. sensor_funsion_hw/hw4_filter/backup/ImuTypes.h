@@ -1,3 +1,15 @@
+/*
+ * @Author: Liu Weilong
+ * @Date: 2020-12-03 07:37:47
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2020-12-13 20:47:04
+ * @Description: 预积分
+ * 
+ *               这里使用的方式 是 Forster 14。
+ *               这里是ORB3的具体实现
+ * 
+ * 
+ */
 
 #ifndef IMUTYPES_H
 #define IMUTYPES_H
