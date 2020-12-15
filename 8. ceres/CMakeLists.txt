@@ -10,7 +10,7 @@ include(../cmake/g2o.cmake)
 include(../cmake/PCL.cmake)
 include(../cmake/eigen3.cmake)
 include(../cmake/sophus.cmake)
-
+include(../cmake/yaml.cmake)
 # helloworld
 # add_executable(ceres_icp_analystic_se3 ceres_self_example/ceres_icp_analystic_se3.cpp)
 # target_link_libraries(ceres_icp_analystic_se3 ${CERES_LIBRARIES} )
@@ -24,4 +24,5 @@ include(../cmake/sophus.cmake)
 # add_executable(ceres_icp_analystic_so3_r3 ceres_self_example/ceres_icp_analystic_so3_r3.cpp)
 # target_link_libraries(ceres_icp_analystic_so3_r3 ${CERES_LIBRARIES} )
 
-# add_executable(eigen_icp_so3_r3 ceres_self_example/eigen_icp_so3_r3.cpp)
+add_executable(eigen_icp_so3_r3 ceres_self_example/eigen_svd_icp_test.cpp
+ ceres_self_example/eigen_svd_icp.cpp)

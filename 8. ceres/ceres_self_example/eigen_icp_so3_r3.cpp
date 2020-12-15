@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-11-03 07:19:03
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-03 14:39:45
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2020-12-15 06:01:52
  * @Description:  基于Eigen 实现的ICP 算法 据说是又快又好  目前还是有问题  告一段落
  *                
  *                BUG 在for 的内容
@@ -20,6 +20,8 @@
 #include <g2o/stuff/sampler.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/common/transforms.h>
+
+#include "eigen_svd_icp.h"
 using namespace std;
 
 std::vector<Eigen::Vector4d> point_cloud;
@@ -100,6 +102,32 @@ void ToPclPointType(const std::vector<Eigen::Vector4d> & point_array,
     }
 }
 
+template <typename T>
+class EigenSVDICP
+{
+    public:
+
+    EigenSVDICP(const std::string & config_path);
+    
+
+
+    private:
+
+
+    private:
+    
+    pcl::KdTree<T> kdtree_;
+    class config
+    {
+        public:
+        int max_iter_;
+        double euclidean_eps_;
+        double euclidean_change_;
+        double max_dist_;
+    }
+};
+
+
 int main()
 {
     buildPointCloud();
@@ -150,8 +178,16 @@ int main()
     kdtree.setInputCloud(point_cloud_in_world);
     Eigen::Matrix4f result_transform = Eigen::Matrix4f::Identity();
     pcl::PointCloud<pcl::PointXYZ>::Ptr tmp_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::PointCloud<pcl::PointXYZ>::Ptr predict_transformed_point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+
+    double predict_lie [6] {0.1,0.4,0.3,0.0,0.0,0.0};
+    Eigen::Map<Sophus::SE3d> predict_SE3(predict_lie);
+    pcl::transformPointCloud(*point_cloud_in_camera,*predict_transformed_point_cloud,predict_SE3.matrix().cast<float>());
     for(int i=0;i<max_iter;i++)
     {
+        
+
+
         double sum_squared_dist = 0.0;
 
         target_match.clear();
@@ -164,11 +200,10 @@ int main()
         transform.block(0,3,3,1)=t;
         result_transform = transform*result_transform;
 
-        
+        pcl::transformPointCloud(*predict_transformed_point_cloud,*tmp_point_cloud,result_transform);
 
-        pcl::transformPointCloud(*point_cloud_in_camera,*tmp_point_cloud,result_transform);
-
-        for(auto & point:point_cloud_in_camera->points)
+        // get Correspondence
+        for(auto & point:tmp_point_cloud->points)
         {
             if(!kdtree.nearestKSearch(point,1,search_index,search_dis))
             {
@@ -184,13 +219,14 @@ int main()
             }
         }
 
+        // 构建SVD
         for(int i = 0;i<target_match.size();i++)
         {
             target_center += target_match[i];
             source_center += source_match[i];
         }
 
-        if(target_match.size()==0)
+        if(target_match.size()<5)
         {
             std::cerr<<"no match exist!"<<std::endl;
             abort();
@@ -199,6 +235,7 @@ int main()
         target_center = target_center/float(target_match.size());
         source_center = source_center/float(source_match.size());        
         
+        // 这里是一个不同点
         Eigen::Matrix3f W = Eigen::Matrix3f::Zero();
         for(int i = 0;i<source_match.size();i++)
         {
@@ -206,11 +243,12 @@ int main()
         }
                     
         Eigen::JacobiSVD<Eigen::Matrix3f> svd(W,Eigen::ComputeFullU|Eigen::ComputeFullV);
-        R = svd.matrixU() * svd.matrixV().transpose();
+        R = svd.matrixV() * svd.matrixU().transpose();
         t = target_center - R*source_center;
 
         cur_squared_dist = sum_squared_dist/float(source_match.size());
         double squared_dist_change = last_squared_dist - cur_squared_dist;
+        last_squared_dist = cur_squared_dist;
         if(squared_dist_change<euclidean_change*euclidean_change || cur_squared_dist < euclidean_eps * euclidean_eps)
         {
             break;
@@ -221,7 +259,7 @@ int main()
         Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
         transform.block(0,0,3,3)=R;
         transform.block(0,3,3,1)=t;
-        result_transform = transform*result_transform;
+        result_transform = transform*result_transform*predict_SE3.matrix().cast<float>();
         std::cout<<"the esitimation is "<<std::endl
                  <<result_transform<<std::endl;
 

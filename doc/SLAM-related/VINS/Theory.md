@@ -1,5 +1,5 @@
 
-#### 关于预积分的Ba Bg
+## 关于预积分的Ba Bg 变化的情况
 ![](IMU-Preinte-Ba.jpeg)
 <font color="Red">
 关于$J_{ba}$ 和 $J_{bg}$的问题，在这里得到了解释。</font><br>
@@ -15,5 +15,5 @@ $J_{k+1} = F_{k}J_k$ <br>
 最后一个IMU预积分<br>
 $X_{j} = J_{ji}X_{i} + G_{ji}N_i$<br>
 $J_{bg}$和$J_{ba}$ 都是来自$J_{ji}$<br>
-&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;<img src="Jba.jpeg" style="transform:rotate(-90deg);" width="300">
+　　　  <img src="Jba.jpeg" style="transform:rotate(-90deg);" width="300">
 ![](Ja.jpeg)
