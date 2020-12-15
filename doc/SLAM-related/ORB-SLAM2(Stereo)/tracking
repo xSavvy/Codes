@@ -2,17 +2,30 @@ Tracking
     |__ 重要member var 记述
         |__ mvpLocalKeyFrames                保存在LocalMap 匹配中保存下来的有关联的KeyFrame
         |__ mvpLocalMapPoints                保存用于LocalMap 匹配的LocalMapPoint
+        |__ mpReferenceKeyFrame              Track 过程中用于匹配的参考关键帧
     |__ interface
         |__ mfTrack 主体函数
     |__ internal
         |__ 3 Methods of tracking
-            |__ mfTrackReferenceKeyFrame     词袋加速匹配 ReferenceMap和 CurrentMap 的匹配
+            |__ mfTrackReferenceKeyFrame     词袋加速匹配 ReferenceMap和 CurrentMap 的匹配  PKF和Motion 的匹配会给mCurrentFrame添加 mvMapPoints
             |__ mfTrackWithMotionModel       匀速运动模型匹配
             |__ mfTrackLocalMap              局部地图匹配
         |__ LocalMap_related                 主要是和局部地图的匹配相关
             |__ mfUpdateLocalMap             
-                |__ mfUpdateLocalKeyFrames     一个收集大量LocalKeyFrame的过程
-                |__ mfUpdateLocalPoints        一个收集大量LocalMapPoint的过程
+                |__ mfUpdateLocalKeyFrames     一个收集大量LocalKeyFrame到mvpLocalKeyFrames的过程
+                                               包括共视关键帧、子帧、父帧
+                                               并且会更新 mpReferenceKeyFrame
+                                               流程如下：
+                                               1. 从mCurrentFrame 的mvMapPoints (来自Motion或RKF匹配)
+                                                  的观测收集所有有关的KF
+                                               2. 把所有的KFs加入到mvLocalKF
+                                               3. 对每一个加入的KF 提取其强共视的10帧放入mvLocalKF
+                                               4. 对每一个KF的子帧和父帧加入mvLocalKF
+                |__ mfUpdateLocalPoints        一个收集大量LocalMapPoint到mvpLocalMapPoints的过程
+                                               就是把mvpLocalKeyFrames的MapPoint提取到mvpLocalMapPoints的过程
             |__ mfSearchLocalPoints          把LocalMPs 投影到当前帧和目前的mvMapPoints进行描述子匹配
-            |__ 
+            |__ mfCreateNewKeyFrame()        用于创建新的关键帧，创建对应的MapPoint
     
+============================= 单幅图像的Track流程 ====================================================
+
+

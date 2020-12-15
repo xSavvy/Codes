@@ -1,3 +1,5 @@
+=============================== Frame ==============================================
+
 Frame 
     |__ 重要member var 记述
         |__ mnId        从nNextId 计算而来
@@ -6,11 +8,17 @@ Frame
         |__ mvKeysRight 友目ORB
         |__ mvKeysUn    去畸变之后的ORB
         |__ mvDepth     左目ORB 深度信息
-        |__ mvuRight    存储了左目像素点在右目中的对应点的横坐标，因为纵坐标相同
+        |__ mvuRight    存储了左目像素点在右目中的对应点的横坐标，因为纵坐标相同 ?? 上下冲突 需要之后再仔细地看一下
+                        mvuRight中存放着双目的深度值，如果不是双目，其值将为-1 
+                        最后发现对于不同的相机类型，保存的内容不同
+                        
         |__ mvpMapPoints 存储指针的vector 写法值得学习
-        |__ mvbOutlier  outlier点 主要是用于optimizer中，也在optimizer 中更新
+                         这个主要是在Track当中用于保存匹配的点的关系
+        |__ mvbOutlier  outlier点 主要是用于optimizer中，也在optimizer 中更新 Outlier的话这个会变为false
+                        ？？ 这里还包含了一些结合OPtimizer 的逻辑 留待之后进行梳理
+                        
         |__ mnMinX/mnMaxX/mnMinY/mnMaxY   去畸变之后的图像边界
-        |__ mGrid       存储20个格子里面带有的ORB特征的index
+        |__ mGrid       存储20个格子里面带有的ORB特征的index 在TrackMotion 的mfGetFeaturesInArea() 中使用
         |__ mBowVec     词袋模型相关
         |__ mFeatVec
         |__ mDescriptors\mDescriptorsRight ORB描述子
@@ -27,6 +35,23 @@ Frame
                                      判断这个MP 是否在视野中           
     |__ mfGetFeaturesInArea()        找到在 以x,y为中心,
                                      半径为r的圆形内且在[minLevel, maxLevel]的特征点
+                                     在TrackMotion的时候使用
+
+tips：普通的Frame是没有共视帧这个东西的
+
+Frame流程
+    |__ Tracking GrabImageStereo 产生
+    |__ track() 之后结束
+
+内部member var 只是在 Tracking 中使用
+mvpMapPoints 
+    |__ Frame ctor 中被初始化
+    |__ 在TrackMotion/TrackKF 中被添加，添加的就是KF和LastFrame中的地图点
+    |__ 在TrackMotion/TrackKF 的被添加，对于Outlier 会对 mbOutlier be false
+    |__ 在TrackLocalMap 中被进一步添加,在这里就有可能引入了一些原本没有观测的点
+
+
+================================ KeyFrame ============================================
 
 KeyFrame
     |__ 重要member var 记述 
@@ -91,6 +116,11 @@ KeyFrame
         |__ mfGetFeaturesInArea()               和Frame 相同
         |__ mfUnprojectStereo()                 ORB特征点投影到世界坐标系下
 
+KeyFrame
+    |__ 在Tracking中 CreateNewKeyFrame() 创建
+    |__ 连接关系在LocalMapper中 被经常更新
+
+================================ MapPoint ============================================
 MapPoint
     |__ 重要member var 记述
         |__ nNextId
@@ -116,3 +146,10 @@ MapPoint
         |__ mfEraseObservation(KF)    
             |__ mfSetBagFlag()            彻底删除这个MapPoint
                 |__ EraseMapPointMatchForAllCo  
+
+MapPoint
+    |__ 也是在 Tracking CreateNewKeyFrame 的时候被创建
+    |__ 在Tracking中 StereoInitialization() 创建
+    |__ 在Tracking中 UpdateLastFrame() 创建 如果MapPoint 少于100 个 就使用最近的点 临时创造100个出来用于后面的匹配
+        这也就是为什么在CreateNewKeyFrame的时候会存在是不是临时点的判断 
+    |__ 在LocalMapper　中CreateNewMapPoint() 中 创建，mCurrentKeyFrame 和之前的KF对一个点有了观测，就重新创建这个MapPoint

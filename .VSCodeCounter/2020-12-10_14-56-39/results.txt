@@ -1,0 +1,73 @@
+Date : 2020-12-10 14:56:39
+Directory : /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw
+Total : 40 files,  4497 codes, 850 comments, 1072 blanks, all 6419 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         38 |      4,464 |        850 |      1,063 |      6,377 |
+| Markdown |          1 |         23 |          0 |          7 |         30 |
+| YAML     |          1 |         10 |          0 |          2 |         12 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                              |         40 |      4,497 |        850 |      1,072 |      6,419 |
+| hw1_ceres_ndt                                                                                                  |          4 |        378 |         86 |        123 |        587 |
+| hw2_SC                                                                                                         |          5 |        758 |        118 |        250 |      1,126 |
+| hw3_calibra                                                                                                    |          6 |      1,035 |        226 |        203 |      1,464 |
+| hw4_filter                                                                                                     |         25 |      2,326 |        420 |        496 |      3,242 |
+| hw4_filter/backup                                                                                              |          8 |      1,208 |        154 |        259 |      1,621 |
+| hw4_filter/backup_pre                                                                                          |          1 |          7 |          8 |          2 |         17 |
+| hw4_filter/config                                                                                              |          1 |         10 |          0 |          2 |         12 |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                       | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt.cpp              | C++      |         43 |         29 |         25 |         97 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/ceres_ndt_se3.h            | C++      |        161 |         19 |         47 |        227 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/filter.hpp                 | C++      |         20 |         11 |          5 |         36 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw1_ceres_ndt/icp_registration.hpp       | C++      |        154 |         27 |         46 |        227 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw2_SC/Scancontext.cpp                   | C++      |        276 |         45 |         97 |        418 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw2_SC/Scancontext.h                     | C++      |         71 |         11 |         30 |        112 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw2_SC/robot_relocalization_node.cpp     | C++      |        181 |         10 |         43 |        234 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw2_SC/sc_loop.cpp                       | C++      |        176 |         45 |         67 |        288 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw2_SC/sc_loop.h                         | C++      |         54 |          7 |         13 |         74 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/SO3_RK4_test.cpp             | C++      |        113 |         50 |         22 |        185 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/hw_3_2_accel.cpp             | C++      |        110 |         15 |         23 |        148 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/hw_3_2_gyro.cpp              | C++      |        146 |         18 |         29 |        193 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/hw_3_3.cpp                   | C++      |        426 |        101 |         91 |        618 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/hw_3_4.cpp                   | C++      |        174 |         13 |         24 |        211 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/read_csv.h                   | C++      |         66 |         29 |         14 |        109 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/ImuTypes.cc                   | C++      |        125 |         18 |         16 |        159 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/ImuTypes.h                    | C++      |         22 |          1 |         10 |         33 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/ImuTypes.cc            | C++      |        419 |         31 |         70 |        520 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/ImuTypes.h             | C++      |         22 |          1 |          6 |         29 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/common.cpp             | C++      |         85 |         11 |         12 |        108 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/common.h               | C++      |         43 |          8 |         14 |         65 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/ekf.cpp                | C++      |        145 |          8 |         50 |        203 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/ekf.h                  | C++      |        244 |         48 |         58 |        350 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/ekf_test.cpp           | C++      |        184 |         18 |         35 |        237 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup/read_csv.h             | C++      |         66 |         29 |         14 |        109 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/backup_pre/svd_test.cpp       | C++      |          7 |          8 |          2 |         17 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/common.cpp                    | C++      |         68 |         11 |          9 |         88 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/common.h                      | C++      |         41 |          8 |         13 |         62 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/config/eskf.yaml              | YAML     |         10 |          0 |          2 |         12 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/data_collector.cpp            | C++      |          1 |          7 |          2 |         10 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/data_collector.h              | C++      |        106 |         11 |         15 |        132 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/ekf_test.cpp                  | C++      |        211 |         33 |         43 |        287 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/error_state_kalman_filter.cpp | C++      |         93 |         29 |         26 |        148 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/error_state_kalman_filter.h   | C++      |         34 |         12 |         10 |         56 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/kalman_filter.cpp             | C++      |        141 |         71 |         40 |        252 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/kalman_filter.h               | C++      |         43 |         11 |         14 |         68 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/kalman_filter_interface.h     | C++      |         24 |         10 |          4 |         38 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/measure_module.h              | C++      |         92 |          7 |         11 |        110 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/read_csv.h                    | C++      |         77 |         29 |         13 |        119 |
+| /home/sunny/workspace_private/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/推导过程.md                       | Markdown |         23 |          0 |          7 |         30 |
+| Total                                                                                                          |          |      4,497 |        850 |      1,072 |      6,419 |
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

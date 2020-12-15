@@ -84,6 +84,9 @@ HDR Environments<br>
       c. <font color="Red">ZhaoYiPu Good 三篇</font><br>
          +Optimally observable and minimal cardinality monocular slam<br>
          + Attention and anticipation in fast visualinertial navigation<br>
+      d. (ORB) MapPointCulling 检验方法相对暴力<br>
+      c3：一般来讲，是三帧以上连续追踪就可以判断是好的点。 c1: 和回环有关 c2: 和长时间追踪，但是观测次数有限有关
+
    2. Depth 使用逆深度
    3. 均匀撒点
    4. 离散误差<br>
@@ -96,8 +99,14 @@ HDR Environments<br>
       这个地方是不是可以和IMU 的运动估计信息进行融合？
       
    8. 图像模糊的问题  如何处理？ <br>因为较高的速度下运动模糊的情况可以说是经常发生。
-Budget-Aware Bundle Adjustment in Visual SLAM
-
+   9. 关键帧管理 <br>
+      <font color = "Red">框架实现:</font><br>
+      a. (ORB) KeyFrameCulling
+   10. 子图管理<br>
+      a. Budget-Aware Bundle Adjustment in Visual SLAM
+   11. Challenges in Monocular Visual Odometry:
+Photometric Calibration, Motion Bias and
+Rolling Shutter Effect 大佬们给出的讨论
 ### FrontEnd SlideWindow
 
    1. SlideWindow的策略制定会对算法有影响

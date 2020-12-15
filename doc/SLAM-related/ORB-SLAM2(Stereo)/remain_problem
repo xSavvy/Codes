@@ -1,0 +1,13 @@
+ORBSLAM 改进：
+1. MapPointCulling + CreateNewMapPoint + Fuse 的方式态粗暴了 可以改成SVO/DSO 的收敛的方式
+   CreateNewMapPoint 生成MapPoint 的方式 感觉会存在一些重复的情况感觉这样效果并不好？存疑
+2. KeyFrame 可以改成 BASALT 的方式
+3. AdaptiveFastTH
+4. LocalMapping 的方式相对来说好像并没有对深度信息进行迭代优化，只是在LocalBA的时候一起进行混合的优化。
+                而初始值还是使用了三角化得来的结果
+遗留问题：
+1. 什么时候MapPoint会被replace
+2. ORBMatcher 的算法实现       1 
+3. ORBOptimizer g2o
+4. 词袋的实现方式
+5. KeyFrame Frame MapPoint的存活流程  KeyFrame 自身及其变量跟踪  最主要的是 F KF MapPoint mvpMapPoint child parent 1 

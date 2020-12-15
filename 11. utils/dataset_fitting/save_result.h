@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-07 14:39:06
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-08 17:09:01
+ * @LastEditTime: 2020-12-14 14:33:11
  * @FilePath: /3rd-test-learning/11. utils/dataset_fitting/save_result.h
  * @Description:  转换到标准的真值格式
  */
@@ -53,19 +53,70 @@ void EuRocTimeStamp(string & data_line)
     data_line = new_str;
 }
 
-bool EuRocToTUMInterf(const string & csv_path)
+void EuRocTimeStampORB(string & data_line)
 {
-    ifstream fin(csv_path.c_str());                        // 打开文件流操作
+    auto n = data_line.find(',');
+    auto timestamp = data_line.substr(0,n);
+    timestamp=timestamp.substr(0,timestamp.length()-3);
+    auto timestamp_d = double(stoull(timestamp))*1e-6;
+    std::stringstream ss;
+    ss << std::setprecision(16) << timestamp_d;
+    auto str = ss.str(); 
+    string new_str = str+data_line.substr(n);
+    cout<<new_str<<endl;
+    data_line = new_str;
+}
+
+bool EuRocToTUMInterf(const string & csv_path_in, const string& csv_path_out)
+{
+    ifstream fin(csv_path_in.c_str());                        // 打开文件流操作
+    ofstream fout(csv_path_out.c_str());
     string data_line;
     if(!fin.is_open())
     {
         std::cout<<"[FATAL]: the csv_file_path is invalid. Please check the path "<<":"<<endl
-                 << csv_path.c_str()<<endl;
+                 << csv_path_in.c_str()<<endl;
+        return false;
+    }
+    if(!fout.is_open())
+    {
+        std::cout<<"[FATAL]: the csv_file_path is invalid. Please check the path "<<":"<<endl
+                 << csv_path_out.c_str()<<endl;
+        return false;
+    }
+
+
+    while(getline(fin,data_line))
+    {
+        EuRocTimeStamp(data_line); 
+        fout<<data_line<<endl;  
+    }
+
+    fin.close();
+    fout.close();
+}
+bool EuRocToTUMORBInterf(const string & csv_path_in, const string& csv_path_out)
+{
+    ifstream fin(csv_path_in.c_str());                        // 打开文件流操作
+    ofstream fout(csv_path_out.c_str());
+    string data_line;
+    if(!fin.is_open())
+    {
+        std::cout<<"[FATAL]: the csv_file_path is invalid. Please check the path "<<":"<<endl
+                 << csv_path_in.c_str()<<endl;
+        return false;
+    }
+    if(!fout.is_open())
+    {
+        std::cout<<"[FATAL]: the csv_file_path is invalid. Please check the path "<<":"<<endl
+                 << csv_path_out.c_str()<<endl;
         return false;
     }
     while(getline(fin,data_line))
     {
-        EuRocTimeStamp(data_line);
-        
+        EuRocTimeStampORB(data_line);   
+        fout<<data_line<<endl;  
     }
+    fin.close();
+    fout.close();
 }

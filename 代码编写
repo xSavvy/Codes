@@ -1,8 +1,8 @@
 1. cmake   完成了 install 之前的部分
    |__ lidar_localization
    |__ PNPSimulation
-2. openmp 最基础的部分 完成
-   |__ 使用教程
+//// 2. openmp 最基础的部分 完成
+////   |__ 使用教程
 4. pcl                 大作业之后
    |__ feature 
    |__ correspondence
@@ -17,12 +17,12 @@
    BugFreePlam
 8. 多级指针   完成
 
-9. yaml 无法使用的问题   完成
-10. LocalParameterization  完成 并且阅读了一大部分的problem.h problem_impl.h problem.cc
-    这里ComputeJacobian 什么时候使用还不明确
-    但是对于Sophus 已经有对于quternion 的表示了
-    经过查阅还是和 AutoDiff 联合进行使用当中进行使用
-    所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
+//// 9. yaml 无法使用的问题   完成
+//// 10. LocalParameterization  完成 并且阅读了一大部分的problem.h problem_impl.h problem.cc
+////    这里ComputeJacobian 什么时候使用还不明确
+////    但是对于Sophus 已经有对于quternion 的表示了
+////    经过查阅还是和 AutoDiff 联合进行使用当中进行使用
+////    所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
 11. pcl ndt 的深度阅读       44周、45周 这两个周的大作业
     |__ ndt omp 深度阅读
     |__ pcl ndt eigen 实现
@@ -31,7 +31,7 @@
     |__ pcl icp ceres 实现
     |__ eigen-BA
     |__ ceres-BA
-12. 不使用 inline 的情况下，如何定义Common Function？ 能够防止 multiple define
+//// 12. 不使用 inline 的情况下，如何定义Common Function？ 能够防止 multiple define  答案就是分离式定义
 13. google code standard C++ 
 14. 43周 code self-review 
 15. friend 函数和类的声明和使用方式 暂时不进行
