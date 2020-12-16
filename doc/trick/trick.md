@@ -29,7 +29,10 @@ motion" <br>
       点多的话 可能会误匹配？<br>
       点少的话 是因为什么呢？<br>
       这个特征点数量的调整可能还是要放在具体的环境里进行调参才可以了
-
+   3. 对抗误匹配<br>
+      a. (ORB/Trifo-VIO ...)H F RANSAC + PnP 二次去误差
+      b. (LARVIO)描述子去误匹配
+      c. (DSM) T 分布去outlier ？？ 没有仔细看这里存疑
 #### 光流/Direct 
 
    1. Data Assoicate 的问题<br>
@@ -97,9 +100,10 @@ HDR Environments<br>
       Good Graph to Optimize: Cost-Effective,
    7. 对于图像曝光 添加 AdaptiveFAST(Cutting_line)
       这个地方是不是可以和IMU 的运动估计信息进行融合？
-      
-   8. 图像模糊的问题  如何处理？ <br>因为较高的速度下运动模糊的情况可以说是经常发生。
-   9. 关键帧管理 <br>
+      <font color="Red">框架实现</font>
+      a. (trifo-vio) 先一个mean brightness check 然后需要的话做一个histogram matching来克服自动曝光的问题<br>
+   8. 图像模糊的问题  如何处理？ <br>因为较高的速度下运动模糊的情况可以说是经常发生。DSO SVO 的取周围pixel 的方法？
+   9.  关键帧管理 <br>
       <font color = "Red">框架实现:</font><br>
       a. (ORB) KeyFrameCulling
    10. 子图管理<br>
@@ -107,6 +111,7 @@ HDR Environments<br>
    11. Challenges in Monocular Visual Odometry:
 Photometric Calibration, Motion Bias and
 Rolling Shutter Effect 大佬们给出的讨论
+
 ### FrontEnd SlideWindow
 
    1. SlideWindow的策略制定会对算法有影响
