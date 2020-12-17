@@ -1,5 +1,5 @@
 
-## 关于预积分的Ba Bg 变化的情况
+## VINS关于预积分的Ba Bg 变化的情况
 ![](IMU-Preinte-Ba.jpeg)
 <font color="Red">
 关于$J_{ba}$ 和 $J_{bg}$的问题，在这里得到了解释。</font><br>
@@ -14,6 +14,24 @@ $X_{k+1} = F_kX_{k} + G_{k}N_{k}$<br>
 $J_{k+1} = F_{k}J_k$ <br>
 最后一个IMU预积分<br>
 $X_{j} = J_{ji}X_{i} + G_{ji}N_i$<br>
+$X_{k+1} = f(X_k,u,n)$<br>
+$X_{k+1} = f_0 + J_{X_k}(X_k-\hat{X_k})+J_{u}(u)+J_{n}(n)$<br>
+$J_{ji} =J_{X_k}$<br>
+由此，我们就可以知道
 $J_{bg}$和$J_{ba}$ 都是来自$J_{ji}$<br>
 　　　  <img src="Jba.jpeg" style="transform:rotate(-90deg);" width="300">
 ![](Ja.jpeg)
+
+## VINS 关于为什么预积分是使用了误差分析的方法来构建方差
+这里，还是举一个例子。<br>
+在ESKF中，我们对于 观测误差方程的构建是<br>
+$z_{error}=z_{observer} - CX_{true}$<br>
+
+在VINS 中，对于状态量转移到误差状态<br>
+$X_{error} = X_{fromIMU(obs)} - X_{true}$<br>
+$X_{error}=\delta{X}$<br>
+
+此处，$X_{error}$的正是IMU递推过程中的 误差状态量，所以
+VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差分析。<br>
+在这一点上，是和ESKF的Propagration过程是一致的。<br>
+就可以使用误差分析的方法来解决这个方差分析的问题了

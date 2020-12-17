@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-04 23:13:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-13 20:20:03
+ * @LastEditTime: 2020-12-17 07:46:47
  * @Description: 之前对于问题粗浅的理解导致现在代码写得非常难受
  * 
  *               2020.12.13 
@@ -57,11 +57,15 @@ class ESKF:public EKFInterface<IMU,Laser,15>
     ~ESKF(){}
 
     // internal
-    void UpdateState();
-
+    void DataProcess(const IMU & rIMU, IMU & ubIMU);
+    void UpdateState(const IMU & ubIMU);
+    void UpdateErrorState(const IMU & ubIMU);
+    void UpdateErrorStateCovarance(const IMU & ubIMU);
     private:
     using EKFInterface::mState;
     using EKFInterface::mCovar;
+    State mErrorState;
+    
     State mdState = State::Zero();
     // 这个是用于迭代 nominal state
     State mPreState = State::Zero();

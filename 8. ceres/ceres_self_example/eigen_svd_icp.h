@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-15 03:55:00
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-15 05:52:10
+ * @LastEditTime: 2020-12-16 19:42:59
  * @Description: 
  */
 
@@ -37,6 +37,13 @@ class EigenSVDICP
         Eigen::Matrix4f & result_pose
     );
 
+    void GetTransform(
+        const std::vector<Eigen::Vector3f> & xs,
+        const std::vector<Eigen::Vector3f> & ys,
+        Eigen::Matrix4f & transform
+    );
+    
+
     private:
 
     size_t GetCorrespondence(
@@ -45,12 +52,6 @@ class EigenSVDICP
         std::vector<Eigen::Vector3f> & ys
     );
 
-    void GetTransform(
-        const std::vector<Eigen::Vector3f> & xs,
-        const std::vector<Eigen::Vector3f> & ys,
-        Eigen::Matrix4f & transform
-    );
-    
     bool IsSignificant(
         const Eigen::Matrix4f & transform);
 

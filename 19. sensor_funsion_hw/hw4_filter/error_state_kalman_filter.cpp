@@ -2,11 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-07 21:17:55
+ * @LastEditTime: 2020-12-17 07:54:25
  * @Description:  ESKF 内部函数实现
  */
 
 #include "error_state_kalman_filter.h"
+
+
+Eigen::Vector3d gravity_vector_w(0,0,9.794841972265039942);
 
 ESKF::ESKF(const Covar & c,const State & s,
            const IMUNoise & in, const LaserNoise & ln)
@@ -21,15 +24,22 @@ ESKF::ESKF(const Covar & c,const State & s,
 
 void ESKF::Predict(const IMU & u)
 {
+    IMU ubIMU;
+    DataProcess(u,ubIMU);
 
-    static Eigen::Vector3d gravity_vector_w(0,0,9.794841972265039942);
     // update expectation
-    // calculate imu measure without bias 
-    Eigen::Vector3d AccNB = u.mAccel - mState.block<3,1>(BA_IDX,0);
-    Eigen::Vector3d GyroNB = u.mGyro - mState.block<3,1>(BG_IDX,0);
+    // calculate imu measure without bias
+        
+    Eigen::Vector3d AccNB = ubIMU.mAccel ;
+    Eigen::Vector3d GyroNB = ubIMU.mGyro ;
     Eigen::Vector3d so3_b_n = mState.block<3,1>(PHI_IDX,0);
     Eigen::Matrix3d R_b_n = Sophus::SO3d::exp(so3_b_n).matrix();
     Eigen::Vector3d AccNBNG = AccNB + R_b_n.transpose()*gravity_vector_w;
+    
+    // UpdateState UpdateErrorState
+    UpdateState(ubIMU);
+    UpdateErrorState(ubIMU);
+    UpdateErrorStateCovarance(ubIMU);
     // calculate transfer equation 
     // the deritive form of error state is as below
     // EX_dot = F* EX + G * N
@@ -63,6 +73,22 @@ void ESKF::Predict(const IMU & u)
 #endif 
 
     // Nominal State Update
+
+    
+    // here assuming the noise is normal distribution
+    mdState = mdState + F*delta_t*mdState;
+    
+    // update covariance
+    Eigen::Matrix<double,15,15> I = Eigen::Matrix<double,15,15>::Identity();
+    mCovar = (I+F*delta_t)*mCovar*(I+F*delta_t).transpose() + G*delta_t*mIN.mCov*(G*delta_t).transpose();
+}
+
+// TODO 单元测试
+void ESKF::UpdateState(const IMU & ubIMU)
+{
+    double delta_t = 0.01;
+    const Eigen::Vector3d & GyroNB = ubIMU.mGyro;
+    const Eigen::Vector3d & AccNB = ubIMU.mAccel;
     Sophus::SO3d so3_k_n = Sophus::SO3d::exp(mState.block<3,1>(PHI_IDX,0));
     Sophus::SO3d so3_delta = Sophus::SO3d::exp(GyroNB*delta_t);
     
@@ -72,14 +98,12 @@ void ESKF::Predict(const IMU & u)
                                     0.5*(so3_k_n*AccNB+gravity_vector_w)*delta_t*delta_t;
 
     mState.block<3,1>(VEL_IDX,0) += (so3_k_n*AccNB+gravity_vector_w)*delta_t;
-    
-    // here assuming the noise is normal distribution
-    mdState = mdState + F*delta_t*mdState;
-    
-    // update covariance
-    Eigen::Matrix<double,15,15> I = Eigen::Matrix<double,15,15>::Identity();
-    mCovar = (I+F*delta_t)*mCovar*(I+F*delta_t).transpose() + G*delta_t*mIN.mCov*(G*delta_t).transpose();
+}
 
+// TODO 单元测试
+void ESKF::UpdateErrorState(const IMU & ubIMU)
+{
+    mErrorState.block()
 }
 
 void ESKF::Correct(const Laser & z)
@@ -123,26 +147,11 @@ void ESKF::Correct(const Laser & z)
     <<K<<endl;
 #endif
 
-    UpdateState();
+
     
 }
 
 Eigen::MatrixXd ESKF::GetOM()const
 {
 
-}
-void ESKF::UpdateState()
-{
-    mPreState = mState;
-    cout<<"the current mState is "<<endl
-    << mState.transpose()<<endl;
-    cout<<"the current mdState is "<<endl
-    << mdState.transpose()<<endl;
-    mState.block<15,1>(0,0) += mdState.block<15,1>(0,0);
-    // Eigen::Vector3d so3_old_n = mState.block<3,1>(PHI_IDX,0);
-    // Eigen::Vector3d so3_new_old = mdState.block<3,1>(PHI_IDX,0);
-    // mState.block<3,1>(PHI_IDX,0) = (Sophus::SO3d::exp(so3_old_n)*Sophus::SO3d::exp(so3_new_old)).log();
-    cout<<"the current mState is "<<endl
-    << mState.transpose()<<endl;
-    mdState.setZero();
 }
