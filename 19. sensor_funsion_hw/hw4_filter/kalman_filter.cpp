@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-09 08:13:13
+ * @LastEditTime: 2020-12-19 11:12:52
  * @Description:  EKF 内部函数实现
  */
 
@@ -180,9 +180,9 @@ void EKF::Correct(const Laser & z)
     delta_so3 = Sophus::SO3d::exp(dx.block<3,1>(PHI_IDX,0));
     mState.block<3,1>(PHI_IDX,0) = (old_so3*delta_so3).log();
     mPreK = mState;
-    Eigen::MatrixXd Ob = obser;
-    mvOb.push_back(Ob);
-    UpdateOM();
+    // Eigen::MatrixXd Ob = obser;
+    // mvOb.push_back(Ob);
+    // UpdateOM();
     // cout<<"the delta position of mState is "<<endl<<dState.block<3,1>(POS_IDX,0).transpose()<<endl;
     // cout<<"the postion of mState is "<< endl<< mState.block<3,1>(POS_IDX,0).transpose()<<endl;
 }

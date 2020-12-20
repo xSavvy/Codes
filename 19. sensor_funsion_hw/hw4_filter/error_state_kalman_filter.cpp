@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-17 07:54:25
+ * @LastEditTime: 2020-12-20 17:27:27
  * @Description:  ESKF 内部函数实现
  */
 
@@ -27,60 +27,13 @@ void ESKF::Predict(const IMU & u)
     IMU ubIMU;
     DataProcess(u,ubIMU);
 
-    // update expectation
-    // calculate imu measure without bias
-        
-    Eigen::Vector3d AccNB = ubIMU.mAccel ;
-    Eigen::Vector3d GyroNB = ubIMU.mGyro ;
-    Eigen::Vector3d so3_b_n = mState.block<3,1>(PHI_IDX,0);
-    Eigen::Matrix3d R_b_n = Sophus::SO3d::exp(so3_b_n).matrix();
-    Eigen::Vector3d AccNBNG = AccNB + R_b_n.transpose()*gravity_vector_w;
-    
     // UpdateState UpdateErrorState
+    MatrixG G;
+    MatrixF F;
     UpdateState(ubIMU);
-    UpdateErrorState(ubIMU);
-    UpdateErrorStateCovarance(ubIMU);
-    // calculate transfer equation 
-    // the deritive form of error state is as below
-    // EX_dot = F* EX + G * N
-    // then the transfer equation can be written as below
-    // EX_k+1 = (I+F*delta_t)EX_k + G*delta_t*N
+    UpdateErrorState(ubIMU,F,G);
+    UpdateErrorStateCovarance(F,G);
 
-    Eigen::Matrix<double,15,15> F = Eigen::Matrix<double,15,15>::Zero();
-    F.block<3,3>(PHI_IDX,PHI_IDX) = -1*Sophus::SO3d::hat(GyroNB);
-    F.block<3,3>(PHI_IDX,BG_IDX) = -1 * Eigen::Matrix<double,3,3>::Identity();
-    F.block<3,3>(VEL_IDX,PHI_IDX) = -1*R_b_n*Sophus::SO3d::hat(AccNB);
-    F.block<3,3>(VEL_IDX,BA_IDX) = -1*R_b_n;
-    F.block<3,3>(VEL_IDX,POS_IDX) = Eigen::Matrix<double,3,3>::Identity();
-    
-    Eigen::Matrix<double,15,12> G = Eigen::Matrix<double,15,12>::Zero();
-    
-    G.block<3,3>(PHI_IDX,NG_IDX) = Eigen::Matrix<double,3,3>::Identity();
-    G.block<3,3>(VEL_IDX,NA_IDX) = R_b_n;
-    G.block<3,3>(BG_IDX,NG_IDX) = Eigen::Matrix<double,3,3>::Identity();
-    G.block<3,3>(BA_IDX,NA_IDX) = Eigen::Matrix<double,3,3>::Identity();
-
-
-#ifdef SIMULATION
-    double delta_t = 0.01;
-#else
-    double delta_t = u.mTime - mpreIMU.mTime;
-    if(delta_t <0.0)
-    {
-        std::cerr<<"[ERROR]: there must be something wrong with the imu timestamp!"<<endl;
-        std::abort();
-    }
-#endif 
-
-    // Nominal State Update
-
-    
-    // here assuming the noise is normal distribution
-    mdState = mdState + F*delta_t*mdState;
-    
-    // update covariance
-    Eigen::Matrix<double,15,15> I = Eigen::Matrix<double,15,15>::Identity();
-    mCovar = (I+F*delta_t)*mCovar*(I+F*delta_t).transpose() + G*delta_t*mIN.mCov*(G*delta_t).transpose();
 }
 
 // TODO 单元测试
@@ -101,54 +54,89 @@ void ESKF::UpdateState(const IMU & ubIMU)
 }
 
 // TODO 单元测试
-void ESKF::UpdateErrorState(const IMU & ubIMU)
+void ESKF::UpdateErrorState(const IMU & ubIMU, MatrixF & F, MatrixG & G)
 {
-    mErrorState.block()
+    F.setZero();
+    G.setZero();
+    
+    // PHI 部分
+    F.block<3,3>(PHI_IDX,PHI_IDX) = -1 * Sophus::SO3d::hat(ubIMU.mGyro);
+    F.block<3,3>(PHI_IDX,BG_IDX) = -1 *I3;
+    G.block<3,3>(PHI_IDX,NG_IDX) = I3;
+    
+    // VEL 部分
+    Eigen::Vector3d so3 = mState.block<3,1>(PHI_IDX,0);
+    Eigen::Matrix3d C_n_b = Sophus::SO3d::exp(so3).matrix();
+
+    F.block<3,3>(VEL_IDX,BA_IDX) = -1*C_n_b;
+    F.block<3,3>(VEL_IDX,PHI_IDX) = -1*C_n_b*Sophus::SO3d::hat(ubIMU.mAccel); 
+    G.block<3,3>(VEL_IDX,NA_IDX) = C_n_b;
+
+    // POS 部分
+    F.block<3,3>(POS_IDX,VEL_IDX) = I3;
+    
+    // BA BG 部分
+    G.block<3,3>(BA_IDX,NAW_IDX) = I3;
+    G.block<3,3>(BG_IDX,NGW_IDX) = I3; 
+
+#ifdef COV_CHECK
+    std::cout<<"the F matrix is "<<std::endl
+    <<std::setprecision(5)<<F<<std::endl;
+    std::cout<<"the G matrix is "<<std::endl
+    <<std::setprecision(5)<<G<<std::endl;
+#endif // COV_CHECK
+
+#ifdef F_1ST
+    mErrorState = (I15 + F*0.01) *mErrorState;
+#else
+    mErrorState = (I15 + F*0.01 + 0.5*F*0.01*F*0.01)*mErrorState;
+#endif
+    
+}
+
+void ESKF::UpdateErrorStateCovarance(const MatrixF & F, const MatrixG & G)
+{
+
+#ifdef F_1ST
+    mErrorCov = (I15 + F*0.01)*mErrorCov*(I15 + F*0.01).transpose();
+#else
+    mErrorCov = (I15 + F*0.01 + 0.5*F*0.01*F*0.01)*mErrorCov*(I15 + F*0.01 + 0.5*F*0.01*F*0.01).transpose();
+#endif
+
+    mErrorCov += (G*0.01)*mIN.mCov*(G*0.01).transpose();
 }
 
 void ESKF::Correct(const Laser & z)
 {
-    // build the observation equation
-    // Z = H*X + D*N
-    // Here the mCovar is the piror cov
-    Eigen::Matrix<double,6,15> H = Eigen::Matrix<double,6,15>::Zero();
-    H.block<3,3>(0,PHI_IDX) = Eigen::Matrix<double,3,3>::Identity();
-    H.block<3,3>(3,POS_IDX) = Eigen::Matrix<double,3,3>::Identity();
-    Eigen::Matrix<double,15,6> K ;
-    K = mCovar*H.transpose()*(H*mCovar*H.transpose()+mLN.mCov).inverse();
+    Laser::LaserY Y_l;
+    Laser::LaserG G_l;
+    Laser::LaserC C_l = Laser::LaserC::Identity();
+    Laser::LaserK K_l;
+    Y_l.setZero();
+    G_l.setZero();
+    BuildErrorStateObs(z.mDRot.data(),nullptr,z.mDTra.data(),
+                       Y_l,G_l);
     
-    // the Updated mCovar is the postier cov
-    Eigen::Matrix<double,15,15> I = Eigen::Matrix<double,15,15>::Identity();
-    mCovar =(I-K*H)*mCovar*(I-K*H).transpose() + K*mLN.mCov*K.transpose();
-#ifdef UPDATESO3
+    K_l.setZero();
+    K_l = mErrorCov*G_l.transpose()*
+          ((G_l*mErrorCov*G_l.transpose()+C_l*mLN.mCov*C_l.transpose()).inverse());
+
+    mErrorCov = (I15-K_l*G_l)*mErrorCov;
+
+    mErrorState = mErrorState + K_l*(Y_l - G_l*mErrorState);
+
+    UpdateErrorStateToState();
+}
+
+void ESKF::UpdateErrorStateToState()
+{
+    mState.block<12,1>(VEL_IDX,0) += mErrorState.block<12,1>(VEL_IDX,0);
     
-#else
-    Eigen::Matrix<double,6,1> vz;
-    vz.block<3,1>(0,0)=z.mDRot;
-    vz.block<3,1>(3,0)=z.mDTra;
-    Eigen::Matrix<double,15,1> dState = mState -mPreState;
-    Sophus::SO3d so3_n_old = Sophus::SO3d::exp(-1*mPreState.block<3,1>(PHI_IDX,0));
-    Sophus::SO3d so3_new_n = Sophus::SO3d::exp(mState.block<3,1>(PHI_IDX,0));
+    Sophus::SO3d SO3_old = Sophus::SO3d::exp(mState.block<3,1>(PHI_IDX,0));
+    Sophus::SO3d SO3_delta = Sophus::SO3d::exp(mErrorState.block<3,1>(PHI_IDX,0));
+    mState.block<3,1>(PHI_IDX,0) = (SO3_old*SO3_delta).log();
 
-    dState.block<3,1>(PHI_IDX,0) = (so3_n_old*so3_new_n).log(); 
-
-    cout<<"the current delta Angle is "<<endl
-    <<  dState.block<3,1>(PHI_IDX,0).transpose()<<endl;
-    cout<<"the current delta Pos is "<<endl
-    <<  (so3_n_old*dState.block<3,1>(POS_IDX,0)).transpose()<<endl;
-    dState.block<3,1>(POS_IDX,0) = so3_n_old*dState.block<3,1>(POS_IDX,0);
-    // Eigen::Matrix<double,6,1> ddState = vz-H*(dState);
-    // so3_n_old = Sophus::SO3d::exp(-1*vz.block<3,1>(PHI_IDX,0));
-    // so3_new_n = Sophus::SO3d::exp(ddState.block<3,1>(PHI_IDX,0));
-    // mdState = K*(vz-H*(dState));
-    cout<< "the residual is "<<endl
-    <<(vz-H*(dState)).transpose()<<endl;
-    cout<<"the K is "<<endl
-    <<K<<endl;
-#endif
-
-
-    
+    mErrorState.setZero();
 }
 
 Eigen::MatrixXd ESKF::GetOM()const

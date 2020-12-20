@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-04 23:14:23
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-06 14:54:35
+ * @LastEditTime: 2020-12-20 17:16:06
  * @Description: 
  */
 #pragma once
@@ -104,6 +104,11 @@ class LaserNoise
 class Laser
 {
     public:
+    using LaserY = Eigen::Matrix<double,6,1>;
+    using LaserG = Eigen::Matrix<double,6,15>;
+    using LaserC = Eigen::Matrix<double,6,6>;
+    using LaserK = Eigen::Matrix<double,15,6>;
+
     Eigen::Vector3d mDRot;
     Eigen::Vector3d mDTra;
     double mTime = -1.0;
