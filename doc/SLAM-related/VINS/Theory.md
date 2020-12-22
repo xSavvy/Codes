@@ -35,3 +35,16 @@ $X_{error}=\delta{X}$<br>
 VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差分析。<br>
 在这一点上，是和ESKF的Propagration过程是一致的。<br>
 就可以使用误差分析的方法来解决这个方差分析的问题了
+
+
+## VINS 从Quaternin 到SO3
+
+其实，虽然状态量是 16 (四元数四维)<br>
+但是，误差是 15 四元数实部为0 省掉不看 <br>
+因为四元数的性质 $\delta{\theta_q} = In(exp(\delta{\theta_{SO3}}))$ <br>
+误差都是旋转矢量的变化量<br>
+所以就可以直接使用SO3 的方式对这部分进行求导<br>
+并且 $\cfrac{d\delta{\theta_q}}{dq_i} =[\cfrac{d\delta\theta_{SO3}}{dR_i},0^{3×1}]$  <br>
+所以可以完成这样的一个转换
+
+四元数的部分之后，还是需要看一下

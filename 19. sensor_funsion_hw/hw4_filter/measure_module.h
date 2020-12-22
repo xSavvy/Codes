@@ -2,12 +2,15 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-04 23:14:23
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-20 17:16:06
+ * @LastEditTime: 2020-12-22 07:30:17
  * @Description: 
  */
 #pragma once
 #include "Eigen/Eigen"
 #include <iostream>
+
+
+#define IMUPreIntegration
 
 using namespace std;
 
@@ -59,10 +62,32 @@ class IMUNoise
 class IMU 
 {
     public:
+
+#ifdef IMUPreIntegration   
+    using F = Eigen::Matrix<double,15,15>;
+    using BEuler = Eigen::Matrix<double,15,12>; 
+    using BMidV = Eigen::Matrix<double,15,18>;
+    using State = Eigen::Matrix<double,15,1>;
+    bool GetFEuler(const State & state, F & oF);
+    bool GetFMidV(const State & state, F & oF);
+    bool GetBEuler(const State & state, BEuler & oB);
+    bool GetBMidV(const State & state, BMidV & oB);
+#endif
     Eigen::Vector3d mAccel;
     Eigen::Vector3d mGyro;
     double mTime = -1.0;
+    // Eigen::Vector3d & GetAccBias()
+    // {
+    //     static Eigen::Vector3d AccBias = Eigen::Vector3d::Zero();
+    //     return AccBias;    
+    // }
+    // Eigen::Vector3d & GetGyroBias()
+    // {
+    //     static Eigen::Vector3d GyroBias = Eigen::Vector3d::Zero();
+    //     return GyroBias; 
+    // }
 };
+
 
 class LaserNoise
 {
