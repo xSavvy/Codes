@@ -2,13 +2,20 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-15 13:53:38
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-15 13:57:00
- * @FilePath: /3rd-test-learning/11. utils/tictoc/tic_toc.cpp
+ * @LastEditTime: 2020-12-21 13:24:39
+ * @FilePath: /ORB_SLAM2/src/tic_toc.cpp
  * @Description: 
  */
 #include "tic_toc.hpp"
+
 TicToc::TicToc(const std::string funcName):funcName_(funcName){
         start = std::chrono::high_resolution_clock::now();
+    }
+TicToc::TicToc(const std::string funcName,const std::string StatPath):
+        funcName_(funcName),StatPath_(StatPath){
+        fout_.open(StatPath_,std::ios_base::out);
+        start = std::chrono::high_resolution_clock::now();
+        save = true;
     }
 
 void TicToc::Tic()
@@ -23,6 +30,10 @@ int64_t TicToc::Toc()
     {
         average_sum+=duration;
         count++;
+    }
+    if(save)
+    {
+        fout_<<duration<<std::endl;
     }
     return duration;
 }
@@ -61,4 +72,8 @@ TicToc::~TicToc()
     <<std::endl<<" "<<
     nanos(diff).count()<<" nanoseconds "<<" == "<<micros(diff).count()<<" macroseconds "<<
     " == "<<millis(diff).count()<<" milliseconds "<<std::endl;
+    if(save)
+    {
+        fout_.close();
+    }
 }

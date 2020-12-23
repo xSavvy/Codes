@@ -23,14 +23,14 @@ Frame
         |__ mFeatVec
         |__ mDescriptors\mDescriptorsRight ORB描述子
     |__ mfctor        进行特征提取
-                    frame 的ctor有多个 可以进行单双目的ORB特征提取
+                      frame 的ctor有多个 可以进行单双目的ORB特征提取
         |__ mfextractORB()           双线程进行提取，class member func 的线程写法值得学习
         |__ mfUndistortKeyPoints()   用畸变参数矫正ORB特征点坐标
         |__ mfComputeImageBounds()   计算去畸变之后的图像边界
         |__ mfAssignFeaturesToGrid()
     |__ mfComputeBoW()
     |__ mfSetPose()                  设置T_c_w
-        |__ UpdatePoseMatrices()
+        |__ UpdatePoseMatrices()     
     |__ mfisInFrustum(MP)            根据点的深度正负性、距离、观测角度，
                                      判断这个MP 是否在视野中           
     |__ mfGetFeaturesInArea()        找到在 以x,y为中心,

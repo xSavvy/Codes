@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-19 07:30:29
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-12-23 13:46:34
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
@@ -66,9 +66,6 @@ class AnalyticCostFunction:public ceres::SizedCostFunction<3,6>
         double* jacobian = jacobians[0];
         if (!jacobian) return true;
         
-        // 这里不使用Sophus 的SE3 求导
-        // 因为Sophus的SE3 是四元数 + 位姿的一个组合
-
         Eigen::Map<Eigen::Matrix<double,3,6>> jacobian_map(jacobians[0]);
         
         Eigen::Matrix<double,4,6> point_jing = Eigen::Matrix<double,4,6>::Zero();

@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2020-12-16 13:23:44
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2020-12-21 09:41:45
+ * @FilePath: /3rd-test-learning/doc/paper-12.16-12.30/conclusion.md
+ * @Description: 
+-->
 ### MSCKF
 
 1. Trifo-VIO:<br>
@@ -24,3 +32,13 @@ Points and Lines<br>
     点 KLT+FAST <br>线LSD+LBD 线的匹配也是使用LBD 进行匹配<br>
     mean brightness check + histogram matching 克服自动曝光
     
+2. FAST-ORB:<br>
+   FastORB-SLAM: Fast ORB-SLAM method with Coarse-to-Fine
+Descriptor Independent Keypoint Matching
+    
+   摘要:<br>
+   1. 一个更改过ORB2前端的 SLAM 系统
+   内容:<br>
+   1. 加速度模型初匹配
+   2. 光流二次匹配
+   3. inlier check： a. 运动约束 b.RANSAC 的约束
