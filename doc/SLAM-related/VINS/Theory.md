@@ -1,4 +1,3 @@
-
 ## VINS关于预积分的Ba Bg 变化的情况
 ![](IMU-Preinte-Ba.jpeg)
 <font color="Red">
@@ -17,8 +16,23 @@ $X_{j} = J_{ji}X_{i} + G_{ji}N_i$<br>
 $X_{k+1} = f(X_k,u,n)$<br>
 $X_{k+1} = f_0 + J_{X_k}(X_k-\hat{X_k})+J_{u}(u)+J_{n}(n)$<br>
 $J_{ji} =J_{X_k}$<br>
-由此，我们就可以知道
+由此，我们就可以知道<br>
 $J_{bg}$和$J_{ba}$ 都是来自$J_{ji}$<br>
+2020.12.24添加 具体说明一下$J$
+$$
+\begin{aligned}
+X_{k+1} &= f_{k}(X_{k},b_{k})\\
+X_{k+1} &= \hat{(f_{k}(\hat{X_{k}},\hat{b_{k}}))} + J^{f_k}_{X_{k}}(X_k - \hat{X_k}) + J^{f_k}_{b_k}(b_k-\hat{b_k})\\
+X_{k+2} &= f_{k+1}(X_{k+1},b_{k+1})\\
+X_{k+2} &= \hat{(f_{k+1}(\hat{X_{k+1}},\hat{b_{k+1}}))} + J^{f_{k+1}}_{X_{k+1}}(X_{k+1} - \hat{X_{k+1}}) + J^{f_{k+1}}_{b_{k+1}}(b_{k+1}-\hat{b_{k+1}})\\
+X_{k+2} &= \hat{(f_{k+1}(\hat{X_{k+1}},\hat{b_{k+1}}))} \\&+ J^{f_{k+1}}_{X_{k+1}}(\hat{(f_{k}(\hat{X_{k}},\hat{b_{k}}))} + J^{f_k}_{X_{k}}(X_k - \hat{X_k}) + J^{f_k}_{b_k}(b_k-\hat{b_k}) - \hat{X_{k+1}})\\ &+ J^{f_{k+1}}_{b_{k+1}}(b_{k+1}-\hat{b_{k+1}})\\
+
+b_{k+1} &= b_k\\
+J^{X_{k+2}}_{b_k} &=J^{f_{k+1}}_{X_{k+1}}( J^{f_k}_{b_k}(b_k-\hat{b_k}))+ J^{f_{k+1}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
+\end{aligned}
+$$
+这里就可以发现，通过不断迭代我们最终可以找到一个近似的$J^{X}_b$
+
 　　　  <img src="Jba.jpeg" style="transform:rotate(-90deg);" width="300">
 ![](Ja.jpeg)
 
