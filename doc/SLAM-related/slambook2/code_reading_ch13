@@ -15,7 +15,7 @@ FrontEnd
     |__ internal
         |__ StereoInit()
             |__ DetectFeatures()        利用mask 分散的找点
-            |__ FindFeaturesInRight()   LK找左右匹配点
+            |__ FindFeaturesInRight()   LK找左右匹配点内部光流实现
             |__ BuildInitMap()          生成地图  三角化 创建MapPoint
         |__ Track()
             |__ current_frame_          预估一下新的移动

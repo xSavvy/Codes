@@ -55,10 +55,15 @@ VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差
 
 其实，虽然状态量是 16 (四元数四维)<br>
 但是，误差是 15 四元数实部为0 省掉不看 <br>
-因为四元数的性质 $\delta{\theta_q} = In(exp(\delta{\theta_{SO3}}))$ <br>
+因为四元数的性质 $\delta{\theta_q} = [In(exp(\delta{\theta_{SO3}}))^T,0]^T$ <br>
 误差都是旋转矢量的变化量<br>
 所以就可以直接使用SO3 的方式对这部分进行求导<br>
 并且 $\cfrac{d\delta{\theta_q}}{dq_i} =[\cfrac{d\delta\theta_{SO3}}{dR_i},0^{3×1}]$  <br>
 所以可以完成这样的一个转换
 
 四元数的部分之后，还是需要看一下
+
+### VINS 预积分中一个隐藏的巨雷
+
+推导见 ./19. sensor_funsion_hw/hw6_imu_wheel/IMU_Wheel.md
+对于IMU 的预积分在迭代的时候，每一次线性化都需要对预积分进行一次重新计算，因为对应的Bias 发生了更新

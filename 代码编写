@@ -84,3 +84,4 @@
 39. VINS 的点管理进行优化
 40. VINS 的光流进行优化
 41. 看一下SO3上的概率
+42. 看一下 IMU 标定 sensor_fusion/hw3 的内容
