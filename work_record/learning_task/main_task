@@ -1,0 +1,43 @@
+1. 传感器融合第三章作业 完成
+2. 视觉实现    类SVO(PLK 、DriectMethod) PnP Triangulate
+              EPnP  极线搜索 ICP(完成)
+              BA (SE3\Sim3估计) EFH估计
+              类ORB(Feature) 
+2. ORB-SLAM3 代码阅读
+2. 预积分误差 误差关系确定
+2. SO3 上的龙格库塔
+2. VINS-Mono代码阅读
+3. gtsam 学习
+3. EKF 不收敛的大坑看一下
+3. 重新学一下四元数
+4. LIO-SAM 剩余代码阅读
+4. LIO-SAM 和Lego-LOAM 的区别
+5. BASALT代码阅读
+6. hdl_localization 代码阅读
+7. lidar_localization 紧耦合
+8. lidar_localization 位姿图替换
+9. 修改一个实用的ICP
+   LOAM 基底打KITTI F-LOAM+LLS-LOAM 基于环境进行特别的修改也没有关系
+10.数值分析过一下线性方程求解
+
+
+======================================
+1. 思考技术工作后续 
+
+===================================================
+1. LIO-SAM IMU 二次更新的问题 视频中并没有给出讲解
+
+==================================================
+1. VSLAM slambook2 代码过一遍  重要内容基本完成 剩下g2o
+2. ORB
+3. DSO\SVO
+4. MSCKF
+5. 跟着SVO.py 学一下python
+
+===================================================
+周末工作清单
+1. ORB2 YGZ光流版本 2
+2. 作业PPT 1
+3. 第七章作业 1
+4. SVO.py 过一下 python
+5. g2o 学习

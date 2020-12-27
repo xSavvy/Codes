@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-06 21:15:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-26 15:56:13
+ * @LastEditTime: 2020-12-27 17:08:00
  * @Description: 使用 Analytic Diff 来进行代码编写，这个地方也就是补上了 7th的例子
  */
 
@@ -49,7 +49,7 @@ class Rat43Analytic: public ceres::SizedCostFunction<1,4>
     private:
     double x_;
     double y_;
-}
+};
 
 
 int main()
