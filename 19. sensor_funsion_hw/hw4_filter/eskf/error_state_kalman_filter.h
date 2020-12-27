@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-04 23:13:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-20 17:23:28
+ * @LastEditTime: 2020-12-27 11:04:54
  * @Description: 之前对于问题粗浅的理解导致现在代码写得非常难受
  * 
  *               2020.12.13 
@@ -17,7 +17,9 @@
  *                  IMU 的Bias 是否更新， 在GeYao的实现中，会check 一下Cov 是否收敛。 
  *               5. ErrorState 置零 然后从1 继续进行
  *
- *
+ *               
+ *               现在存在的问题是如何 之前说的那个随机偏差要如何引入的问题
+ *               如果不引入这个随机偏差 无法进行更新
  *               对于预积分的方法
  *               类似的误差分析主要是用于获取方差
  *
@@ -134,7 +136,7 @@ bool ESKF::BuildErrorStateObs(const double * PhiObs, const double * VelObs, cons
         // Y calculate
         Eigen::Map<const Eigen::Vector3d> posi_true(PosiObs);
         Y_obs.block<3,1>(idx_count*3,0) = posi_true - mState.block<3,1>(POS_IDX,0);
-        idx_count++:
+        idx_count++;
     }
 
     return true;

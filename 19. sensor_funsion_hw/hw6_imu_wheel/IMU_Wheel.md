@@ -28,15 +28,14 @@ $$
         &= J^{\theta_{b_ib_{k+1}}}_{\theta_{b_ib_{k}}}(\theta_{b_ib_{k}}-\hat{\theta_{b_ib_{k}}})+J^{\theta_{b_ib_{k+1}}}_{b_{gk}}(b_{gk}-\hat{{b_{gk}}})+c
         \end{aligned}
 $$
-
 $$
     \begin{aligned}
     \theta_{whole}&=In(exp(\hat{\theta_{b_ib_{k}}})exp[(\omega_m - \hat{b_{gk}})\Delta{t}])\\
-    
     J^{\theta_{b_ib_{k+1}}}_{\theta_{b_ib_{k}}}&=\cfrac{d\theta_{b_ib_{k+1}}(\delta{\theta})}{d\delta{\theta}} \\&= \frac{In(exp(\hat{\theta_{b_ib_{k}}})exp(\delta{\theta})exp[(\omega_m - \hat{b_{gk}})\Delta{t}])}{d\delta\theta}\\
     &=J^{-1}_r(exp(\theta_{whole}))(exp[(\omega_m - \hat{b_{gk}})\Delta{t}])^T
     \end{aligned}
-    \\
+$$
+$$
     \begin{aligned}
     J^{\theta_{b_ib_{k+1}}}_{b_{gk}} &= \cfrac{d\theta_{b_ib_{k+1}}(\delta{b_{gk}})}{d\delta{b_{gk}}}\\&=\frac{In(exp(\hat{\theta_{b_ib_{k}}})exp[(\omega_m - \hat{b_{gk}}-\delta{b_{gk}})\Delta{t}])}{d\delta{b_{gk}}}\\
     &=-J^{-1}_r(exp(\theta_{whole}))J_r(exp[(\omega_m - \hat{b_{gk}})\Delta{t}])\Delta{t}
@@ -82,8 +81,15 @@ $$
        \dot{\delta{b_g}} &= n_{gwalk}
     \end{aligned}
 $$
-不断进行迭代就可以。
 
+得到
+
+$$
+    \dot{\delta{X}} = F\delta{X}+ BN
+$$
+不断进行迭代进行方差计算了。
+
+### r求导
 最后就是对于$r$的求导
 $$
     \begin{aligned}
@@ -94,9 +100,14 @@ $$
     \\
     \cfrac{\partial{r_{\alpha_{bjbi}}}}{\partial{b_{gbi}}}&=-J^{\alpha}_{b_{gbi}}
     \\
-    r_{\theta_{bjbi}}&=In[R_j^TR_iexp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(b_{gbi}-\hat{b_{gbi}}))]
-    
-
-
+    r_{\theta_{bjbi}}&=In[R_j^TR_iexp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(b_{gbi}-{b^{linearized}_{gbi}}))]
+    \\
+    \theta_{whole} &= In[\hat{R_j}^T\hat{R_i}exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}}))
+    \\
+    \cfrac{\partial{\theta_{bjbi}}}{\partial{R_j}}&= -J^{-1}_{l}(exp(\theta_{whole}))
+    \\
+    \cfrac{\partial{\theta_{bjbi}}}{\partial{R_i}}&= J^{-1}_{r}(exp(\theta_{whole}))(exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}})))^T
+    \\
+    \cfrac{\partial{\theta_{bjbi}}}{\partial{b_{gki}}}&= J^{-1}_{r}(exp(\theta_{whole}))J_{r}(exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}})))J^{\theta_{b_jb_i}}_{b_{gi}}
     \end{aligned}
 $$
