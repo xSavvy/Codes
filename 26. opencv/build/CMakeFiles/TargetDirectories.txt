@@ -1,3 +1,0 @@
-/home/sunny/workspace_private/3rd-test-learning/26. opencv/build/CMakeFiles/rebuild_cache.dir
-/home/sunny/workspace_private/3rd-test-learning/26. opencv/build/CMakeFiles/basic_mat.dir
-/home/sunny/workspace_private/3rd-test-learning/26. opencv/build/CMakeFiles/edit_cache.dir
