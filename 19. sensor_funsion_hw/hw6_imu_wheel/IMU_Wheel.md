@@ -108,6 +108,6 @@ $$
     \\
     \cfrac{\partial{\theta_{bjbi}}}{\partial{R_i}}&= J^{-1}_{r}(exp(\theta_{whole}))(exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}})))^T
     \\
-    \cfrac{\partial{\theta_{bjbi}}}{\partial{b_{gki}}}&= J^{-1}_{r}(exp(\theta_{whole}))J_{r}(exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}})))
+    \cfrac{\partial{\theta_{bjbi}}}{\partial{b_{gki}}}&= J^{-1}_{r}(exp(\theta_{whole}))J_{r}(exp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(\hat{b_{gbi}}-{b^{linearized}_{gbi}})))J^{\theta_{b_jb_i}}_{b_{gi}}
     \end{aligned}
 $$

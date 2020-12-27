@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-20 17:27:27
+ * @LastEditTime: 2020-12-27 10:25:03
  * @Description:  ESKF 内部函数实现
  */
 
@@ -33,7 +33,15 @@ void ESKF::Predict(const IMU & u)
     UpdateState(ubIMU);
     UpdateErrorState(ubIMU,F,G);
     UpdateErrorStateCovarance(F,G);
+    UpdateErrorStateToState();
 
+}
+
+void ESKF::DataProcess(const IMU & u, IMU & unIMU)
+{
+    unIMU.mAccel = u.mAccel - mState.block<3,1>(BA_IDX,0);
+    unIMU.mGyro  = u.mGyro - mState.block<3,1>(BG_IDX,0);
+    unIMU.mTime = u.mTime;
 }
 
 // TODO 单元测试
@@ -124,8 +132,6 @@ void ESKF::Correct(const Laser & z)
     mErrorCov = (I15-K_l*G_l)*mErrorCov;
 
     mErrorState = mErrorState + K_l*(Y_l - G_l*mErrorState);
-
-    UpdateErrorStateToState();
 }
 
 void ESKF::UpdateErrorStateToState()
