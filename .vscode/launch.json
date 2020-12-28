@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sunny/workspace_private/3rd-test-learning/29. g2o/build/g2o_powell_function",
+            "program": "/home/lwl/workspace/3rd-test-learning/29. g2o/build/g2o_icp_so3_r3",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

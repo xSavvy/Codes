@@ -1,6 +1,6 @@
 project(g2o_test)
 cmake_minimum_required( VERSION 3.5)
-
+set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_BUILD_TYPE "Debug")
 find_package(OpenCV 3 REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -12,6 +12,7 @@ link_libraries( g2o_core g2o_stuff)
 
 
 include (../cmake/eigen3.cmake)
+include (../cmake/sophus.cmake)
 # find_package(CSparse REQUIRED)
 # find_package(Cholmod REQUIRED)
 # include_directories(${CSPARSE_INCLUDE_DIR})
@@ -26,9 +27,11 @@ include (../cmake/eigen3.cmake)
 # g2o_parser g2o_solver_pcg g2o_types_data g2o_types_sim3 cxsparse )
 
 include_directories(./g2o_basic_example)
+include_directories(./g2o_slam_demo)
 
+link_libraries(${OpenCV_LIBS})
+# add_executable(g2o_basic ./g2o_basic_example/g2o_curvefitting.cpp)
 
-add_executable(g2o_basic ./g2o_basic_example/g2o_curvefitting.cpp)
-target_link_libraries(g2o_basic ${OpenCV_LIBS})
-add_executable(g2o_powell_function ./g2o_basic_example/g2o_powell_function.cpp)
-target_link_libraries(g2o_powell_function ${OpenCV_LIBS})
+# add_executable(g2o_powell_function ./g2o_basic_example/g2o_powell_function.cpp)
+
+add_executable(g2o_icp_so3_r3 ./g2o_slam_demo/g2o_icp_so3_r3.cpp)

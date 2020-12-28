@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-23 19:05:34
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-24 07:36:37
+ * @LastEditTime: 2020-12-28 21:04:36
  * @Description: 主要是用于SO3 的测试
  *               1. SO3 自己的求导是否正确  是正确的
  *               2. SO3 非绕动和绕动模型的测试
@@ -103,7 +103,6 @@ Eigen::Matrix3d RightJacobianSO3(const float &x, const float &y, const float &z)
          z, 0, -x,
          -y,  x, 0;
         return I - W*(1.0f-cos(d))/d2 + W*W*(d-sin(d))/(d2*d);
-    
 }
 
 
