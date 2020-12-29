@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-28 21:25:13
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-28 22:15:22
+ * @LastEditTime: 2020-12-28 22:17:58
  * @Description: 
  */
 #include "g2o_icp_so3_r3.h"
@@ -98,7 +98,7 @@ int main()
     typedef g2o::LinearSolverDense<BlockSolverType::PoseMatrixType> LinearSolverType;
     
     // 创建求解器
-    auto solver = new g2o::OptimizationAlgorithmDogleg(
+    auto solver = new g2o::OptimizationAlgorithmLevenberg(
         g2o::make_unique<BlockSolverType>(g2o::make_unique<LinearSolverType>()));
     g2o::SparseOptimizer optimizer;     // 图模型
     optimizer.setAlgorithm(solver);   // 设置求解器
