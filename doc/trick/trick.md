@@ -112,6 +112,7 @@ HDR Environments<br>
    11. Challenges in Monocular Visual Odometry:
 Photometric Calibration, Motion Bias and
 Rolling Shutter Effect 大佬们给出的讨论
+   12. ORB 的PoseOptimzation 在优化之后会去掉不合理的点，然后再次从头进行优化(算是一种类型的点管理吧)
 
 ### FrontEnd SlideWindow
 
