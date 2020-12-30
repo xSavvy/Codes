@@ -17,7 +17,7 @@ ORBSLAM 改进：
 1. 为什么加入MonoError精度没有明显的提高？
 2. 为什么Stereo的Pose Optmization 里面会有Mono 的约束？
    而且加上Mono 之后算法精度并并没有很大的提高(这一点有待商榷，可以是因为我对于代码修改的问题，需要之后进行测试)
-3. 
+3. 加上GroundConstraint 之后，整个效果存在很大的问题
 
 
 
