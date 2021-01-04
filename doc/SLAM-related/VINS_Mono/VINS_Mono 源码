@@ -38,12 +38,14 @@ feature_tracker
             |__ pts_velocity              点的速度
         |__ readImage()               函数主体
             |__ PyrLKTracking()       之前有值就调用cv:: calcOpticalFlowPyrLK() 进行track
+                                      这里可以看出是直接使用cur_pts
+                                      经过光流来寻找forw_pts
             |__ if PUB_THIS_FRAME
-                |__ rejectWithF()     RANSAC + FundamentalMat 筛一次特征点
-                |__ setMask()         保证和现有点有一定距离，保证特征点均匀
-                |__ goodFeaturesToTrack()
-                |__ addPoints()       队列中添加新的特征点
-            |__ updateInfo()          新旧信息更新 + 计算点的速度(和相机模型有关) 没仔细看怎么算的? 
+                |__ rejectWithF()         RANSAC + FundamentalMat 筛一次特征点
+                |__ setMask()             保证和现有点有一定距离，保证特征点均匀
+                |__ goodFeaturesToTrack() 应该是从forw_img 当中再提取一部分点来用于之后的跟踪
+                |__ addPoints()           队列中添加新的特征点
+            |__ updateInfo()              新旧信息更新 + 计算点的速度(和相机模型有关) 没仔细看怎么算的? 
 
 =============================================================================================
 
