@@ -9,7 +9,7 @@ ROS_nodelet spin 驱动执行
                                         2. 通过自身的重力数值和先验重力得到一个对于东北天下的旋转阵
     |__ featureCallback() 
         |__ batchImuProcessing()
-            |__ slef extractIMUinfo()
+            |__ self extractIMUinfo()
             |__ processModel()          协方差三阶近似
                                         姿态递推四阶龙格库塔
                                         OC-modified State Transition

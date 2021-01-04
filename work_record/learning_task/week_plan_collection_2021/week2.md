@@ -1,4 +1,5 @@
 
+
 ### Week2
 计划:<br>
 1. front_end_self(Camera) 的建立 可以持续两个周   11
@@ -11,5 +12,7 @@
 3. VINS Covar 获取学习 12            
 4. YGZ-ORB TrackLocalMap 学习 11    
 5. EKF 概率、插值 on SO3 12 
+   包括双目的概率例子
 6. 学习python 12 
 7. 地面约束问题寻找      11 
+8. SVO.py 进行python + opencv 学习 12
