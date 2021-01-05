@@ -33,7 +33,7 @@ motion" <br>
       a. (ORB/Trifo-VIO ...)H F RANSAC + PnP 二次去误差
       b. (LARVIO)描述子去误匹配
       c. (DSM) T 分布去outlier ？？ 没有仔细看这里存疑
-      d. (SELF) 待验证 先验知识用于去掉误匹配
+      d. (SELF) 待验证 先验运动用于去掉误匹配
 #### 光流/Direct 
 
    1. Data Assoicate 的问题<br>

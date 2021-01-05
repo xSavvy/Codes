@@ -23,9 +23,51 @@ Tracking
                                                4. 对每一个KF的子帧和父帧加入mvLocalKF
                 |__ mfUpdateLocalPoints        一个收集大量LocalMapPoint到mvpLocalMapPoints的过程
                                                就是把mvpLocalKeyFrames的MapPoint提取到mvpLocalMapPoints的过程
+
             |__ mfSearchLocalPoints          把LocalMPs 投影到当前帧和目前的mvMapPoints进行描述子匹配
             |__ mfCreateNewKeyFrame()        用于创建新的关键帧，创建对应的MapPoint
     
 ============================= 单幅图像的Track流程 ====================================================
 
+Tracking 的具体实现
+    mfTrackWithMotionModel     LastFrame CurFrame 的匹配
+        |__ mfUpdateLastFrame()
+            |__ self getTcwOfLastFrame
+            |__ self getAllPointWithDepthinLastFrame
+            |__ self createMapPointForThesePoints
+        |__ self predictPoseForCurFrame
+        |__ mfSearchByProjection      Frame to Frame
+            |__ self initialize       包括RotHistogram Tcw Tlw 等
+            |__ self checkBackwardOrFrontward 判断向前向后  
+            |__ self for_each MP in LastFrame
+                |__ projectIntoCurFrame
+                |__ self getMatchingCandidates        使用CurFrame.GetFeaturesInArea 
+                |__ self for_each Candidates 
+                    |__ find Best Match with MP
+                |__ if BestDist<TH  
+                    |__ addMPToCurFrame
+                    |__ addIntoRotHist
+            |__ self rotationConsistencyCheck
+                |__ 分成了360度分成了12块角度区域
+                |__ 只留下了存在于三个数量最多的角度区域 的匹配点
+        |__ mf Optimizer.PoseOptimization()   进行优化
+        |__ self removeOutlierMPs
 
+    mfTrackReferenceKeyFrame   Frame to KeyFrame
+        |__ mfComputeBoW
+        |__ mfSearchByBoW      Frame to KeyFrame
+            |__ self searchBestMatching   和词袋三方库有关 量有些大 先不看
+            |__ self bestDist1 bestDist2 Compare
+            |__ self RotHistCheck
+        |__ mf Optimizer.PoseOptimization()   进行优化
+        |__ self removeOutlierMPs
+    
+    mfTrackLocalMap
+        |__ mfUpdateLocalKeyFrames
+        |__ mfUpdateLocalPoints
+            |__ for_each mvpLocalMapPoints
+                |__ self checkIfInFrusttum
+            |__ mfSearchByProjection       Frame to MPs 基本和 Frame to Frame 一致除了没有RotHisto
+                |__ for_each LocalMP
+                    |__ self checkValid
+                    |__ mfGetFeaturesInArea

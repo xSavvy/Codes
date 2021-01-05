@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2020-12-27 13:12:44
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-05 11:27:50
+ * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
+ * @Description: 
+-->
 ## VINS关于预积分的Ba Bg 变化的情况
 ![](IMU-Preinte-Ba.jpeg)
 <font color="Red">
@@ -25,11 +33,13 @@ X_{k+1} &= f_{k}(X_{k},b_{k})\\
 X_{k+1} &= \hat{(f_{k}(\hat{X_{k}},\hat{b_{k}}))} + J^{f_k}_{X_{k}}(X_k - \hat{X_k}) + J^{f_k}_{b_k}(b_k-\hat{b_k})\\
 X_{k+2} &= f_{k+1}(X_{k+1},b_{k+1})\\
 X_{k+2} &= \hat{(f_{k+1}(\hat{X_{k+1}},\hat{b_{k+1}}))} + J^{f_{k+1}}_{X_{k+1}}(X_{k+1} - \hat{X_{k+1}}) + J^{f_{k+1}}_{b_{k+1}}(b_{k+1}-\hat{b_{k+1}})\\
-X_{k+2} &= \hat{(f_{k+1}(\hat{X_{k+1}},\hat{b_{k+1}}))} \\&+ J^{f_{k+1}}_{X_{k+1}}(\hat{(f_{k}(\hat{X_{k}},\hat{b_{k}}))} + J^{f_k}_{X_{k}}(X_k - \hat{X_k}) + J^{f_k}_{b_k}(b_k-\hat{b_k}) - \hat{X_{k+1}})\\ &+ J^{f_{k+1}}_{b_{k+1}}(b_{k+1}-\hat{b_{k+1}})\\
-
+X_{k+2} &= \hat{(f_{k+1}(\hat{X_{k+1}},\hat{b_{k+1}}))} \\&+ J^{f_{k+1}}_{X_{k+1}}[\hat{(f_{k}(\hat{X_{k}},\hat{b_{k}}))} + J^{f_k}_{X_{k}}(X_k - \hat{X_k}) + J^{f_k}_{b_k}(b_k-\hat{b_k}) - \hat{X_{k+1}}]\\ &+ J^{f_{k+1}}_{b_{k+1}}(b_{k+1}-\hat{b_{k+1}})
+\\
 b_{k+1} &= b_k\\
 J^{X_{k+2}}_{b_k} &=J^{f_{k+1}}_{X_{k+1}}( J^{f_k}_{b_k}(b_k-\hat{b_k}))+ J^{f_{k+1}}_{b_{k+1}}(b_{k}-\hat{b_{k}})\\
-J^{X_{k+2}}_{b_k} &=J^{X_{k+2}}_{X_{k+1}}( J^{X_{k+1}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
+ &=J^{X_{k+2}}_{X_{k+1}}( J^{X_{k+1}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
+ \\
+ &=( J^{X_{k+2}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
 \end{aligned}
 $$
 这里就可以发现，通过不断迭代我们最终可以找到一个不是近似的$J^{X}_b$

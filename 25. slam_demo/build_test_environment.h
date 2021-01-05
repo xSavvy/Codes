@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-11 09:27:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-11-19 16:27:51
+ * @LastEditTime: 2021-01-05 09:50:26
  * @FilePath: /3rd-test-learning/25. slam_demo/build_test_environment.h
  * @Description: 用于建立测试环境 拥有数据一致性
  */
@@ -11,12 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-struct Landmark
-{
-  Landmark():position_(Eigen::Vector3d::Zero()),label_(0){}
-  Eigen::Vector3d position_;
-  unsigned int label_;
-};
+
 
 void transfromPointIntoNewFrame(const Eigen::Vector3d &  point_old,Eigen::Vector3d & point_new,
                                 const Eigen::Matrix3d & rotation,const Eigen::Vector3d& translation)
