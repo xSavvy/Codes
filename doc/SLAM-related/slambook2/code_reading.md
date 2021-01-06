@@ -1,4 +1,3 @@
-
 ### ch5
 1. Stereo
    双目深度估计
@@ -24,12 +23,14 @@ direct pesodu code
 4. 得到结果
 
 direct method 公式<br>
+
 $$
     \begin{aligned}
     &\underset{T}{\operatorname{argmin}} (I_1(u_1,v_1)-I_2(\cfrac{DKT^2_1p_1}{z_2}))\\
     = &\underset{\delta{T}}{\operatorname{argmin}}(I_1(u_1,v_1)\\&-I_2(\cfrac{DKT^2_1p_1}{z_2}))-\cfrac{\partial{I_2}}{\partial{u,v}}\cfrac{\partial{u,v}}{\partial{x_2,y_2,z_2}}\cfrac{\partial{x_2,y_2,z_2}}{\partial{\xi}}\delta{\xi})\\
     \end{aligned}
 $$
+
 ![](./picture/1.png)
 
 这里需要注意的是 对 $T$ 求导的时候绕动模型是加在左边还是右边<br>
