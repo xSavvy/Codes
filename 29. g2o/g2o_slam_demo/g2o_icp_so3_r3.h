@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-12-28 21:06:12
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-28 22:12:14
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-06 10:33:38
  * @Description: 
  */
 
@@ -69,7 +69,15 @@ class EdgeICP :public g2o::BaseUnaryEdge<3,Eigen::Vector3d,SO3R3Vertex>
     {
         const SO3R3Vertex *v = static_cast<const SO3R3Vertex *> (_vertices[0]);
         const SO3R3 Twc = v->estimate();
-        
+        static bool first = false;
+
+        _jacobianOplusXi.setZero();
+        // 用于检测_jacobianOplusXi 是不是提前初始化过
+        // if(!first)
+        // {
+        // std::cout<<"check the jacobian init"<<_jacobianOplusXi.transpose()<<std::endl;
+        // first = true;
+        // }
         _jacobianOplusXi.block<3,3>(0,0) = -1*Sophus::SO3d::hat(Twc._SO3*Xw);
         _jacobianOplusXi.block<3,3>(0,3) = Eigen::Matrix3d::Identity();
     }
