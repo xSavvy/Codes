@@ -60,7 +60,10 @@ pesodu code
                     buildLKResdiual <br>
             update $\Delta{u}$ 和 $\Delta{v}$ <br>
         update vP1 和 vP2 coordinate in a lower layer<br>
+    
 5. 统一vP1 在最低层上对应的vP2 完成匹配 得到结果
+
+确定一下 patch 的匹配过程
 
 LKresidual
 direct method 公式<br>

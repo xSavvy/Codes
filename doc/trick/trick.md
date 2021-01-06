@@ -114,6 +114,8 @@ HDR Environments<br>
 Photometric Calibration, Motion Bias and
 Rolling Shutter Effect 大佬们给出的讨论
    12. ORB 的PoseOptimzation 在优化之后会去掉不合理的点，然后再次从头进行优化(算是一种类型的点管理吧)
+   13. MapPoint 和 KeyFrame 都需要进行去重复,不然之后一定会出现计算量过大的问题
+   14. 视觉需要维护一个共视关系
 
 ### FrontEnd SlideWindow
 
