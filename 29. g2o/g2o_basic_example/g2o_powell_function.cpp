@@ -2,13 +2,24 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 18:22:47
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-27 19:28:21
+ * @LastEditTime: 2021-01-07 15:54:08
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/g2o_powell_function.cpp
  * @Description: 
  */
 
 
 #include "VE_self_powell_function.h"
+
+void ConvarianceCatch(g2o::SparseOptimizer & optimizer)
+{
+    for(auto & edge:optimizer.edges())
+    {
+        edge->vertices().size()
+    }
+}
+
+
+
 using namespace std;
 int main()
 {
@@ -31,18 +42,7 @@ int main()
 
     double dx1=3.0,dx2=-1.0,dx3=0.0,dx4=1.0;
 
-    // vx1->setId(0);
-    // vx1->setEstimate(dx1);
-    // optimizer.addVertex(vx1);
-    // vx2->setId(1);
-    // vx2->setEstimate(dx2);
-    // optimizer.addVertex(vx2);
-    // vx3->setId(2);
-    // vx3->setEstimate(dx3);
-    // optimizer.addVertex(vx3);
-    // vx4->setId(3);
-    // vx4->setEstimate(dx4);
-    // optimizer.addVertex(vx4);
+
     vx->setEstimate(Eigen::Vector4d(dx1,dx2,dx3,dx4));
     vx->setId(0);
     optimizer.addVertex(vx);
@@ -55,20 +55,6 @@ int main()
     ef2->setVertex(0,vx);
     ef3f4->setVertex(0,vx);
 
-    // ef1->setId(0);
-    // ef2->setId(1);
-    // ef3f4->setId(2);
-    
-    // ef1->setVertex(0,vx1);
-    // ef1->setVertex(1,vx2);
-    // ef2->setVertex(0,vx3);
-    // ef2->setVertex(1,vx4);
-    // ef3f4->getVertices().resize(4,nullptr);
-    // ef3f4->resize(6);
-    // ef3f4->setVertex(0,vx1);
-    // ef3f4->setVertex(1,vx2);
-    // ef3f4->setVertex(2,vx3);
-    // ef3f4->setVertex(3,vx4);
   
     ef1->setInformation(Eigen::Matrix<double,1,1>::Identity());
     ef2->setInformation(Eigen::Matrix<double,1,1>::Identity());
@@ -90,6 +76,22 @@ int main()
     cout<<"x2 is "<<vx2->estimate()<<endl;
     cout<<"x3 is "<<vx3->estimate()<<endl;
     cout<<"x4 is "<<vx4->estimate()<<endl;
+    
+    // 用于读取 Hessian 矩阵
+    // 原本这里 是用于得到 边缘化之后的 信息矩阵和向量， 用于之后用作先验的
+    // 需要区别 现在版本中setMarginalized 中是 marginalized out 而不是留下
+    // 使用单节点  也就是 v_x 会有报错的
+    g2o::SparseBlockMatrix<Eigen::MatrixXd> info_matrix;
+    std::vector<g2o::OptimizableGraph::Vertex*> v_x;
+    v_x.push_back(optimizer.vertex(0));
+    optimizer.computeMarginals(info_matrix,v_x);
+    cout<<"the hessian idx is  "<<vx->hessianIndex()<<endl;
+    cout<<"the hessian rows is "<<info_matrix.rows()<<endl;
+    cout<<"the hessian cols is "<<info_matrix.cols()<<endl;
+    
+    
+    
+    
     
     return 0;
 }

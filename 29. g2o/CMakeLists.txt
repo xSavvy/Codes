@@ -32,6 +32,6 @@ include_directories(./g2o_slam_demo)
 link_libraries(${OpenCV_LIBS})
 # add_executable(g2o_basic ./g2o_basic_example/g2o_curvefitting.cpp)
 
-# add_executable(g2o_powell_function ./g2o_basic_example/g2o_powell_function.cpp)
+add_executable(g2o_powell_function ./g2o_basic_example/g2o_powell_function.cpp)
 
 add_executable(g2o_icp_so3_r3 ./g2o_slam_demo/g2o_icp_so3_r3.cpp)

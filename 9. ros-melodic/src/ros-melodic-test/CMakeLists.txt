@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ros-melodic-test)
+project(ros_melodic_test)
 
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
+set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_BUILD_TYPE "Debug")
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -19,24 +20,46 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   visualization_msgs
+  message_generation
 )
+
+include(../../../cmake/eigen3.cmake)
+include(../../../cmake/sophus.cmake)
+include(../../../cmake/opencv.cmake)
+
+
+find_package(Threads)
 
 include_directories(
  include
+ build
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(viz-test "src/9.3 visualizetion_msgs-test.cpp")
-target_link_libraries(viz-test ${catkin_LIBRARIES})
+# add_executable(viz-test "src/9.3 visualizetion_msgs-test.cpp")
+# target_link_libraries(viz-test ${catkin_LIBRARIES})
 
-add_executable(9.5.1-multiple-spinner-test "src/9.5.1 multiple-spinner-test.cpp")
-target_link_libraries(9.5.1-multiple-spinner-test ${catkin_LIBRARIES})
+# add_executable(9.5.1-multiple-spinner-test "src/9.5.1 multiple-spinner-test.cpp")
+# target_link_libraries(9.5.1-multiple-spinner-test ${catkin_LIBRARIES})
 
-add_executable(9.5.2-spinner-with-callbackqueue "src/9.5.2 spinner-with-callbackqueue.cpp")
-target_link_libraries(9.5.2-spinner-with-callbackqueue ${catkin_LIBRARIES})
+# add_executable(9.5.2-spinner-with-callbackqueue "src/9.5.2 spinner-with-callbackqueue.cpp")
+# target_link_libraries(9.5.2-spinner-with-callbackqueue ${catkin_LIBRARIES})
 
-add_executable(viz-template "src/viz-template.cpp")
-target_link_libraries(viz-template ${catkin_LIBRARIES})
+# add_executable(viz-template "src/viz-template.cpp")
+# target_link_libraries(viz-template ${catkin_LIBRARIES})
+
+
+add_executable( tf_message_self_define "src/9.6 tf_and_message_self_define.cpp")
+target_link_libraries(tf_message_self_define ${catkin_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+
+
+
+
+
+
+
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -71,11 +94,10 @@ target_link_libraries(viz-template ${catkin_LIBRARIES})
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  VisualOdometryMsg.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -92,10 +114,11 @@ target_link_libraries(viz-template ${catkin_LIBRARIES})
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   map_msgs#   std_msgs#   std_msgs#   visualization_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs#   map_msgs#   
+  std_msgs#   std_msgs#   visualization_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -131,6 +154,7 @@ catkin_package(
 #  LIBRARIES ros-melodic-test
 #  CATKIN_DEPENDS costmap_2d geometry_msgs map_msgs roscpp std_msgs std_msgs tf visualization_msgs
 #  DEPENDS system_lib
+CATKIN_DEPENDS message_runtime
 )
 
 ###########

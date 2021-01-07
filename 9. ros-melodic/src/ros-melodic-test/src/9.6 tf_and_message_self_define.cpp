@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-06 11:01:19
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-06 17:34:22
+ * @LastEditTime: 2021-01-07 14:26:50
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.6 tf_and_message_self_define.cpp
  * @Description: 用于进行 ros - melodic - tf 的学习
  */
@@ -15,6 +15,8 @@
 #include "opencv2/core/core.hpp"
 #include "Eigen/Eigen"
 #include "sophus/so3.hpp"
+#include "devel/include/ros_melodic_test/VisualOdometryMsg.h"
+
 
 #include "ros/ros.h"
 #include "tf2/LinearMath/Quaternion.h"
@@ -30,34 +32,75 @@ class TfBroadcaster
 {
     public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    TfBroadcaster(const std::string & frame_id, const std::string & child_frame_id):
+    TfBroadcaster(const std::string & frame_id, const std::string & child_frame_id,bool tf = false):
     nh_(),frame_id_(frame_id),child_frame_id_(child_frame_id)
     {
-        
+        if(tf)
+        {
+            std::thread t(&TfBroadcaster::RunTF,this);
+            t.detach();
+        }
+        else
+        {
+            pose_message_pub_ = nh_.advertise<ros_melodic_test::VisualOdometryMsg>("VisualOdometry",1);
+            std::thread t(&TfBroadcaster::RunMessage,this);
+            t.detach();
+        }
     }
-    
+    // 两者只能开线程跑一个
+    // 不要开两个线程同时跑，只有一个锁的情况下，会不会出问题还没有进行过测试
     void RunTF();
     void RunMessage();
 
-    bool SetTransform(const Eigen::Matrix4d & tf);
-    bool SetTransform(const Eigen::Vector3d & translation, const Eigen::Matrix3d & rotation);
-    bool SetTransform(const Eigen::Vector3d & translation, const Sophus::SO3d & rotation);
-    bool SetTransform(const Eigen::Vector3d & translation, const Eigen::Quaterniond & rotation);
+    bool SetTransform(const Eigen::Matrix4d & tf,
+                      ros::Time time_stamp = ros::Time::now(),
+                      const double translation_weight = 0.0,
+                      const double rotation_weight = 0.0);
+    //  这里默认 Mat 内部存储方式是 CV_32F
+    bool SetTransform(cv::Mat & tf,
+                      ros::Time time_stamp = ros::Time::now(),
+                      const double translation_weight = 0.0,
+                      const double rotation_weight = 0.0);
+
+    bool SetTransform(const Eigen::Vector3d & translation, 
+                      const Eigen::Matrix3d & rotation,
+                      ros::Time time_stamp = ros::Time::now(),
+                      const double translation_weight= 0.0,
+                      const double rotation_weight = 0.0);
+
+    bool SetTransform(const Eigen::Vector3d & translation, 
+                      const Sophus::SO3d & rotation,
+                      ros::Time time_stamp = ros::Time::now(),
+                      const double translation_weight = 0.0,
+                      const double rotation_weight = 0.0);
+                      
+    bool SetTransform(const Eigen::Vector3d & translation, 
+                      const Eigen::Quaterniond & rotation,
+                      ros::Time time_stamp = ros::Time::now(),
+                      const double translation_weight = 0.0,
+                      const double rotation_weight = 0.0);
+    
+
+    
 
     private:
 
     bool CheckRotation(const Eigen::Matrix3d & rotation)const ;
     void LoadTransfromStamped(geometry_msgs::TransformStamped & tfs) const;
-    void LoadVisualOdometryMsg()const;
+    void LoadVOMsg(ros_melodic_test::VisualOdometryMsg & vo)const;
 
     private:
     
     ros::NodeHandle nh_;
     ros::Publisher  pose_message_pub_;
-
+    ros::Time       cur_time_;
 
     std::string     frame_id_;
     std::string     child_frame_id_;
+
+    double          cur_translation_weight_=0;
+    double          cur_rotation_weight_=0;
+
 
     Eigen::Vector3d          translation_;
     Sophus::SO3d             rotation_;
@@ -80,16 +123,35 @@ void TfBroadcaster::RunTF()
             static tf2_ros::TransformBroadcaster br;
             br.sendTransform(tfs);
             pose_update_ = false;
+            std::cout<<"pub a pose"<<std::endl;
         }
+        // std::cout<<" TF is Running "<<std::endl;
     }
 }
 
 void TfBroadcaster::RunMessage()
 {
+    ros_melodic_test::VisualOdometryMsg vo_msg;
+    while(ros::ok())
+    {
+        {
+            std::unique_lock<std::mutex> locker(transform_lock_);
+            pose_condition_variable_.wait(locker,[this]()->bool{return pose_update_ == true;});
+            LoadVOMsg(vo_msg);
+            pose_message_pub_.publish(vo_msg);
 
+
+            pose_update_ = false;
+            std::cout<<"pub a message"<<std::endl;
+        }
+        // std::cout<<" TF is Running "<<std::endl;
+    }
 }
 
-bool TfBroadcaster::SetTransform(const Eigen::Matrix4d & tf)
+bool TfBroadcaster::SetTransform(const Eigen::Matrix4d & tf,
+                                 ros::Time time_stamp,
+                                 const double translation_weight,
+                                 const double rotation_weight)
 {
     std::lock_guard<std::mutex> locker(transform_lock_);
     Eigen::Matrix3d rotation = tf.block<3,3>(0,0);
@@ -102,12 +164,32 @@ bool TfBroadcaster::SetTransform(const Eigen::Matrix4d & tf)
     Eigen::AngleAxisd aa(rotation);
     rotation_ = Sophus::SO3d::exp(aa.angle()*aa.axis());
     translation_ = translation;
+    cur_time_ = time_stamp;
+    cur_translation_weight_ = translation_weight;
+    cur_rotation_weight_ = rotation_weight;
     pose_update_ = true;
     pose_condition_variable_.notify_one();
     return true;
 }
 
-bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, const Eigen::Matrix3d & rotation)
+bool TfBroadcaster::SetTransform(cv::Mat & tf,
+                                 ros::Time time_stamp ,
+                                 const double translation_weight ,
+                                 const double rotation_weight )
+{
+    Eigen::Matrix4d tf_eigen = Eigen::Matrix4d::Zero();
+    tf_eigen << tf.at<float>(0,0), tf.at<float>(0,1), tf.at<float>(0,2),tf.at<float>(0,3),
+        tf.at<float>(1,0), tf.at<float>(1,1), tf.at<float>(1,2),tf.at<float>(1,3),
+        tf.at<float>(2,0), tf.at<float>(2,1), tf.at<float>(2,2),tf.at<float>(2,3),
+        0.0,0.0,0.0,1.0;
+    SetTransform(tf_eigen,time_stamp,translation_weight,rotation_weight);
+}
+
+bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, 
+                                 const Eigen::Matrix3d & rotation,
+                                 ros::Time time_stamp,
+                                 const double translation_weight,
+                                 const double rotation_weight)
 {
     std::lock_guard<std::mutex> locker(transform_lock_);
     if(!CheckRotation(rotation))
@@ -118,25 +200,45 @@ bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, const Eige
     Eigen::AngleAxisd aa(rotation);
     rotation_ = Sophus::SO3d::exp(aa.angle()*aa.axis());
     translation_ = translation;
+    cur_time_ = time_stamp;
+    cur_translation_weight_ = translation_weight;
+    cur_rotation_weight_ = rotation_weight;
+    pose_update_ = true;
     pose_condition_variable_.notify_one();
     return true;
 }
 
-bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, const Sophus::SO3d & rotation)
+bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, 
+                                 const Sophus::SO3d & rotation,
+                                 ros::Time time_stamp,
+                                 const double translation_weight,
+                                 const double rotation_weight)
 {
     std::lock_guard<std::mutex> locker(transform_lock_);
     rotation_ = rotation;
     translation_ = translation;
+    cur_time_ = time_stamp;
+    cur_translation_weight_ = translation_weight;
+    cur_rotation_weight_ = rotation_weight;
+    pose_update_ = true;
     pose_condition_variable_.notify_one();
     return true;
 }
 
-bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, const Eigen::Quaterniond & rotation)
+bool TfBroadcaster::SetTransform(const Eigen::Vector3d & translation, 
+                                 const Eigen::Quaterniond & rotation,
+                                 ros::Time time_stamp,
+                                 const double translation_weight,
+                                 const double rotation_weight)
 {
     std::lock_guard<std::mutex> locker(transform_lock_);
     Eigen::AngleAxisd aa(rotation);
     rotation_ = Sophus::SO3d::exp(aa.angle()*aa.axis());
     translation_ = translation;
+    cur_time_ = time_stamp;
+    cur_translation_weight_ = translation_weight;
+    cur_rotation_weight_ = rotation_weight;
+    pose_update_ = true;
     pose_condition_variable_.notify_one();
     return true;
 }
@@ -152,7 +254,7 @@ bool TfBroadcaster::CheckRotation(const Eigen::Matrix3d & rotation)const
 void TfBroadcaster::LoadTransfromStamped(geometry_msgs::TransformStamped & tfs)const 
 {
     tfs.child_frame_id = child_frame_id_;
-    tfs.header.stamp = ros::Time::now();
+    tfs.header.stamp = cur_time_;
     tfs.header.frame_id = frame_id_;
 
     // transfer the data type from SO3 to Quaternion
@@ -167,18 +269,62 @@ void TfBroadcaster::LoadTransfromStamped(geometry_msgs::TransformStamped & tfs)c
     tfs.transform.translation.z = translation_.z();
 }
 
+void TfBroadcaster::LoadVOMsg(ros_melodic_test::VisualOdometryMsg & vo)const
+{   
+    vo.header.frame_id = child_frame_id_;
+    vo.header.stamp = cur_time_;
+
+    Eigen::Quaterniond temp_q  = rotation_.unit_quaternion();
+    vo.cam_in_map_pose.orientation.w = temp_q.w();
+    vo.cam_in_map_pose.orientation.x = temp_q.x();
+    vo.cam_in_map_pose.orientation.y = temp_q.y();
+    vo.cam_in_map_pose.orientation.z = temp_q.z();
+
+    vo.cam_in_map_pose.position.x = translation_.x();
+    vo.cam_in_map_pose.position.y = translation_.y();
+    vo.cam_in_map_pose.position.z = translation_.z();
+
+    vo.rotation_weight = cur_rotation_weight_;
+    vo.translation_weight = cur_translation_weight_;
+}
 _E_TF_BROADCASTER_
 
 
 
+void FillPose(tf_broadcaster::TfBroadcaster * tfs_ptr)
+{
+    ros::Rate r(10);
+    int count =0;
+    // 先走直线
+    Eigen::Vector3d translation = Eigen::Vector3d::Zero();
+    Eigen::Matrix3d rotation = Eigen::Matrix3d::Identity();
+    while(count<50)
+    {
+        translation += Eigen::Vector3d::Ones()*0.1;
+        tfs_ptr->SetTransform(translation,rotation);
+        r.sleep();
+        count++;
+    }
+    // 然后进行旋转
+    double angle = 0.0;
+    while(ros::ok())
+    {
+        angle += 0.1;
+        Eigen::AngleAxisd aa(angle,Eigen::Vector3d(0,0,1));
+        tfs_ptr->SetTransform(translation,aa.matrix());
+        r.sleep();
+    }
+}
+
+
 int main(int argc, char ** argv)
 {
+    ros::init(argc,argv,"tf_broadcaster_test");
+
     const std::string frame_id = "map2",child_frame_id="camera";
     tf_broadcaster::TfBroadcaster tf_broadcaster_(frame_id,child_frame_id);
 
-    
-
-
+    FillPose(&tf_broadcaster_);
 
     return 0;
 }

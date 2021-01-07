@@ -75,6 +75,7 @@
         "core": "cpp",
         "numericaldiff": "cpp",
         "specialfunctions": "cpp",
-        "*.txx": "cpp"
+        "*.txx": "cpp",
+        "*.tpp": "cpp"
     }
 }

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-24 13:57:00
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-27 18:35:49
+ * @LastEditTime: 2021-01-07 15:38:38
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/g2o_curvefitting.cpp
  * @Description: 
  * 
@@ -78,6 +78,7 @@ int main()
 
 
     // 执行优化
+    
     cout << "start optimization" << endl;
     chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
     optimizer.initializeOptimization();

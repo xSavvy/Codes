@@ -9,11 +9,11 @@
 2. ESKF编码+测试 12                  
 3. VINS Covar获取\特征和帧见管理 学习 12            
 4. YGZ-ORB TrackLocalMap 学习 11    
-   |__ 需要光流的前置知识
+   |__ 需要光流的前置知识   11 
 5. EKF 概率、插值 on SO3 12 
    包括双目的概率例子
 6. 学习python 12 
-7. 地面约束问题寻找      11 
+7. 地面约束问题寻找      11     完成
 8. SVO.py 进行python + opencv 学习 12
 
 重新梳理ORB 3个track 的过程     完成
