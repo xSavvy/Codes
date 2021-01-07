@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-12-27 17:04:29
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-27 19:25:32
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-01-07 21:46:56
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/VE_self_powell_function.h
  * @Description:  使用g2o 编写 powell function
  */
@@ -57,6 +57,7 @@ class X4:public g2o::BaseVertex<4,Eigen::Vector4d>
     }; 
     virtual bool read(std::istream &in) {}
     virtual bool write(std::ostream &out) const {}
+    
 };
 
 class F1:public g2o::BaseUnaryEdge<1,double, X4>
@@ -72,16 +73,6 @@ class F1:public g2o::BaseUnaryEdge<1,double, X4>
 
         _error(0, 0) = x4a(0)+10*x4a(1);
     }
-
-    // virtual void linearizeOplus() override {
-    //     const CurveFittingVertex *v = static_cast<const CurveFittingVertex *> (_vertices[0]);
-    //     const Eigen::Vector3d abc = v->estimate();
-        
-    //     double y = exp(abc[0] * _x * _x + abc[1] * _x + abc[2]);
-    //     _jacobianOplusXi[0] = -_x * _x * y;
-    //     _jacobianOplusXi[1] = -_x * y;
-    //     _jacobianOplusXi[2] = -y;
-    // }
 
     virtual bool read(std::istream &in) {}
 
@@ -101,16 +92,6 @@ class F2:public g2o::BaseUnaryEdge<1,double,X4>
 
         _error(0, 0) = std::sqrt(5.0)*(x4a(2)-x4a(3));
     }
-
-    // virtual void linearizeOplus() override {
-    //     const CurveFittingVertex *v = static_cast<const CurveFittingVertex *> (_vertices[0]);
-    //     const Eigen::Vector3d abc = v->estimate();
-        
-    //     double y = exp(abc[0] * _x * _x + abc[1] * _x + abc[2]);
-    //     _jacobianOplusXi[0] = -_x * _x * y;
-    //     _jacobianOplusXi[1] = -_x * y;
-    //     _jacobianOplusXi[2] = -y;
-    // }
 
     virtual bool read(std::istream &in) {}
 
@@ -132,16 +113,6 @@ class F3F4:public g2o::BaseUnaryEdge<2,Eigen::Vector2d,X4>
         _error(0, 0) = std::sqrt(10.0)*(x4a(0)-x4a(3))*(x4a(0)-x4a(3));
         _error(1,0)  = (x4a(1)-2.0*x4a(2))*(x4a(1)-2.0*x4a(2));
     }
-
-    // virtual void linearizeOplus() override {
-    //     const CurveFittingVertex *v = static_cast<const CurveFittingVertex *> (_vertices[0]);
-    //     const Eigen::Vector3d abc = v->estimate();
-        
-    //     double y = exp(abc[0] * _x * _x + abc[1] * _x + abc[2]);
-    //     _jacobianOplusXi[0] = -_x * _x * y;
-    //     _jacobianOplusXi[1] = -_x * y;
-    //     _jacobianOplusXi[2] = -y;
-    // }
 
     std::vector<g2o::HyperGraph::Vertex *> & getVertices(){return _vertices;}
     

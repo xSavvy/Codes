@@ -76,6 +76,7 @@
         "numericaldiff": "cpp",
         "specialfunctions": "cpp",
         "*.txx": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "nonlinearoptimization": "cpp"
     }
 }
