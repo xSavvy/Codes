@@ -2,21 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 18:22:47
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-07 15:54:08
+ * @LastEditTime: 2021-01-07 20:27:28
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/g2o_powell_function.cpp
  * @Description: 
  */
 
 
 #include "VE_self_powell_function.h"
-
-void ConvarianceCatch(g2o::SparseOptimizer & optimizer)
-{
-    for(auto & edge:optimizer.edges())
-    {
-        edge->vertices().size()
-    }
-}
+#include "covariance_collector.h"
 
 
 
@@ -63,7 +56,7 @@ int main()
     optimizer.addEdge(ef1);
     optimizer.addEdge(ef2);
     optimizer.addEdge(ef3f4);
-
+    
     cout << "start optimization" << endl;
     chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
     optimizer.initializeOptimization();
@@ -89,8 +82,14 @@ int main()
     cout<<"the hessian rows is "<<info_matrix.rows()<<endl;
     cout<<"the hessian cols is "<<info_matrix.cols()<<endl;
     
-    
-    
+    cov_collector::CovCollector cc;
+    cc.push_back(ef1,vx);
+    cc.push_back(ef2,vx);
+    cc.push_back(ef3f4,vx);
+
+    Eigen::MatrixXd mm;
+    cc.getHessian(vx,mm);
+    cout<<"the hessian is "<<endl<<mm<<endl;
     
     
     return 0;
