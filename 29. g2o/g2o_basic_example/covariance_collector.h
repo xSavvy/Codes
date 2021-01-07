@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-07 16:06:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-07 19:40:31
+ * @LastEditTime: 2021-01-07 19:45:00
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/covariance_collector.h
  * @Description: 
  * 
@@ -87,21 +87,7 @@ void CovCollector::push_back(g2o::BaseBinaryEdge<D,E,VertexXi,VertexXj>* edge_pt
     type_pool_.push_back(1);
 }
 
-Eigen::MatrixXd CovCollector::computeHessian()
-{
-    for(auto & vertex:vertex_pool_)
-    {
-        Eigen::MatrixXd hessian;
-        for(int idx:vertex.second)
-        {
-            if(type_pool_[idx] == 0)
-            {
-                edge_pool_[idx].;
-                edge_pool_[i]
-            }
-        }
-    }
-}
+
 
 
 
