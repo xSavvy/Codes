@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 17:04:29
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-27 19:25:32
+ * @LastEditTime: 2021-01-08 09:12:41
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/VE_self_powell_function.h
  * @Description:  使用g2o 编写 powell function
  */
@@ -86,6 +86,7 @@ class F1:public g2o::BaseUnaryEdge<1,double, X4>
     virtual bool read(std::istream &in) {}
 
     virtual bool write(std::ostream &out) const {}
+
 };
 
 class F2:public g2o::BaseUnaryEdge<1,double,X4>

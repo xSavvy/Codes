@@ -2,15 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-07 16:06:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-08 09:07:28
+ * @LastEditTime: 2021-01-08 09:12:28
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/covariance_collector.h
  * @Description: 
  * 
  *              这个类专门用于计算 协方差
  *              坑：
  *              1. BaseEdge 访问不到内部的 _vertices
- *              2. BaseEdge 内部的各种
+ *              2. BaseEdge 内部的各种 _* 都是 protected 无法直接访问到内部
  *             
+ *              2. Hessian  接近于0了,还是需要想办法验证CovCollector 的正确性
+ *                 应该是对的
  * 
  */
 #include <iostream>
