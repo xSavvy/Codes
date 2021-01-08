@@ -2,13 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-07 16:06:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-07 20:23:54
+ * @LastEditTime: 2021-01-08 09:07:28
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/covariance_collector.h
  * @Description: 
  * 
  *              这个类专门用于计算 协方差
  *              坑：
  *              1. BaseEdge 访问不到内部的 _vertices
+ *              2. BaseEdge 内部的各种
  *             
  * 
  */
@@ -60,10 +61,10 @@ void CovCollector::push_back(g2o::BaseUnaryEdge<D,E,VertexXi>* edge_ptr,
     auto tmp_edge_ptr = reinterpret_cast<g2o::OptimizableGraph::Edge *>(edge_ptr);
     edge_pool_.push_back(tmp_edge_ptr);
     edge_ptr->linearizeOplus();
-    
+    Eigen::Matrix<double,D,D> info =  edge_ptr->information();
     typename g2o::BaseUnaryEdge<D,E,VertexXi>::JacobianXiOplusType jacobian = edge_ptr->jacobianOplusXi();
     Eigen::Matrix<double,VertexXi::Dimension,VertexXi::Dimension> hessian;
-    hessian = jacobian.transpose()*jacobian;
+    hessian = jacobian.transpose()*info*jacobian;
 
     auto tmp_vertex_ptr_1 = reinterpret_cast<g2o::OptimizableGraph::Vertex *>(vertex_ptr);
     if(!vertex_pool_.count(tmp_vertex_ptr_1))
@@ -87,9 +88,11 @@ void CovCollector::push_back(g2o::BaseBinaryEdge<D,E,VertexXi,VertexXj>* edge_pt
     edge_pool_.push_back(tmp_edge_ptr);
     edge_ptr->linearizeOplus();
 
+    Eigen::Matrix<double,D,D> info =  edge_ptr->information();
+
     typename g2o::BaseBinaryEdge<D,E,VertexXi,VertexXj>::JacobianXiOplusType jacobian1 = edge_ptr->jacobianOplusXi();
     Eigen::Matrix<double,VertexXi::Dimension,VertexXi::Dimension> hessian1;
-    hessian1 = jacobian1.transpose()*jacobian1;
+    hessian1 = jacobian1.transpose()*info*jacobian1;
 
     auto tmp_vertex_ptr_1 = reinterpret_cast<g2o::OptimizableGraph::Vertex *>(vertex_1_ptr);
     if(!vertex_pool_.count(tmp_vertex_ptr_1))
@@ -101,7 +104,7 @@ void CovCollector::push_back(g2o::BaseBinaryEdge<D,E,VertexXi,VertexXj>* edge_pt
 
     typename g2o::BaseBinaryEdge<D,E,VertexXi,VertexXj>::JacobianXjOplusType jacobian2 = edge_ptr->jacobianOplusXj();
     Eigen::Matrix<double,VertexXj::Dimension,VertexXj::Dimension> hessian2;
-    hessian2 = jacobian2.transpose()*jacobian2;
+    hessian2 = jacobian2.transpose()*info*jacobian2;
     auto tmp_vertex_ptr_2 = reinterpret_cast<g2o::OptimizableGraph::Vertex *>(vertex_2_ptr);
 
     if(!vertex_pool_.count(tmp_vertex_ptr_2))
