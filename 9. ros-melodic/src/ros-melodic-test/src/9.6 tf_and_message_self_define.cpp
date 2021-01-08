@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-06 11:01:19
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-07 14:26:50
+ * @LastEditTime: 2021-01-08 11:15:05
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.6 tf_and_message_self_define.cpp
  * @Description: 用于进行 ros - melodic - tf 的学习
  */
@@ -11,17 +11,26 @@
 #include <mutex>
 #include <atomic>
 #include <condition_variable>
+#include <cmath>
 
 #include "opencv2/core/core.hpp"
 #include "Eigen/Eigen"
+#include "Eigen/Geometry"
 #include "sophus/so3.hpp"
-#include "devel/include/ros_melodic_test/VisualOdometryMsg.h"
+
 
 
 #include "ros/ros.h"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2_ros/transform_broadcaster.h"
 #include "geometry_msgs/TransformStamped.h"
+
+// #define MSG_COMPILE
+
+#ifdef MSG_COMPILE
+#include "devel/include/ros_melodic_test/VisualOdometryMsg.h"
+#endif
+
 
 #define _S_TF_BROADCASTER_ namespace tf_broadcaster{
 #define _E_TF_BROADCASTER_ };
@@ -42,16 +51,19 @@ class TfBroadcaster
         }
         else
         {
+#ifdef MSG_COMPILE
             pose_message_pub_ = nh_.advertise<ros_melodic_test::VisualOdometryMsg>("VisualOdometry",1);
             std::thread t(&TfBroadcaster::RunMessage,this);
             t.detach();
+#endif
         }
     }
     // 两者只能开线程跑一个
     // 不要开两个线程同时跑，只有一个锁的情况下，会不会出问题还没有进行过测试
     void RunTF();
+#ifdef MSG_COMPILE
     void RunMessage();
-
+#endif
     bool SetTransform(const Eigen::Matrix4d & tf,
                       ros::Time time_stamp = ros::Time::now(),
                       const double translation_weight = 0.0,
@@ -87,8 +99,9 @@ class TfBroadcaster
 
     bool CheckRotation(const Eigen::Matrix3d & rotation)const ;
     void LoadTransfromStamped(geometry_msgs::TransformStamped & tfs) const;
+#ifdef MSG_COMPILE
     void LoadVOMsg(ros_melodic_test::VisualOdometryMsg & vo)const;
-
+#endif
     private:
     
     ros::NodeHandle nh_;
@@ -128,7 +141,7 @@ void TfBroadcaster::RunTF()
         // std::cout<<" TF is Running "<<std::endl;
     }
 }
-
+#ifdef MSG_COMPILE
 void TfBroadcaster::RunMessage()
 {
     ros_melodic_test::VisualOdometryMsg vo_msg;
@@ -147,6 +160,7 @@ void TfBroadcaster::RunMessage()
         // std::cout<<" TF is Running "<<std::endl;
     }
 }
+#endif
 
 bool TfBroadcaster::SetTransform(const Eigen::Matrix4d & tf,
                                  ros::Time time_stamp,
@@ -268,7 +282,7 @@ void TfBroadcaster::LoadTransfromStamped(geometry_msgs::TransformStamped & tfs)c
     tfs.transform.translation.y = translation_.y();
     tfs.transform.translation.z = translation_.z();
 }
-
+#ifdef MSG_COMPILE
 void TfBroadcaster::LoadVOMsg(ros_melodic_test::VisualOdometryMsg & vo)const
 {   
     vo.header.frame_id = child_frame_id_;
@@ -287,6 +301,7 @@ void TfBroadcaster::LoadVOMsg(ros_melodic_test::VisualOdometryMsg & vo)const
     vo.rotation_weight = cur_rotation_weight_;
     vo.translation_weight = cur_translation_weight_;
 }
+#endif
 _E_TF_BROADCASTER_
 
 
@@ -319,12 +334,33 @@ void FillPose(tf_broadcaster::TfBroadcaster * tfs_ptr)
 
 int main(int argc, char ** argv)
 {
+
+    // -90.6805,-0.155628,90.4006,-153,-33,370,0.254107
+
+    Eigen::Vector3d position(-153,33,370);
+    position*=0.001;
+
+    double roll = -90.6805/180.0*M_PI;
+    double pitch = -0.155628/180.0*M_PI;
+    double yaw = 90.4006/180.0*M_PI;
+    Eigen::Matrix3d rotation;
+    rotation.setZero();
+    rotation =   Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()).matrix()
+               * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()).matrix()
+               * Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX()).matrix();
     ros::init(argc,argv,"tf_broadcaster_test");
 
     const std::string frame_id = "map2",child_frame_id="camera";
-    tf_broadcaster::TfBroadcaster tf_broadcaster_(frame_id,child_frame_id);
+    tf_broadcaster::TfBroadcaster tf_broadcaster_(frame_id,child_frame_id,1);
 
-    FillPose(&tf_broadcaster_);
+    tf_broadcaster_.SetTransform(position,rotation);
+    
+    ros::Rate r(10);
 
+    while(ros::ok())
+    {
+        tf_broadcaster_.SetTransform(position,rotation);
+        r.sleep();
+    }
     return 0;
 }

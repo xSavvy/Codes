@@ -1,4 +1,5 @@
 
+
 ### Week2
 计划:<br>
 1. front_end_self(Camera) 的建立 可以持续两个周   11
@@ -8,7 +9,10 @@
    |__ 到TrackLocalMap为止
    LBA等内容先不进行涉及
 2. ESKF编码+测试 12                  
-3. VINS Covar获取\特征和帧见管理 学习 12            
+3. VINS Covar获取\特征和帧见管理 学习 12     
+   |__ Covar获取 + 边缘化     完成
+   |__ 特征管理
+   |__ 帧管理       
 4. YGZ-ORB TrackLocalMap 学习 11    
    |__ 需要光流的前置知识    这个周末
 5. EKF 概率、插值 on SO3 12 

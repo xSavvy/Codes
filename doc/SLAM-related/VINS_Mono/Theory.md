@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-05 11:27:50
+ * @LastEditTime: 2021-01-08 17:57:39
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -94,3 +94,8 @@ VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差
 
 推导见 ./19. sensor_funsion_hw/hw6_imu_wheel/IMU_Wheel.md
 对于IMU 的预积分在迭代的时候，每一次线性化都需要对预积分进行一次重新计算，因为对应的Bias 发生了更新
+
+
+### VINS 中边缘化的实现
+也是 用CostFunction Evaluate 自己算
+类似 我写的CovCollector

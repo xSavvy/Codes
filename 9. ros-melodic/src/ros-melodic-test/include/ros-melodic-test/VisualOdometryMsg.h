@@ -28,14 +28,14 @@ struct VisualOdometryMsg_
   VisualOdometryMsg_()
     : header()
     , cam_in_map_pose()
-    , translation_weight()
-    , rotation_weight()  {
+    , translation_weight(0.0)
+    , rotation_weight(0.0)  {
     }
   VisualOdometryMsg_(const ContainerAllocator& _alloc)
     : header(_alloc)
     , cam_in_map_pose(_alloc)
-    , translation_weight(_alloc)
-    , rotation_weight(_alloc)  {
+    , translation_weight(0.0)
+    , rotation_weight(0.0)  {
   (void)_alloc;
     }
 
@@ -47,10 +47,10 @@ struct VisualOdometryMsg_
    typedef  ::geometry_msgs::Pose_<ContainerAllocator>  _cam_in_map_pose_type;
   _cam_in_map_pose_type cam_in_map_pose;
 
-   typedef std::vector<double, typename ContainerAllocator::template rebind<double>::other >  _translation_weight_type;
+   typedef double _translation_weight_type;
   _translation_weight_type translation_weight;
 
-   typedef std::vector<double, typename ContainerAllocator::template rebind<double>::other >  _rotation_weight_type;
+   typedef double _rotation_weight_type;
   _rotation_weight_type rotation_weight;
 
 
@@ -142,12 +142,12 @@ struct MD5Sum< ::ros_melodic_test::VisualOdometryMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "08f7daef14ac52fffbd9100899ee6aef";
+    return "f17e00e8d06ef5c890124246d0e4b633";
   }
 
   static const char* value(const ::ros_melodic_test::VisualOdometryMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x08f7daef14ac52ffULL;
-  static const uint64_t static_value2 = 0xfbd9100899ee6aefULL;
+  static const uint64_t static_value1 = 0xf17e00e8d06ef5c8ULL;
+  static const uint64_t static_value2 = 0x90124246d0e4b633ULL;
 };
 
 template<class ContainerAllocator>
@@ -168,8 +168,8 @@ struct Definition< ::ros_melodic_test::VisualOdometryMsg_<ContainerAllocator> >
   {
     return "std_msgs/Header header\n"
 "geometry_msgs/Pose cam_in_map_pose\n"
-"float64[] translation_weight\n"
-"float64[] rotation_weight\n"
+"float64 translation_weight\n"
+"float64 rotation_weight\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -253,18 +253,10 @@ struct Printer< ::ros_melodic_test::VisualOdometryMsg_<ContainerAllocator> >
     s << indent << "cam_in_map_pose: ";
     s << std::endl;
     Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "  ", v.cam_in_map_pose);
-    s << indent << "translation_weight[]" << std::endl;
-    for (size_t i = 0; i < v.translation_weight.size(); ++i)
-    {
-      s << indent << "  translation_weight[" << i << "]: ";
-      Printer<double>::stream(s, indent + "  ", v.translation_weight[i]);
-    }
-    s << indent << "rotation_weight[]" << std::endl;
-    for (size_t i = 0; i < v.rotation_weight.size(); ++i)
-    {
-      s << indent << "  rotation_weight[" << i << "]: ";
-      Printer<double>::stream(s, indent + "  ", v.rotation_weight[i]);
-    }
+    s << indent << "translation_weight: ";
+    Printer<double>::stream(s, indent + "  ", v.translation_weight);
+    s << indent << "rotation_weight: ";
+    Printer<double>::stream(s, indent + "  ", v.rotation_weight);
   }
 };
 
