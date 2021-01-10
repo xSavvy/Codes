@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-24 14:56:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-10 11:14:07
+ * @LastEditTime: 2021-01-10 11:19:23
  * @FilePath: /3rd-test-learning/26. opencv/basic/basic_mat_operator.cpp
  * @Description: 
  *              主要是为了测试和学习 opencv Mat 的操作
@@ -13,6 +13,7 @@
  *              4. 矩阵加减乘除 取逆  经过测试都可以进行使用
  *              5. 存储类型    和 4  一起测试过了
  *              6. channel 和 reshape
+ *              7. 测试函数传值和返回的拷贝方式
  */
 
 #include <iostream>
