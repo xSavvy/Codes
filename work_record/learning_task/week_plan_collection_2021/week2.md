@@ -3,7 +3,13 @@
 ### Week2
 计划:<br>
 1. front_end_self(Camera) 的建立 可以持续两个周   11
-   |__ 了解相机传感器模型
+   |__ Displayer
+       |__ coding
+       |__ testing
+   |__ DataLoader
+       |__ coding
+       |__ testing
+   |__ 光流opencv pipeline
    |__ 编写对极几何\Pnp等基础
    |__ 光流基础pipeline                这个周末前三项
    |__ 到TrackLocalMap为止
@@ -20,6 +26,7 @@
 6. 学习python 12 
 7. 地面约束问题寻找      11      完成
 8. SVO.py 进行python + opencv 学习 12
+9. 多传感器作业          12
 
 重新梳理ORB 3个track 的过程     完成
 se2lam                       简单阅读完成
