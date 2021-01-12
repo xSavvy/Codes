@@ -1,3 +1,4 @@
+
 ### ch5
 1. Stereo
    双目深度估计
@@ -59,15 +60,14 @@ pesodu code
             for each point1 from IMG1<br>
                 for each pixel from patch of point1<br> 
                     buildLKResdiual <br>
-            update $\Delta{u}$ 和 $\Delta{v}$ <br>
+                update $\Delta{u}$ 和 $\Delta{v}$ <br>
         update vP1 和 vP2 coordinate in a lower layer<br>
     
 5. 统一vP1 在最低层上对应的vP2 完成匹配 得到结果
 
 确定一下 patch 的匹配过程
 
-LKresidual
-direct method 公式<br>
+LKresidual 公式<br>
 $$
     \underset{u_2,v_1}{\operatorname{argmin}} (I_1(u_1,v_1)-I_2(u_2,v_2))\\
 $$
