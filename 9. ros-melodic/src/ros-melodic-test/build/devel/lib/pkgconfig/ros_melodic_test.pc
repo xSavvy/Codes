@@ -1,0 +1,8 @@
+prefix=/home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/build/devel
+
+Name: ros_melodic_test
+Description: Description of ros_melodic_test
+Version: 0.0.0
+Cflags: -I/home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/build/devel/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime
