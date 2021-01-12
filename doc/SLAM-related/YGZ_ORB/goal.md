@@ -1,6 +1,14 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2021-01-04 09:16:13
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-12 16:43:03
+ * @FilePath: /3rd-test-learning/doc/SLAM-related/YGZ_ORB/goal.md
+ * @Description: 
+-->
 
 ## 目标
-1. 研究实际中的直接法是如何实现的
+1. 研究实际中的直接法是如何实现的     完成
 2. 学习TrackLocalMap的直接法实现
 3. 学习Cache的实现
 
@@ -28,5 +36,35 @@ $$
 这样反向，应该是之后给TrackLocalMapDirect也提供了方便<br>
 实现方法和之前基本一直，都是多层金字塔。<br>
 唯一的不同是添加了双边滤波进行亚像素级的匹配.<br>
+
+<font Color="Green">===== 2021.1.12 添加 =====</font><br>
+经过学习光流之后，发现这里实际上是 Inverse Compositional 的直接法<br>
+所以才会有各种各样提前算好的Jacobian<br>
+具体公式如下：<br>
+$$
+    \underset{p}{argmin}\sum[I(W(x;p))-T(W(x;\Delta{p}))]^{2}
+    \\
+    W(x;p) =\exp(p)x
+$$
+进行更更新的时候
+$$
+    \begin{aligned}
+
+    W(x;p)&\leftarrow{W(x;p)\circ{W(x;\Delta{p})^{-1}}}  
+    \\
+    & = W(W(x;\Delta{p})^{-1};p)  
+    \\   
+    &=\exp(p)\exp(-\Delta{p})x
+    \\
+    &=\exp(p_{new})x
+    \end{aligned}
+$$
+
+$\cfrac{\partial{T}}{\partial{W}}$ 具体实现还是需要参考YGZ-ORB
+
+Warp 要求是半群<br>
+这个Compositional真的是神奇，也不知道是哪里的概念
+
+<font Color="Green">================</font><br>
 
 ### TrackLocalMapDirect 逻辑和实现
