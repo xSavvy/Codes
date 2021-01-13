@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-06 11:01:19
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-11 09:34:19
+ * @LastEditTime: 2021-01-13 14:04:10
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.6 tf_and_message_self_define.cpp
  * @Description: 
  * 
@@ -340,7 +340,7 @@ int main(int argc, char ** argv)
 
     // -90.6805,-0.155628,90.4006,-153,-33,370,0.254107
 
-    Eigen::Vector3d position(-153,33,370);
+    Eigen::Vector3d position(-153,-33,370);
     position*=0.001;
 
     double roll = -90.6805/180.0*M_PI;
@@ -370,6 +370,8 @@ int main(int argc, char ** argv)
     transform_mat=transform_mat.t();
     std::cout<<"the cv transform is "<< transform_mat<<std::endl;
 
+    std::cout<<"the transform inv is "<< transform_mat.inv()<<std::endl;
+    
     ros::Rate r(10);
 
     while(ros::ok())

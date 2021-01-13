@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-10 21:25:03
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-12 17:40:41
+ * @LastEditTime: 2021-01-12 17:45:38
  * @Description: 
 -->
 
@@ -27,7 +27,7 @@ b. 统计这个过程中,没有完成的原因,心理的变化. 只记录大段�
         |__ 光流基础pipeline                
         |__ 到TrackLocalMap为止       
     b. YGZ-ORB TrackLocalMapDirect 学习 
-        |__ 需要光流的前置知识          完成 虽然是比较肤浅的
+        |__ 需要光流的前置知识             完成 虽然是比较肤浅的 数学上还是有些难度的
 12:
     a. ESKF编码+测试
     b. VINS Covar获取\特征和帧见管理 学习 

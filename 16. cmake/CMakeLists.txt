@@ -32,7 +32,7 @@ file(GLOB_RECURSE NODE_SRCS "main.cpp")
 
 
 # 使用list(REMOVE_ITEM )去除不需要的源文件
-list(REMOVE_ITEM ALL_SRCS ${NODE_SRCS})
+# list(REMOVE_ITEM ALL_SRCS ${NODE_SRCS})
 # list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
 
 # 展示CMAKE 的内置路径
