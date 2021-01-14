@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:33:25
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-05 09:48:45
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-01-13 23:11:25
  * @FilePath: /3rd-test-learning/25. slam_demo/environment_builder.h
  * @Description: 
  */
@@ -38,7 +38,6 @@ class Landmark
 class EnvironmentBuilderOptions
 {
     public:
-
     void LoadOptions();
     double x_min_, y_min_,z_min_;
     double x_scale_,y_scale_,z_scale_;
@@ -48,29 +47,34 @@ class EnvironmentBuilderOptions
 class EnvironmentBuilder
 {
     public:
-
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     EnvironmentBuilder(const string & config_path):
-    config_path_(config_path)
-    {
-        
-    }
+    config_path_(config_path){}
 
     bool BuildEnvironment(double x_min,double y_min,double z_min ,
                           double x_scale, double y_scale, double z_scale ,
                           double x_interval,double y_interval,double z_interval,
                           std::vector<Landmark,Eigen::aligned_allocator<Landmark>> &landmark_array);
-
     bool ShowEnvironment();
                         
     private:
     const string config_path_;
 };
 
-void TransfromPointIntoNewFrame(const Point &  point_a ,Point & point_b,
-                                const Rot & r_ab,const Translation& t_ab);
+bool TransformPoints(const std::vector<Eigen::Vector3d> & points_world,
+                     const Eigen::Matrix4d & Twc,
+                     std::vector<Eigen::Vector3d> & points_camera);
 
-void TransformNormalizedPointIntoUV(const Eigen::Matrix3d & intrinc_params,
-                                    const Eigen::Vector3d landmark,
-                                    UV & uv);
+bool NormalizePoints(const std::vector<Eigen::Vector3d> & points_camera,
+                     std::vector<Eigen::Vector3d> & normalized_points);
+
+bool CameraPointToUV(const std::vector<Eigen::Vector3d> & points_camera,
+                     const Eigen::Matrix3d & camera_intrinsic,
+                     std::vector<Eigen::Vector2d> & uvs);
+
+bool UVToCameraPoint(const std::vector<Eigen::Vector2d> & uvs,
+                     const Eigen::Matrix3d & camera_intrinsic,
+                     std::vector<Eigen::Vector3d> & points_camera);
+
 
 _E_SLAM_DEMO_

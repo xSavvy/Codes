@@ -1,4 +1,4 @@
-ORBSLAM 改进：
+ORBSLAM 大改进：
 1. MapPointCulling + CreateNewMapPoint + Fuse 的方式态粗暴了 可以改成SVO/DSO 的收敛的方式
    1.1 现在看的话主要就是MapPointCulling 方面的改善
    CreateNewMapPoint 生成MapPoint 的方式 感觉会存在一些重复的情况感觉这样效果并不好？ 存疑
@@ -13,16 +13,21 @@ ORBSLAM 改进：
 6. 线面特征的形式
 7. 高速跟踪存在问题  想办法光流解决一下  1 
 
+ORBSLAM 小改进:
+1. 加一个PoseTree，这样的话能够更好的更新共视关系
+
+
+
 现存问题：
 1. 为什么加入MonoError精度没有明显的提高？
 2. 为什么Stereo的Pose Optmization 里面会有Mono 的约束？
    而且加上Mono 之后算法精度并并没有很大的提高(这一点有待商榷，可以是因为我对于代码修改的问题，需要之后进行测试)
-3. 加上GroundConstraint 之后，整个效果存在很大的问题
+3. 加上GroundConstraint 之后，整个效果存在很大的问题   已经解决
 
 
 
 ORB大修计划
-1. 实时性和旋转稳定性的耦合
+1. 实时性和旋转稳定性的耦合    完成
    解决跟丢的问题
    |__ 现在ORB挂掉的原因是什么?
        |__ 内部参数设置的原因? (TrackLocalMap 门槛过于严格) 完成
@@ -51,18 +56,18 @@ ORB大修计划
 遗留问题：
 1. 什么时候MapPoint会被replace  完成
    LocalMapping 调用 ORBmatcher:: Fuse 的地方
-2. ORBMatcher 的算法实现
-   |__ Projection的匹配
+2. ORBMatcher 的算法实现      
+   |__ Projection的匹配     完成
    |__ 词袋的匹配      
-3. ORBOptimizer g2o 实现方式还没有进行学习
+3. ORBOptimizer g2o 实现方式还没有进行学习 完成
    |__ LocalBA
    |__ GlobalBA
    |__ EssentialGraph
    |__ 树的结构
-4. 词袋的实现方式 源码还没有进行阅读
+4. 词袋的实现方式 源码还没有进行阅读    
 5. KeyFrame Frame MapPoint的存活流程  KeyFrame 自身及其变量跟踪
    最主要的是 F KF MapPoint mvpMapPoint child parent 1 
 6. ORB 的大量改版没有进行阅读 非常可惜
 7. 一些基础算法的实现 非常可惜
-8. 没有跟一下数据流
-9. ORB 大量的MapPoint 累计之后会让系统变得很慢
+8. 没有跟一下数据流    完成
+9. ORB 大量的MapPoint 累计之后会让系统变得很慢 

@@ -53,7 +53,8 @@ add_executable( tf_message_self_define "src/9.6 tf_and_message_self_define.cpp")
 target_link_libraries(tf_message_self_define ${catkin_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 
-
+# add_executable( spin_and_ctrl_c "src/9.7 spin_and_ctrl_c.cpp")
+# target_link_libraries(spin_and_ctrl_c ${catkin_LIBRARIES})
 
 
 

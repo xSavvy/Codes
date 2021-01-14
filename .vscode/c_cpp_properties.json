@@ -19,7 +19,8 @@
                 "/home/sunny/workspace/ros2_foxy/install/**",
                 "/usr/local/include/gtsam",
                 "/usr/local/include/*",
-                "/usr/local/include/g2o/*"
+                "/usr/local/include/g2o/*",
+                "/usr/local/include/pangolin"
                 
             ],
             "defines": [],

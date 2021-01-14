@@ -2,9 +2,12 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-06 11:01:19
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-08 11:15:05
+ * @LastEditTime: 2021-01-13 14:04:10
  * @FilePath: /3rd-test-learning/9. ros-melodic/src/ros-melodic-test/src/9.6 tf_and_message_self_define.cpp
- * @Description: 用于进行 ros - melodic - tf 的学习
+ * @Description: 
+ * 
+ *               1. 用于进行 ros - melodic - tf 的学习
+ *               2. 测试了一下cv::Mat 的内部存储结构是不是一个ColMajor 测试之后发现果然shi
  */
 #include <iostream>
 #include <thread>
@@ -136,7 +139,7 @@ void TfBroadcaster::RunTF()
             static tf2_ros::TransformBroadcaster br;
             br.sendTransform(tfs);
             pose_update_ = false;
-            std::cout<<"pub a pose"<<std::endl;
+            // std::cout<<"pub a pose"<<std::endl;
         }
         // std::cout<<" TF is Running "<<std::endl;
     }
@@ -337,7 +340,7 @@ int main(int argc, char ** argv)
 
     // -90.6805,-0.155628,90.4006,-153,-33,370,0.254107
 
-    Eigen::Vector3d position(-153,33,370);
+    Eigen::Vector3d position(-153,-33,370);
     position*=0.001;
 
     double roll = -90.6805/180.0*M_PI;
@@ -354,6 +357,20 @@ int main(int argc, char ** argv)
     tf_broadcaster::TfBroadcaster tf_broadcaster_(frame_id,child_frame_id,1);
 
     tf_broadcaster_.SetTransform(position,rotation);
+    
+    std::cout<<"the rotation is "<< std::endl<< rotation<<std::endl;
+    std::cout<<"the translation is "<<std::endl<<position.transpose()<<std::endl;
+    Eigen::Matrix4d transform;
+    transform.setIdentity();
+    transform.block<3,3>(0,0) = rotation;
+    transform.block<3,1>(0,3) = position;
+
+    cv::Mat transform_mat(4,4,CV_64F);
+    transform_mat.data = (unsigned char *)transform.data();
+    transform_mat=transform_mat.t();
+    std::cout<<"the cv transform is "<< transform_mat<<std::endl;
+
+    std::cout<<"the transform inv is "<< transform_mat.inv()<<std::endl;
     
     ros::Rate r(10);
 
