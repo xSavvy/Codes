@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-14 19:49:35
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-14 19:54:04
+ * @LastEditTime: 2021-01-14 19:56:48
  * @FilePath: /3rd-test-learning/doc/paper-21.1.4-21.1.15/reading_doc.md
  * @Description: 
 -->
@@ -52,6 +52,9 @@ Map-assisted EKF Approach
 
 6. A Square Root Inverse Filter for Efficient
 Vision-aided Inertial Navigation on Mobile Devices
+
+
+7. Inertial-Aided KLT Feature Tracking for a Moving Camera
    摘要：<br>
    a. 一个Inverse Compositional + Affine Warp + IMU 的融合光流
    内容：<br>
@@ -63,6 +66,3 @@ Vision-aided Inertial Navigation on Mobile Devices
    c. 从IMU + 外参误差分析, 得到 Template 的Size 假设
    ![](6.png)
 
-
-7. Inertial-Aided KLT Feature Tracking for a Moving Camera
-   
