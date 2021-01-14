@@ -21,6 +21,11 @@ link_libraries(hello)
 # EXCLUDE_FROM_ALL 代表不进行编译的文件
 add_subdirectory(src bin)
 
+
+# 想要替代掉LD_XX_PATH 但是没有效果
+# set(CMAKE_INSTALL_RPATH "/usr/local/lib")
+# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 install(TARGETS hello hello_static
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
