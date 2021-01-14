@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2021-01-14 19:49:35
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-14 19:56:48
+ * @FilePath: /3rd-test-learning/doc/paper-21.1.4-21.1.15/reading_doc.md
+ * @Description: 
+-->
 
 
 1. Visual-Odometric Localization and Mapping for Ground Vehicles
@@ -45,5 +53,16 @@ Map-assisted EKF Approach
 6. A Square Root Inverse Filter for Efficient
 Vision-aided Inertial Navigation on Mobile Devices
 
+
 7. Inertial-Aided KLT Feature Tracking for a Moving Camera
-   
+   摘要：<br>
+   a. 一个Inverse Compositional + Affine Warp + IMU 的融合光流
+   内容：<br>
+   a. 在大旋转运动的时候，使用 Rotation 来做一个单应矩阵的假设<br>
+   <font Color="Green">如果加入轮子，就可以单应和基础矩阵，进行判断和转换了</font>
+   ![](4.png)
+   b. 从这个单应矩阵假设来得到Affine Warp 用于转换 像素值
+   ![](5.png)
+   c. 从IMU + 外参误差分析, 得到 Template 的Size 假设
+   ![](6.png)
+

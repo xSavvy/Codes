@@ -1,8 +1,13 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-10 21:25:03
+<<<<<<< HEAD
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-13 23:32:34
+ * @LastEditTime: 2021-01-14 20:47:43
+=======
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-13 18:17:44
+>>>>>>> 656f7c07f4b58501a649972f51c279e4636f93d6
  * @Description: 
 -->
 
@@ -71,3 +76,6 @@ d. 不要自满,自己一段时间内能学会的,别人也可以
 2021.1.13<br>
 是时候考虑一下,跳槽的项目了<br>
 目前是更倾向于 点线VIO 
+
+2021.1.13<br>
+今天着实是认识到了数学的重要性，需要好好补一下了

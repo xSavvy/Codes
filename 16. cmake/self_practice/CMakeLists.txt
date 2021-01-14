@@ -9,8 +9,9 @@ set(ALL_TARGET_LIBRARIES "")
 
 # include cmake 文件进行第三方库的配置
 # 内部使用 list 进行文件的添加和删除
-include(cmake/PCL.cmake)
-include(cmake/global_defination.cmake)
+# include(../cmake/PCL.cmake)
+# include(../cmake/global_defination.cmake)
+include(../cmake/opencv.cmake)
 
 # 另外一种寻找库的方法
 # FIND_LIBRARY(GLOG_LIB
@@ -36,12 +37,39 @@ file(GLOB_RECURSE NODE_SRCS "main.cpp")
 # list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
 
 # 展示CMAKE 的内置路径
-
 message(STATUS " 1. cmake_binary_dir: " ${CMAKE_BINARY_DIR})
 message(STATUS " 2. cmake_source_dir: " ${CMAKE_SOURCE_DIR})
 message(STATUS " 3. cmake_project_binary_dir: " ${PROJECT_BINARY_DIR})
 message(STATUS " 4. cmake_project_source_dir: " ${PROJECT_SOURCE_DIR})
 
-add_executable(main_test src/main.cpp)
-target_link_libraries(main_test ${ALL_TARGET_LIBRARIES})
+# 生成了一个SHARED库，add_library  + SHARED 之后就可以生成库了
+# 如果没有添加 SHARED 或者 STATIC 就不会生成这个库
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(libtest ${OpenCV_LIBS})
+add_library(libtest  SHARED
+src/foo.cc)
 
+
+
+add_executable(main_test src/main.cc)
+target_link_libraries(main_test libtest)
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY devel)
+
+install(TARGETS main_test libtest 
+        ARCHIVE DESTINATION devel/lib
+        RUNTIME DESTINATION devel/bin
+        LIBRARY DESTINATION devel/lib
+)
+
+install(DIRECTORY include/
+  DESTINATION devel/include
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".in" EXCLUDE
+)
+
+install(FILES
+  include/global_defination.h.in
+  DESTINATION devel/others
+)
