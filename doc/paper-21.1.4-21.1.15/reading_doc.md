@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-14 19:49:35
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-14 19:56:48
+ * @LastEditTime: 2021-01-15 13:51:52
  * @FilePath: /3rd-test-learning/doc/paper-21.1.4-21.1.15/reading_doc.md
  * @Description: 
 -->
@@ -42,6 +42,9 @@ d.1. 皮带打滑的情况： 如果匹配点大于一半都是outlier 就判断
 
 
 3. IMRL: An Improved Inertial-Aided KLT Feature Tracker
+   摘要： <br>
+   a. 深度估计+惯导初值KLT
+
 
 4. Accurate Monocular Visual-inertial SLAM using a
 Map-assisted EKF Approach
@@ -66,3 +69,6 @@ Vision-aided Inertial Navigation on Mobile Devices
    c. 从IMU + 外参误差分析, 得到 Template 的Size 假设
    ![](6.png)
 
+8. 顶会点子2 空间特征关系的slam
+   现在的视觉SLAM 大多依靠图像前后无法确认是不是同一个特征
+   对于点来说，是这样的，那么如何使用线来构建一个空间特征，而不是一个平面特征就有的说了

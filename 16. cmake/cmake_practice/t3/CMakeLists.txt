@@ -22,7 +22,7 @@ link_libraries(hello)
 add_subdirectory(src bin)
 
 
-# 想要替代掉LD_XX_PATH 但是没有效果
+# 想要替代掉LD_LIBRARY_PATH 但是没有效果
 # set(CMAKE_INSTALL_RPATH "/usr/local/lib")
 # set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 

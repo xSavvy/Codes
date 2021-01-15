@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-16 13:23:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-25 10:04:29
+ * @LastEditTime: 2021-01-15 09:19:15
  * @FilePath: /3rd-test-learning/doc/paper-12.16-12.30/conclusion.md
  * @Description: 
 -->
@@ -46,11 +46,11 @@ Points and Lines<br>
 Descriptor Independent Keypoint Matching
     
    摘要:<br>
-   1. 一个更改过ORB2前端的 SLAM 系统
+   a. 一个更改过ORB2前端的 SLAM 系统<br>
    内容:<br>
-   1. 加速度模型初匹配
-   2. 光流二次匹配
-   3. inlier check： a. 运动约束 b.RANSAC 的约束
+   b. 加速度模型初匹配<br>
+   c. 光流二次匹配<br>
+   d. inlier check： a. 运动约束 b.RANSAC 的约束<br>
 
 3. PL-VINS：
    PL-VINS: Real-Time Monocular Visual-Inertial SLAM with Point and
@@ -74,5 +74,5 @@ Flexible Sensor Fusion and Hardware Co-Design
    
    顶会的点子 果然别人已经做过了
 6. StructVIO : Visual-inertial Odometry with 
-7. Structural Regularity of Man-made Environments<br>
+   Structural Regularity of Man-made Environments<br>
    看一下综述
