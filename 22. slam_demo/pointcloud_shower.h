@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-15 07:01:48
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-15 08:09:22
+ * @LastEditTime: 2021-01-15 22:05:08
  * @Description: 
  */
 
@@ -33,7 +33,7 @@ class PangolinPointCloudShower
     bool LoadPointCloud(Eigen::Vector3i color, std::vector<Eigen::Vector3d> & pts);
     bool ErasePointCloud(Eigen::Vector3i color);
 
-    void SetPointCloud(const std::vector<Eigen::Matrix<double,3,1>> & points,Eigen::Vector3i color);
+    void SetPointCloud(const std::vector<Eigen::Matrix<double,3,1>> & points,Eigen::Vector3d color);
     bool ColorConvert(const Eigen::Vector3i color,uint32_t & color_ui32);
     bool ColorConvert(const uint32_t color_ui32,Eigen::Vector3i& color);
     private:
@@ -101,7 +101,7 @@ bool PangolinPointCloudShower::ErasePointCloud(Eigen::Vector3i color)
 }
 
 void PangolinPointCloudShower::SetPointCloud(const std::vector<Eigen::Matrix<double,3,1>> & points,
-                                             Eigen::Vector3i color)
+                                             Eigen::Vector3d color)
 {
     glColor3d(color.x(),color.y(),color.z());
     pangolin::glDrawPoints(points);

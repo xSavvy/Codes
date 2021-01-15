@@ -2,13 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:33:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-15 07:29:31
+ * @LastEditTime: 2021-01-15 22:11:06
  * @FilePath: /3rd-test-learning/25. slam_demo/environment_builder.h
  * @Description: 
  */
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
 
 #include "Eigen/Eigen"
 #include "opencv2/core/core.hpp"
@@ -51,7 +52,7 @@ class EnvironmentBuilder
 {
     public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    EnvironmentBuilder(const string & config_path);
+    EnvironmentBuilder(const string config_path);
     bool LoadOptions();
     bool BuildEnvironment(double x_min,double y_min,double z_min ,
                           double x_scale, double y_scale, double z_scale ,

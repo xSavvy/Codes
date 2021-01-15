@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-13 22:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-15 07:00:42
+ * @LastEditTime: 2021-01-15 22:11:14
  * @Description: 
  */
 
@@ -10,7 +10,7 @@
 
 _S_SLAM_DEMO_
 
-EnvironmentBuilder::EnvironmentBuilder(const string & config_path):
+EnvironmentBuilder::EnvironmentBuilder(const string config_path):
 config_path_(config_path){
     LoadOptions();
     BuildEnvironment(options_.x_min_,options_.y_min_,options_.z_min_,
