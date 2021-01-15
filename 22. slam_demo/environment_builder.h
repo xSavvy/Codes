@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:33:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-13 23:11:25
+ * @LastEditTime: 2021-01-15 07:29:31
  * @FilePath: /3rd-test-learning/25. slam_demo/environment_builder.h
  * @Description: 
  */
@@ -14,6 +14,7 @@
 #include "opencv2/core/core.hpp"
 
 using namespace std;
+
 
 #define _S_SLAM_DEMO_ namespace slam_demo {
 #define _E_SLAM_DEMO_ };
@@ -32,8 +33,10 @@ using UV = Eigen::Vector2d;
 class Landmark
 {
     public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Eigen::Vector3d position_;
     unsigned int label_;
+    bool view_ = false;
 };
 class EnvironmentBuilderOptions
 {
@@ -48,18 +51,34 @@ class EnvironmentBuilder
 {
     public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    EnvironmentBuilder(const string & config_path):
-    config_path_(config_path){}
-
+    EnvironmentBuilder(const string & config_path);
+    bool LoadOptions();
     bool BuildEnvironment(double x_min,double y_min,double z_min ,
                           double x_scale, double y_scale, double z_scale ,
                           double x_interval,double y_interval,double z_interval,
                           std::vector<Landmark,Eigen::aligned_allocator<Landmark>> &landmark_array);
-    bool ShowEnvironment();
-                        
+    
+    std::vector<Landmark,Eigen::aligned_allocator<Landmark>> & GetLandmarks(){return landmarks_;}
+    std::vector<Eigen::Vector3d> & GetLandmarksVec3d(){return landmarks_v3d_;}
+
     private:
     const string config_path_;
+    EnvironmentBuilderOptions options_;
+    std::vector<Landmark,Eigen::aligned_allocator<Landmark>>  landmarks_;
+    std::vector<Eigen::Vector3d> landmarks_v3d_;
 };
+
+template<class Allocator>
+bool LandmarkToVec3d(const std::vector<Landmark,Allocator> & landmarks ,
+                     std::vector<Eigen::Vector3d> & landmarks_vec3d)
+{
+    landmarks_vec3d.clear();
+    landmarks_vec3d.reserve(landmarks.size());
+    for(auto & ld:landmarks)
+    {
+        landmarks_vec3d.push_back(ld.position_);
+    }
+}
 
 bool TransformPoints(const std::vector<Eigen::Vector3d> & points_world,
                      const Eigen::Matrix4d & Twc,

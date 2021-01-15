@@ -2,13 +2,47 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-13 22:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-13 23:14:09
+ * @LastEditTime: 2021-01-15 07:00:42
  * @Description: 
  */
 
 #include "environment_builder.h"
 
 _S_SLAM_DEMO_
+
+EnvironmentBuilder::EnvironmentBuilder(const string & config_path):
+config_path_(config_path){
+    LoadOptions();
+    BuildEnvironment(options_.x_min_,options_.y_min_,options_.z_min_,
+                        options_.x_scale_,options_.y_scale_,options_.z_scale_,
+                        options_.x_interval_,options_.y_interval_,options_.z_interval_,
+                        landmarks_);
+    LandmarkToVec3d(landmarks_,landmarks_v3d_);
+}
+
+bool EnvironmentBuilder::LoadOptions()
+{
+    cv::FileStorage fin(config_path_,CV_STORAGE_READ);
+    fin["Environment.Xmin"]>>options_.x_min_;
+    fin["Environment.Ymin"]>>options_.y_min_;
+    fin["Environment.Zmin"]>>options_.z_min_;
+    fin["Environment.Xscale"]>>options_.x_scale_;
+    fin["Environment.Yscale"]>>options_.y_scale_;
+    fin["Environment.Zscale"]>>options_.z_scale_;
+    fin["Environment.Xinterval"]>>options_.x_interval_;
+    fin["Environment.Yinterval"]>>options_.y_interval_;
+    fin["Environment.Zinterval"]>>options_.z_interval_;
+
+    cout<<"Environment.Xmin : "<< options_.x_min_<<endl;
+    cout<<"Environment.Ymin : "<< options_.y_min_<<endl;
+    cout<<"Environment.Zmin : "<< options_.z_min_<<endl;
+    cout<<"Environment.Xscale : "<<options_.x_scale_<<endl;
+    cout<<"Environment.Yscale : "<<options_.y_scale_<<endl;
+    cout<<"Environment.Zscale : "<<options_.z_scale_<<endl;
+    cout<<"Environment.Xinterval : "<<options_.x_interval_<<endl;
+    cout<<"Environment.Yinterval : "<<options_.y_interval_<<endl;
+    cout<<"Environment.Zinterval : "<<options_.z_interval_<<endl;
+}
 
 bool EnvironmentBuilder::BuildEnvironment(double x_min,double y_min,double z_min ,
                                           double x_scale, double y_scale, double z_scale ,

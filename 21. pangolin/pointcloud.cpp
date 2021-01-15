@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-13 23:28:07
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-14 20:46:30
+ * @LastEditTime: 2021-01-15 07:01:13
  * @Description: 
  */
 
@@ -56,7 +56,7 @@ void SetPointCloud(const std::vector<Eigen::Matrix<double,3,1>> & points,Eigen::
 
 void ShowPointCloud()
 {
-        pangolin::CreateWindowAndBind("Main",640,480);
+    pangolin::CreateWindowAndBind("Main",640,480);
     glEnable(GL_DEPTH_TEST);
 
     // Define Projection and initial ModelView matrix
