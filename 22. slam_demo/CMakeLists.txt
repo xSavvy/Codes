@@ -7,6 +7,7 @@ include(../cmake/eigen3.cmake)
 include(../cmake/pangolin.cmake)
 include(../cmake/opencv.cmake)
 
-set(src environment_builder.cpp)
+set(src environment_builder.cpp
+        common.cpp)
 
 add_executable(main_test main_test.cpp ${src})

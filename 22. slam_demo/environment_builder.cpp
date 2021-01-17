@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-13 22:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-15 22:11:14
+ * @LastEditTime: 2021-01-18 06:37:55
  * @Description: 
  */
 
@@ -10,38 +10,44 @@
 
 _S_SLAM_DEMO_
 
+EnvironmentBuilderOptions::EnvironmentBuilderOptions(const string & config_path)
+{
+    cv::FileStorage fin(config_path,CV_STORAGE_READ);
+    if(!fin.isOpened())
+    {
+        cerr<<"[ERROR]: there is something wrong with the path"<<endl;
+        abort();
+    }
+    fin["Environment.Xmin"]>>x_min_;
+    fin["Environment.Ymin"]>>y_min_;
+    fin["Environment.Zmin"]>>z_min_;
+    fin["Environment.Xscale"]>>x_scale_;
+    fin["Environment.Yscale"]>>y_scale_;
+    fin["Environment.Zscale"]>>z_scale_;
+    fin["Environment.Xinterval"]>>x_interval_;
+    fin["Environment.Yinterval"]>>y_interval_;
+    fin["Environment.Zinterval"]>>z_interval_;
+
+    cout<<"Environment.Xmin : "<< x_min_<<endl;
+    cout<<"Environment.Ymin : "<< y_min_<<endl;
+    cout<<"Environment.Zmin : "<< z_min_<<endl;
+    cout<<"Environment.Xscale : "<<x_scale_<<endl;
+    cout<<"Environment.Yscale : "<<y_scale_<<endl;
+    cout<<"Environment.Zscale : "<<z_scale_<<endl;
+    cout<<"Environment.Xinterval : "<<x_interval_<<endl;
+    cout<<"Environment.Yinterval : "<<y_interval_<<endl;
+    cout<<"Environment.Zinterval : "<<z_interval_<<endl;
+}
+
+
 EnvironmentBuilder::EnvironmentBuilder(const string config_path):
-config_path_(config_path){
-    LoadOptions();
+config_path_(config_path),options_(config_path_){
+    
     BuildEnvironment(options_.x_min_,options_.y_min_,options_.z_min_,
                         options_.x_scale_,options_.y_scale_,options_.z_scale_,
                         options_.x_interval_,options_.y_interval_,options_.z_interval_,
                         landmarks_);
     LandmarkToVec3d(landmarks_,landmarks_v3d_);
-}
-
-bool EnvironmentBuilder::LoadOptions()
-{
-    cv::FileStorage fin(config_path_,CV_STORAGE_READ);
-    fin["Environment.Xmin"]>>options_.x_min_;
-    fin["Environment.Ymin"]>>options_.y_min_;
-    fin["Environment.Zmin"]>>options_.z_min_;
-    fin["Environment.Xscale"]>>options_.x_scale_;
-    fin["Environment.Yscale"]>>options_.y_scale_;
-    fin["Environment.Zscale"]>>options_.z_scale_;
-    fin["Environment.Xinterval"]>>options_.x_interval_;
-    fin["Environment.Yinterval"]>>options_.y_interval_;
-    fin["Environment.Zinterval"]>>options_.z_interval_;
-
-    cout<<"Environment.Xmin : "<< options_.x_min_<<endl;
-    cout<<"Environment.Ymin : "<< options_.y_min_<<endl;
-    cout<<"Environment.Zmin : "<< options_.z_min_<<endl;
-    cout<<"Environment.Xscale : "<<options_.x_scale_<<endl;
-    cout<<"Environment.Yscale : "<<options_.y_scale_<<endl;
-    cout<<"Environment.Zscale : "<<options_.z_scale_<<endl;
-    cout<<"Environment.Xinterval : "<<options_.x_interval_<<endl;
-    cout<<"Environment.Yinterval : "<<options_.y_interval_<<endl;
-    cout<<"Environment.Zinterval : "<<options_.z_interval_<<endl;
 }
 
 bool EnvironmentBuilder::BuildEnvironment(double x_min,double y_min,double z_min ,
@@ -59,11 +65,11 @@ bool EnvironmentBuilder::BuildEnvironment(double x_min,double y_min,double z_min
     landmark_array.reserve(static_cast<size_t>(std::ceil(x_scale/x_interval))*
                            static_cast<size_t>(std::ceil(y_scale/y_interval))*
                            static_cast<size_t>(std::ceil(z_scale/z_interval)));
-    for(double x_cur = 0.0;x_cur<x_scale;x_cur+=x_interval)
+    for(double x_cur = 0.0;x_cur<=x_scale;x_cur+=x_interval)
     {
-        for(double y_cur = 0.0;y_cur<y_scale;y_cur+=y_interval)
+        for(double y_cur = 0.0;y_cur<=y_scale;y_cur+=y_interval)
         {
-            for(double z_cur=0.0;z_cur<z_scale;z_cur+=z_interval)
+            for(double z_cur=0.0;z_cur<=z_scale;z_cur+=z_interval)
             {
                 Landmark tmp_lk;
                 tmp_lk.position_ = Eigen::Vector3d(x_cur+x_min,y_cur+y_min,z_cur+z_min);
@@ -77,60 +83,8 @@ bool EnvironmentBuilder::BuildEnvironment(double x_min,double y_min,double z_min
     return true;
 }
 
-bool TransformPoints(const std::vector<Eigen::Vector3d> & points_world,
-                     const Eigen::Matrix4d & Twc,
-                     std::vector<Eigen::Vector3d> & points_camera)
-{
-    points_camera.clear();
-    points_camera.reserve(points_world.size());
-    const Eigen::Matrix3d R = Twc.block<3,3>(0,0);
-    const Eigen::Vector3d t = Twc.block<3,1>(0,3);
-    for(auto & point_world:points_world)
-        points_camera.push_back(R*point_world+t);
-    return true;
-}
 
 
-bool NormalizePoints(const std::vector<Eigen::Vector3d> & points_camera,
-                     std::vector<Eigen::Vector3d> & normalized_points)
-{
-    normalized_points.clear();
-    normalized_points.reserve(points_camera.size());
-    for(auto & point:points_camera)
-        normalized_points.emplace_back(point/point.z());
-    return true;
-}
-
-bool CameraPointToUV(const std::vector<Eigen::Vector3d> & points_camera,
-                     const Eigen::Matrix3d & camera_intrinsic,
-                     std::vector<Eigen::Vector2d> & uvs)
-{
-    uvs.clear();
-    uvs.reserve(points_camera.size());
-    for(auto & point_camera:points_camera)
-        uvs.emplace_back((camera_intrinsic*point_camera).head<2>(0));
-    return true;
-}
-
-bool UVToCameraPoint(const std::vector<Eigen::Vector2d> & uvs,
-                     const Eigen::Matrix3d & camera_intrinsic,
-                     std::vector<Eigen::Vector3d> & points_camera)
-{
-    double fx,fy,cx,cy;
-
-    fx = camera_intrinsic(0,0);
-    fy = camera_intrinsic(1,1);
-    cx = camera_intrinsic(0,2);
-    cy = camera_intrinsic(1,2);
-
-    points_camera.clear();
-    points_camera.reserve(uvs.size());
-    
-    for(auto & uv:uvs)
-        points_camera.emplace_back((uv.x()-cx)/fx,(uv.y()-cy)/fy,1.0);
-
-    return true;
-}
 
 
 _E_SLAM_DEMO_

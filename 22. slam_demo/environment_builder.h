@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:33:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-15 22:11:06
+ * @LastEditTime: 2021-01-17 11:58:27
  * @FilePath: /3rd-test-learning/25. slam_demo/environment_builder.h
  * @Description: 
  */
@@ -42,7 +42,7 @@ class Landmark
 class EnvironmentBuilderOptions
 {
     public:
-    void LoadOptions();
+    EnvironmentBuilderOptions(const string & config_path);
     double x_min_, y_min_,z_min_;
     double x_scale_,y_scale_,z_scale_;
     double x_interval_,y_interval_,z_interval_;
@@ -53,7 +53,6 @@ class EnvironmentBuilder
     public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     EnvironmentBuilder(const string config_path);
-    bool LoadOptions();
     bool BuildEnvironment(double x_min,double y_min,double z_min ,
                           double x_scale, double y_scale, double z_scale ,
                           double x_interval,double y_interval,double z_interval,
@@ -81,20 +80,6 @@ bool LandmarkToVec3d(const std::vector<Landmark,Allocator> & landmarks ,
     }
 }
 
-bool TransformPoints(const std::vector<Eigen::Vector3d> & points_world,
-                     const Eigen::Matrix4d & Twc,
-                     std::vector<Eigen::Vector3d> & points_camera);
-
-bool NormalizePoints(const std::vector<Eigen::Vector3d> & points_camera,
-                     std::vector<Eigen::Vector3d> & normalized_points);
-
-bool CameraPointToUV(const std::vector<Eigen::Vector3d> & points_camera,
-                     const Eigen::Matrix3d & camera_intrinsic,
-                     std::vector<Eigen::Vector2d> & uvs);
-
-bool UVToCameraPoint(const std::vector<Eigen::Vector2d> & uvs,
-                     const Eigen::Matrix3d & camera_intrinsic,
-                     std::vector<Eigen::Vector3d> & points_camera);
 
 
 _E_SLAM_DEMO_
