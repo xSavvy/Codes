@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-10 21:25:03
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-14 21:02:11
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-16 09:02:58
  * @Description: 
 -->
 
@@ -50,6 +50,12 @@ a. 早睡早起
 b. 不看B站
 c. 锻炼身体
 
+
+#### 周末的计划
+a. 搭环境
+b. SVO 文章精读+深度滤波器
+c. ORB原版修改(回环+测试)
+
 2021.1.11<br>
 观测：<br>
 部分bug的产生是因为有多个地方的代码需要进行修改，<br>
@@ -74,3 +80,15 @@ d. 不要自满,自己一段时间内能学会的,别人也可以
 
 2021.1.13<br>
 今天着实是认识到了数学的重要性，需要好好补一下了
+
+
+2021.1.16<br>
+顾步自封，还是看得太少了。还有太多优秀的slam框架可以去学习了<br>
+固定一下，SLAM框架学习流程。<br>
+
+
+a. 论文<br>
+b. Process.md 记录如何跑通<br>
+c. Theory.md 记录框架的疑惑<br>
+d. Read file 记录代码阅读<br>
+e. Trick.md 记录代码实现的trick<br>
