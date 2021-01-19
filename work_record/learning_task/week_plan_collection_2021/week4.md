@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2021-01-18 09:03:45
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-18 11:03:25
+ * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week4.md
+ * @Description: 
+-->
 
 
 ### week4
@@ -17,7 +25,7 @@ b. 记录时间使用<br>
         |__ 编写对极几何\Pnp等基础
             |__ 搭建仿真环境           完成
             |__ 搭建Pangolin显示环境   完成
-            |__ 对极约束
+            |__ 对极约束              
             |__ PnP ICP
         |__ 光流基础pipeline                
         |__ 到TrackLocalMap为止       

@@ -3,9 +3,9 @@ project(slam_demo)
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS "-std=c++14")
 
-include(../cmake/eigen3.cmake)
-include(../cmake/pangolin.cmake)
-include(../cmake/opencv.cmake)
+include(../../cmake/eigen3.cmake)
+include(../../cmake/pangolin.cmake)
+include(../../cmake/opencv.cmake)
 
 set(src environment_builder.cpp
         common.cpp)

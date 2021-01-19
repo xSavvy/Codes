@@ -3,7 +3,7 @@
  * @Date: 2021-01-15 07:00:51
 <<<<<<< HEAD
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-16 11:25:12
+ * @LastEditTime: 2021-01-18 09:05:09
 =======
  * @LastEditors: Liu Weilong
  * @LastEditTime: 2021-01-18 07:49:02
@@ -51,8 +51,6 @@ void EnvironmentShow()
     pps.Show();
 }
 
-<<<<<<< HEAD
-=======
 void CameraModel()
 {
     const string config_path ="../config/EuRoC.yaml";
@@ -115,7 +113,6 @@ void EigenToMat()
     cout<<"the matrix cv is "<<endl<<temp_cv.t()<<endl;
 }
 
->>>>>>> 96e839dc1432c23b21200ab7d9ccff3ce78ca4c8
 int main()
 {
 EigenToMat();

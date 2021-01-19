@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sunny/workspace_private/3rd-test-learning/9. ros-melodic/src/ros-melodic-test/build/spin_and_ctrl_c",
+            "program": "/home/sunny/workspace_private/3rd-test-learning/22. slam_demo/ground_constraint/build/test_pool",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
