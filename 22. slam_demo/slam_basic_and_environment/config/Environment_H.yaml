@@ -1,6 +1,6 @@
 %YAML:1.0
 ---
-Environment.Xmin: 0.0
+Environment.Xmin: 3.0
 Environment.Ymin: 0.0
 Environment.Zmin: 0.0
 Environment.Xscale: 0.0

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-17 10:37:07
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-17 11:04:33
+ * @LastEditTime: 2021-01-19 07:14:49
  * @Description: 
  */
 #include <iostream>
@@ -46,15 +46,15 @@ bool FrameInterface::EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12)
 
     Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double,9,9>> eigen_solver(A.transpose()*A);
     
-    if(eigen_solver.eigenvalues()(7,0)<1e-6)
-    {
-        return false;
-    }
+    eigen_solver.eigenvalues().minCoeff();
 
-    Eigen::Matrix<double,1,9> h = eigen_solver.eigenvectors().col(8);
+    cout<<"the eigen vector is "<<eigen_solver.eigenvalues().transpose()<<endl;
+
+    Eigen::Matrix<double,1,9> h = eigen_solver.eigenvectors().col(1);
+    memcpy(H12.data(),h.data(),9*8);
+    double w = H12.row(2).dot((Eigen::Vector3d()<<uvs_1.front().x(),uvs_1.front().y(),1.0).finished());
+    H12 = H12/w;
     
-    h.normalize();
-    H12<<h;
 }
 
 

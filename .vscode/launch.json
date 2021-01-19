@@ -8,10 +8,14 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
+<<<<<<< HEAD
             "program": "/home/sunny/workspace_private/3rd-test-learning/22. slam_demo/ground_constraint/build/test_pool",
+=======
+            "program": "/home/lwl/workspace/3rd-test-learning/22. slam_demo/build/main_test",
+>>>>>>> 94e0b1bad362a139526339ff6bd4d5b90fe264da
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/22. slam_demo/build",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
