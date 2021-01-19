@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-18 09:03:45
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-19 09:40:06
+ * @LastEditTime: 2021-01-19 09:43:57
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week4.md
  * @Description: 
 -->
@@ -21,15 +21,15 @@ b. 记录时间使用<br>
             |__ coding
             |__ testing
         |__ 相机模型搭建               完成
-        |__ 光流opencv pipeline       
         |__ 编写对极几何\Pnp等基础
             |__ 搭建仿真环境           完成
             |__ 搭建Pangolin显示环境   完成
             |__ 对极约束
             |__ PnP ICP                    需要参考  an invitation to 3d
-        |__ 光流基础pipeline                
+        |__ 光流基础pipeline+光流opencv pipeline   合并为编写 inverse compositional KLT 合并到VINS内部 
+                                                 学习VINS 的框架 做IMU 四阶龙格库塔的预测  混合到 IMU 检测    
         |__ 到TrackLocalMap为止       
-    b. YGZ-ORB TrackLocalMapDirect 学习 
+    b. YGZ-ORB TrackLocalMapDirect 学习  
         |__ 需要光流的前置知识             完成 虽然是比较肤浅的 数学上还是有些难度的
 12:
     a. ESKF编码+测试

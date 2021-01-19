@@ -1,13 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-01-18 07:33:28
-<<<<<<< HEAD:22. slam_demo/slam_basic_and_environment/convert.h
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-19 09:39:39
-=======
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-18 19:40:15
->>>>>>> 94e0b1bad362a139526339ff6bd4d5b90fe264da:22. slam_demo/convert.h
+ * @LastEditTime: 2021-01-19 19:35:34
  * @Description: 
  */
 
@@ -29,7 +24,8 @@ class Converter
     public:
     
     static std::vector<cv::Point2f> toPoints(const std::vector<Eigen::Vector2d> & uvs);
-
+    static std::vector<Eigen::Vector2d> toVector2ds(const std::vector<cv::Point2f> & uvs);
+    
     template<int N, int M>
     static cv::Mat toMat(const Eigen::Matrix<double,N,M> & temp);
     template<typename Allocator,int N, int M>
@@ -37,7 +33,6 @@ class Converter
     
     
 };
-
 
 std::vector<cv::Point2f> Converter::toPoints(const std::vector<Eigen::Vector2d> & uvs)
 {
@@ -47,6 +42,18 @@ std::vector<cv::Point2f> Converter::toPoints(const std::vector<Eigen::Vector2d> 
     for(auto & uv:uvs)
     {
         pts.push_back(cv::Point2f(uv.x(),uv.y()));
+    }
+    return pts;
+}
+
+std::vector<Eigen::Vector2d> Converter::toVector2ds(const std::vector<cv::Point2f> & uvs)
+{
+    std::vector<Eigen::Vector2d> pts;
+    pts.reserve(uvs.size());
+    
+    for(auto & uv:uvs)
+    {
+        pts.push_back(Eigen::Vector2d(uv.x,uv.y));
     }
     return pts;
 }

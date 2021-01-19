@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-14 19:49:35
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-15 13:51:52
+ * @LastEditTime: 2021-01-19 10:56:31
  * @FilePath: /3rd-test-learning/doc/paper-21.1.4-21.1.15/reading_doc.md
  * @Description: 
 -->
@@ -72,3 +72,10 @@ Vision-aided Inertial Navigation on Mobile Devices
 8. 顶会点子2 空间特征关系的slam
    现在的视觉SLAM 大多依靠图像前后无法确认是不是同一个特征
    对于点来说，是这样的，那么如何使用线来构建一个空间特征，而不是一个平面特征就有的说了
+
+9. Odometry-Vision-Based Ground Vehicle Motion
+Estimation With SE(2)-Constrained SE(3) Poses<br>
+
+内容：<br>
+1. 一升一降构建 zrp 约束
+![](./picture/7.png)

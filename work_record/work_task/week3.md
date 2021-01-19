@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-12 09:35:20
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-16 09:43:59
+ * @LastEditTime: 2021-01-19 09:52:05
  * @FilePath: /3rd-test-learning/work_record/work_task/week3.md
  * @Description: 
 -->
@@ -35,3 +35,6 @@
 
 2021.1.14<br>
 矫正之后的数据，fx也需要使用矫正之后的fx‘
+
+2021.1.16<br>
+视觉在反光地面的情况下，存在退化的情况。

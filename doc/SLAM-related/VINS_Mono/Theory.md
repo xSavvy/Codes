@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-08 17:57:39
+ * @LastEditTime: 2021-01-19 09:53:45
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -99,3 +99,4 @@ VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差
 ### VINS 中边缘化的实现
 也是 用CostFunction Evaluate 自己算
 类似 我写的CovCollector
+

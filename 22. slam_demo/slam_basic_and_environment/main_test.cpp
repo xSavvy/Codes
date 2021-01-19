@@ -110,7 +110,10 @@ void H_matrix()
     auto H_cv = cv::findHomography(uvs_cv_world,uvs_cv_camera);
     cout<<"the H from opencv is "<<endl<<H_cv<<endl;
 
-    FrameInterface::EpipolarH4Pts(uvs_camera,uvs_world,h);
+    auto temp = Converter::toVector2ds(uvs_cv_camera);
+
+    // FrameInterface::EpipolarH4Pts(Converter::toVector2ds(uvs_cv_camera),
+    //                               Converter::toVector2ds(uvs_cv_world),h);
     
     cout<<"the H from the frame interface is "<< endl<<h<<endl;
 
