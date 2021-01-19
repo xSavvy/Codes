@@ -18,7 +18,7 @@ b. 记录时间使用<br>
             |__ 搭建仿真环境           完成
             |__ 搭建Pangolin显示环境   完成
             |__ 对极约束
-            |__ PnP ICP
+            |__ PnP ICP                    需要参考  an invitation to 3d
         |__ 光流基础pipeline                
         |__ 到TrackLocalMap为止       
     b. YGZ-ORB TrackLocalMapDirect 学习 
@@ -35,3 +35,4 @@ b. 记录时间使用<br>
     f. BASALT 代码论文阅读
     g. 深度估计方面的请教 + SVO 深度滤波
     h. 学习python
+

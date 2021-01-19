@@ -2,13 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-15 07:00:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-18 07:49:02
+ * @LastEditTime: 2021-01-19 07:59:33
  * @Description:
  *              测试内容
  *              1. 测试颜色的转换          ColorConvert 
  *              2. 显示测试               EnvironmentShow
  *              3. 内参转换               CameraModel
  *              4. Eigen和Mat 的内存转换   EigenToMat   发现只有一行(列)或者方阵 用起来才不会有风险
+ *              5. 单应矩阵结算            H_matrix     验证平面 验证旋转
  */
 
 #include "opencv2/calib3d/calib3d.hpp"
@@ -18,7 +19,7 @@
 #include "frame_interface.h"
 #include "common.h"
 #include "camera_model.h"
-
+#include "convert.h"
 
 
 using namespace slam_demo;
@@ -63,39 +64,59 @@ void CameraModel()
     cout<<"the result from camera model is "<<vtemppts.front().transpose()<<endl;
 }
 
-// void H_matrix()
-// {
-//     //
-
-//     const string env_path= "../config/Environment_H.yaml";
-//     const string camera_path = "../config/EuRoC.yaml";
-
-//     EnvironmentBuilder eb(env_path);
-//     auto & lds = eb.GetLandmarksVec3d();
-//     vector<Eigen::Vector3d> lds_in_camera;
-//     lds_in_camera.reserve(lds.size());
+void PnP()
+{
     
-//     // 设置初始值
-    
-//     Eigen::AngleAxisd aa(0.5,Eigen::Vector3d(1,2,3).normalized());
-//     Eigen::Vector3d translation(0.4,0.5,0.6);
-//     Eigen::Matrix4d transform;
-//     transform.setZero();
-//     transform.block<3,1>(0,3)= translation;
-//     transform.block<3,3>(0,0)= aa.matrix();
-//     TransformPoints(lds,transform,lds_in_camera);
-    
-//     Eigen::Matrix3d h;
+}
 
-//     CameraModelPinhole cm(camera_path);
+void H_matrix()
+{
+    // 配置环境
+
+    const string env_path= "../config/Environment_H.yaml";
+    const string camera_path = "../config/EuRoC.yaml";
+
+    EnvironmentBuilder eb(env_path);
+    auto & lds = eb.GetLandmarksVec3d();
+    vector<Eigen::Vector3d> lds_in_camera;
+    lds_in_camera.reserve(lds.size());
     
-//     std::vector<Eigen::Vector2d> uvs_world,uvs_camera;
-//     cm.CameraPointsToUVs(lds,uvs_world);
-//     cm.CameraPointsToUVs(lds_in_camera,uvs_camera);
+    // 设置初始值
+    
+    Eigen::AngleAxisd aa(0.5,Eigen::Vector3d(1,2,3).normalized());
+    Eigen::Vector3d translation(0.4,0.5,0.6);
+    Eigen::Matrix4d transform;
+    transform.setZero();
+    transform.block<3,1>(0,3)= translation;
+    transform.block<3,3>(0,0)= aa.matrix();
+    TransformPoints(lds,transform,lds_in_camera);
+    
+    Eigen::Matrix3d h;
 
-//     cv::findHomography()
+    CameraModelPinhole cm(camera_path);
+    
+    std::vector<Eigen::Vector2d> uvs_world,uvs_camera;
+    
+    // 去掉第一个0,0,0 的ld
+    lds.erase(lds.begin());
+    lds_in_camera.erase(lds_in_camera.begin());
 
-// }
+    cm.CameraPointsToUVs(lds,uvs_world);
+    cm.CameraPointsToUVs(lds_in_camera,uvs_camera);
+
+    std::vector<cv::Point2f> uvs_cv_world{cv::Point2f(0.0,0.0),cv::Point2f(1.0,0.0),
+                                          cv::Point2f(1.0,1.0),cv::Point2f(0.0,1.0)};
+    std::vector<cv::Point2f> uvs_cv_camera{cv::Point2f(0.0,0.0),cv::Point2f(1.0,0.0),
+                                           cv::Point2f(2.0,3.0),cv::Point2f(0.0,2.0)};
+
+    auto H_cv = cv::findHomography(uvs_cv_world,uvs_cv_camera);
+    cout<<"the H from opencv is "<<endl<<H_cv<<endl;
+
+    FrameInterface::EpipolarH4Pts(uvs_camera,uvs_world,h);
+    
+    cout<<"the H from the frame interface is "<< endl<<h<<endl;
+
+}
 
 void EigenToMat()
 {
@@ -103,15 +124,25 @@ void EigenToMat()
     temp_eigen.setZero();
     temp_eigen.block<6,1>(0,4) = (Eigen::Matrix<double,6,1>()<<1,2,3,4,5,6).finished();
     cout<<"the matrix eigen is "<<endl<<temp_eigen<<endl;
-    cv::Mat temp_cv(6,5,CV_64F);
-    std::memcpy(temp_cv.data,temp_eigen.data(),temp_eigen.rows()*temp_eigen.cols()*8);
-    cout<<"the matrix cv is "<<endl<<temp_cv.t()<<endl;
+    
+    auto temp_mat = Converter::toMat(temp_eigen);
+    cout<<"the matrix cv is "<<endl<<temp_mat<<endl;
+
+    std::vector<Eigen::Matrix<double,6,5>,Eigen::aligned_allocator<Eigen::Matrix<double,6,5>>> veigen;
+    veigen.push_back(temp_eigen);
+    veigen.push_back(temp_eigen*5);
+    
+    auto vtemp = Converter::toMats(veigen);
+    
+    for(auto & temp:vtemp)
+    {
+        cout<<"==========="<<endl;
+        cout<<temp<<endl;
+    }
 }
 
 int main()
 {
-EigenToMat();
-    
-
+    H_matrix();
 
 }
