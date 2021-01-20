@@ -2,10 +2,12 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:33:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-17 11:58:27
+ * @LastEditTime: 2021-01-20 07:44:13
  * @FilePath: /3rd-test-learning/25. slam_demo/environment_builder.h
  * @Description: 
  */
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <cmath>

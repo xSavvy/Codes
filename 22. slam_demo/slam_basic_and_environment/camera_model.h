@@ -2,9 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-17 11:34:40
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-18 07:06:09
+ * @LastEditTime: 2021-01-20 07:44:37
  * @Description: 
  */
+
+#pragma once
 
 #include <iostream>
 #include <vector>

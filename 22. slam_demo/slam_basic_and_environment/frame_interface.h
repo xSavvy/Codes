@@ -2,9 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-17 10:37:07
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-19 07:14:49
+ * @LastEditTime: 2021-01-20 07:44:21
  * @Description: 
  */
+
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -25,6 +27,8 @@ class FrameInterface
     // 四点生成H 矩阵
     // x_2 = Hx_1
     static bool EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12);
+    // x_2^Tt^Rx_1 = 0;
+    static bool EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& E12);
 };
 
 bool FrameInterface::EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12)
@@ -35,6 +39,7 @@ bool FrameInterface::EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12)
     Eigen::MatrixXd A(uvs_1.size()*2,9); 
     A.setZero();
     Eigen::Matrix<double,2,9> temp_A;
+    
     for(int i =0; i<4;i++)
     {
         auto & x1 = uvs_1.at(i);
@@ -47,14 +52,45 @@ bool FrameInterface::EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12)
     Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double,9,9>> eigen_solver(A.transpose()*A);
     
     eigen_solver.eigenvalues().minCoeff();
-
-    cout<<"the eigen vector is "<<eigen_solver.eigenvalues().transpose()<<endl;
-
-    Eigen::Matrix<double,1,9> h = eigen_solver.eigenvectors().col(1);
-    memcpy(H12.data(),h.data(),9*8);
-    double w = H12.row(2).dot((Eigen::Vector3d()<<uvs_1.front().x(),uvs_1.front().y(),1.0).finished());
-    H12 = H12/w;
+    auto & eigen_value = eigen_solver.eigenvalues();
+    auto temp = std::min_element(eigen_value.data(),eigen_value.data()+eigen_value.size());
+    Eigen::Matrix<double,9,1> h = eigen_solver.eigenvectors().col(temp-eigen_value.data());
     
+    Eigen::Matrix<double,3,3,Eigen::RowMajor> H;
+    memcpy(H.data(),h.data(),9*8);
+    double w = H.row(2).dot((Eigen::Vector3d()<<uvs_1.front().x(),uvs_1.front().y(),1.0).finished());
+    H12 = H/w;
+    if(h.norm()>1e8)
+    return false;
+}
+// x_2^Tt^Rx_1 = 0;
+bool FrameInterface::EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& F12)
+{
+    if(uvs_1.size()!=uvs_2.size()||uvs_1.size()<8)
+    return false;
+    // 构造 kronecker product
+    Eigen::Matrix<double,1,9> one_row;
+    Eigen::MatrixXd A(uvs_2.size(),9);
+    for(int i =0;i<uvs_2.size();i++)
+    {
+        auto &  x2 = uvs_2[i];
+        one_row<< x2.x()*uvs_1[i].transpose(),
+                  x2.y()*uvs_1[i].transpose(),
+                  x2.z()*uvs_1[i].transpose();
+        A.block<1,9>(i,0)<<one_row;
+    }
+
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double,9,9>> eigen_solver(A.transpose()*A);
+    
+    eigen_solver.eigenvalues().minCoeff();
+    auto & eigen_value = eigen_solver.eigenvalues();
+    auto temp = std::min_element(eigen_value.data(),eigen_value.data()+eigen_value.size());
+    Eigen::Matrix<double,9,1> h = eigen_solver.eigenvectors().col(temp-eigen_value.data());
+
+    Eigen::Matrix<double,3,3,Eigen::RowMajor> F;
+    memcpy(F.data(),h.data(),9*8);
+    double w = F.row(2).dot((Eigen::Vector3d()<<uvs_1.front().x(),uvs_1.front().y(),1.0).finished());
+    F12 = F/w;
 }
 
 
