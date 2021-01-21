@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-17 10:37:07
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-20 07:44:21
+ * @LastEditTime: 2021-01-21 07:37:45
  * @Description: 
  */
 
@@ -76,7 +76,7 @@ bool FrameInterface::EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& F12)
         auto &  x2 = uvs_2[i];
         one_row<< x2.x()*uvs_1[i].transpose(),
                   x2.y()*uvs_1[i].transpose(),
-                  x2.z()*uvs_1[i].transpose();
+                  1.0*uvs_1[i].transpose();
         A.block<1,9>(i,0)<<one_row;
     }
 

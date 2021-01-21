@@ -127,7 +127,10 @@ void F_matrix()
     auto F_matrix = cv::findFundamentalMat(uvs_cv_camera,uvs_cv_world);
     cout<<"the F from opencv is "<<endl<<F_matrix<<endl;
 
+    Eigen::Matrix3d F;
+    FrameInterface::EpipolarF8Pts(uvs_world,uvs_camera,F);
 
+    cout<<"the F from FrameInterface is "<< F<<endl;
 
 }
 
