@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-20 22:07:19
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 08:10:16
+ * @LastEditTime: 2021-01-21 08:14:34
  * @Description: 
  */
 #include "linear_list.h"
@@ -25,27 +25,16 @@ class SequenceList:public LinearList<T>
     public:
 
     SequenceList(size_t capacity);
-    
     virtual bool Init()  override ;
-
     virtual bool Destroy()  override;
-    
     virtual bool ClearList()  override;
-
     virtual bool GetElem(size_t idx, T &e) const override;
-
     virtual bool LocateElem(const T & e,size_t & idx)const  override;
-    
     virtual bool PriorElem(const T & cur_e, T & pre_e)const  override;
-    
     virtual bool NextElem(const T & cur_e, T & next_e) const override;
-
     virtual bool InsertElem(size_t idx, const T & e)  override;
-
     virtual bool DeleteElem(size_t idx, T & e)  override;
-
     virtual bool Traverse(std::function<void()> f)  override;
-    
     T * pool_;
 };
 
