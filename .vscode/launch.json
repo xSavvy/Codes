@@ -5,23 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) 启动",
+            "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-<<<<<<< HEAD
-            "program": "/home/sunny/workspace_private/3rd-test-learning/22. slam_demo/ground_constraint/build/test_pool",
-=======
-            "program": "/home/lwl/workspace/3rd-test-learning/22. slam_demo/build/main_test",
->>>>>>> 94e0b1bad362a139526339ff6bd4d5b90fe264da
+            "program": "/home/sunny/workspace_private/3rd-test-learning/2. io/data_loader/build/data_loader",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/22. slam_demo/build",
+            "cwd": "${workspaceFolder}/2. io/data_loader/build",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "为 gdb 启用整齐打印",
+                    "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }

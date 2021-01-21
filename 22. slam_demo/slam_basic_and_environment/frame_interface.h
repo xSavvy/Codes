@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-01-17 10:37:07
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-20 07:44:21
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-20 09:40:02
  * @Description: 
  */
 
@@ -71,12 +71,13 @@ bool FrameInterface::EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& F12)
     // 构造 kronecker product
     Eigen::Matrix<double,1,9> one_row;
     Eigen::MatrixXd A(uvs_2.size(),9);
-    for(int i =0;i<uvs_2.size();i++)
+    for(int i = 0;i<8;i++)
     {
-        auto &  x2 = uvs_2[i];
-        one_row<< x2.x()*uvs_1[i].transpose(),
-                  x2.y()*uvs_1[i].transpose(),
-                  x2.z()*uvs_1[i].transpose();
+        auto & x2 = uvs_2[i];
+        Eigen::Vector3d & uv_3d = (Eigen::Vector3d()<<uvs_1[i].transpose(),1.0).finished();
+        one_row<< x2.x()*uv_3d,
+                  x2.y()*uv_3d,
+                  1.0*uv_3d;
         A.block<1,9>(i,0)<<one_row;
     }
 

@@ -2,13 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-18 09:06:14
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-18 09:07:06
+ * @LastEditTime: 2021-01-20 09:42:59
  * @FilePath: /3rd-test-learning/work_record/work_task/week4.md
  * @Description: 
 -->
 
 主要任务如下：
-1. 修改出有回环的ORB         11    
+1. 改善ORB 的旋转           11  
 2. ORB工程重构            属于有待商榷的项目
    |__ TrackLocalMap 改造
        |__ 引入PoseTree 让匹配加速 (近处小回环？)

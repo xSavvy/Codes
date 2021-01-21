@@ -11,6 +11,13 @@
  *              6. 基础矩阵结算            F_matrix     查看旋转退化的情况  以及 退化情况下 F 和H 的选择
  */
 
+// ! 之前的错误是因为 Sophus 前面没有 include Eigen
+// ! 导致Sophus 内部找不到 Eigen 的namespace
+#include "Eigen/Eigen"
+#include "sophus/so3.hpp"
+
+
+
 #include "environment_builder.h"
 #include "pointcloud_shower.h"
 #include "frame_interface.h"
@@ -111,7 +118,7 @@ void F_matrix()
     transform.setZero();
     transform.block<3,3>(0,0) = aa.matrix();
     transform.block<3,1>(0,3) = translation;
-    Eigen::Matrix3d E_expect = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d E_expect = Sophus::SO3d::hat(translation)* aa.matrix();
     Eigen::Matrix3d F_expect = cm.camera_params_.GetInstrincMatrix().transpose()*
                                E_expect*cm.camera_params_.GetInstrincMatrix();
      
