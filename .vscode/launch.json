@@ -8,17 +8,10 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-<<<<<<< HEAD
-            "program": "/home/sunny/workspace_private/3rd-test-learning/2. io/data_loader/build/data_loader",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/2. io/data_loader/build",
-=======
-            "program": "/home/lwl/workspace/3rd-test-learning/22. slam_demo/slam_basic_and_environment/build/main_test",
+            "program": "/home/sunny/workspace_private/3rd-test-learning/22. slam_demo/slam_basic_and_environment/build/main_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/22. slam_demo/slam_basic_and_environment/build",
->>>>>>> d2eaf5a9103c18860a186f63f2d0fe923ffa2cae
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

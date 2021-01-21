@@ -1,13 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-01-17 10:37:07
-<<<<<<< HEAD
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-20 09:40:02
-=======
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 07:37:45
->>>>>>> d2eaf5a9103c18860a186f63f2d0fe923ffa2cae
+ * @LastEditTime: 2021-01-21 13:50:13
  * @Description: 
  */
 
@@ -34,6 +29,8 @@ class FrameInterface
     static bool EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12);
     // x_2^Tt^Rx_1 = 0;
     static bool EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& E12);
+
+    static bool MotionRecovery(const H& E12, Eigen::Matrix4d & transform);
 };
 
 bool FrameInterface::EpipolarH4Pts(const UVs & uvs_1,const UVs & uvs_2,H& H12)
@@ -79,20 +76,22 @@ bool FrameInterface::EpipolarF8Pts(const UVs & uvs_1,const UVs & uvs_2,H& F12)
     for(int i = 0;i<8;i++)
     {
         auto & x2 = uvs_2[i];
-        Eigen::Vector3d & uv_3d = (Eigen::Vector3d()<<uvs_1[i].transpose(),1.0).finished();
-        one_row<< x2.x()*uv_3d,
-                  x2.y()*uv_3d,
-                  1.0*uv_3d;
+        Eigen::Vector3d uv_3d = (Eigen::Vector3d()<<uvs_1[i],1.0).finished();
+        one_row<< x2.x()*uv_3d.transpose(),
+                  x2.y()*uv_3d.transpose(),
+                  1.0*uv_3d.transpose();
         A.block<1,9>(i,0)<<one_row;
     }
-
+    cout<<" the A is "<<endl<<A<<endl;
     Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double,9,9>> eigen_solver(A.transpose()*A);
     
     eigen_solver.eigenvalues().minCoeff();
     auto & eigen_value = eigen_solver.eigenvalues();
+
     auto temp = std::min_element(eigen_value.data(),eigen_value.data()+eigen_value.size());
     Eigen::Matrix<double,9,1> h = eigen_solver.eigenvectors().col(temp-eigen_value.data());
-
+    cout<<"A*h"<<endl<<A*h<<endl;
+    cout<<"h::"<<endl<<h<<endl;
     Eigen::Matrix<double,3,3,Eigen::RowMajor> F;
     memcpy(F.data(),h.data(),9*8);
     double w = F.row(2).dot((Eigen::Vector3d()<<uvs_1.front().x(),uvs_1.front().y(),1.0).finished());

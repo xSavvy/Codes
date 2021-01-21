@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-18 07:33:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-19 19:35:34
+ * @LastEditTime: 2021-01-21 10:46:27
  * @Description: 
  */
 
@@ -25,7 +25,9 @@ class Converter
     
     static std::vector<cv::Point2f> toPoints(const std::vector<Eigen::Vector2d> & uvs);
     static std::vector<Eigen::Vector2d> toVector2ds(const std::vector<cv::Point2f> & uvs);
-    
+    static Eigen::Matrix3d toEigenM33d(const cv::Mat & mat);
+
+
     template<int N, int M>
     static cv::Mat toMat(const Eigen::Matrix<double,N,M> & temp);
     template<typename Allocator,int N, int M>
@@ -33,6 +35,16 @@ class Converter
     
     
 };
+
+Eigen::Matrix3d Converter::toEigenM33d(const cv::Mat & mat)
+{
+    Eigen::Matrix3d M33;
+    M33<<mat.at<double>(0,0),mat.at<double>(0,1),mat.at<double>(0,2),
+         mat.at<double>(1,0),mat.at<double>(1,1),mat.at<double>(1,2),
+         mat.at<double>(2,0),mat.at<double>(2,1),mat.at<double>(2,2);
+    return M33;
+}
+
 
 std::vector<cv::Point2f> Converter::toPoints(const std::vector<Eigen::Vector2d> & uvs)
 {

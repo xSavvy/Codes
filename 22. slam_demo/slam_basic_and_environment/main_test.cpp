@@ -9,6 +9,10 @@
  *              4. Eigen和Mat 的内存转换   EigenToMat   发现只有一行(列)或者方阵 用起来才不会有风险
  *              5. 单应矩阵解算            H_matrix     四个点不能共线，不能出现交叉关联的情况
  *              6. 基础矩阵结算            F_matrix     查看旋转退化的情况  以及 退化情况下 F 和H 的选择
+ *                                                    自己写的F矩阵求解存在问题
+ *                                                    opencv的findF 也存在问题 估计是点集产生的问题
+ *                                                    最后发现是比较方法的问题
+ *              7. 运动解算
  */
 
 // ! 之前的错误是因为 Sophus 前面没有 include Eigen
@@ -103,10 +107,10 @@ void F_matrix()
 {
     // 配置八个点
     std::vector<Eigen::Vector3d> vpts_camera{
-        Eigen::Vector3d(1.0,2.0,0.0),Eigen::Vector3d(2.0,1.0,3.0),
-        Eigen::Vector3d(3.0,5.0,7.0),Eigen::Vector3d(3.0,8.0,-2.0),
-        Eigen::Vector3d(2.0,-1.0,-3.0),Eigen::Vector3d(6.0,3.0,-5.5),
-        Eigen::Vector3d(8.0,-4.0,-4.0),Eigen::Vector3d(1.5,4.0,-6.0)
+        Eigen::Vector3d(1.0,2.0,1.0),Eigen::Vector3d(2.0,1.0,3.0),
+        Eigen::Vector3d(3.0,5.0,7.0),Eigen::Vector3d(3.0,8.0,2.0),
+        Eigen::Vector3d(2.0,-1.0,3.0),Eigen::Vector3d(6.0,3.0,5.5),
+        Eigen::Vector3d(8.0,-4.0,4.0),Eigen::Vector3d(1.5,4.0,6.0)
     };
     std::vector<Eigen::Vector3d> vtps_world;
     
@@ -134,11 +138,31 @@ void F_matrix()
     auto F_matrix = cv::findFundamentalMat(uvs_cv_camera,uvs_cv_world);
     cout<<"the F from opencv is "<<endl<<F_matrix<<endl;
 
-    Eigen::Matrix3d F;
-    FrameInterface::EpipolarF8Pts(uvs_world,uvs_camera,F);
 
-    cout<<"the F from FrameInterface is "<< F<<endl;
 
+    // Eigen::Matrix3d F_cv = Converter::toEigenM33d(F_matrix);
+    // for(int i=0;i<uvs_camera.size();i++)
+    // {
+    //     Eigen::Vector3d uvs_camera_3d = (Eigen::Vector3d()<<uvs_camera[i],1.0).finished();
+    //     Eigen::Vector3d uvs_world_3d = (Eigen::Vector3d()<<uvs_world[i],1.0).finished();
+        
+    //     Eigen::Vector3d temp = F_cv*uvs_camera_3d;
+    //     cout<<"the reprojection error is "<< (uvs_world_3d - temp/temp.z()).transpose()<<endl;
+    // }
+
+    // Eigen::Matrix3d F;
+    // FrameInterface::EpipolarF8Pts(uvs_camera,uvs_world,F);
+
+    // cout<<"the F from FrameInterface is "<< F<<endl;
+
+    // for(int i=0;i<uvs_camera.size();i++)
+    // {
+    //     Eigen::Vector3d uvs_camera_3d = (Eigen::Vector3d()<<uvs_camera[i],1.0).finished();
+    //     Eigen::Vector3d uvs_world_3d = (Eigen::Vector3d()<<uvs_world[i],1.0).finished();
+        
+    //     Eigen::Vector3d temp = F*uvs_camera_3d;
+    //     cout<<"the reprojection error is "<< (uvs_world_3d - temp/temp.z()).transpose()<<endl;
+    // }
 }
 
 void EigenToMat()
@@ -167,5 +191,5 @@ void EigenToMat()
 int main()
 {
 F_matrix();
-
+// H_matrix();
 }
