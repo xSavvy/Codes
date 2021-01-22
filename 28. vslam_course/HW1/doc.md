@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-16 21:41:22
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 21:03:19
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-22 09:30:19
  * @Description: 
 -->
 ### 1. 熟悉Linux
@@ -43,8 +43,8 @@
 提⽰：在安装 git 之后，可以⽤ git clone https://github.com/raulmur/ORB_SLAM2 命令下载
 ORB-SLAM2。下载完成后，请给出终端截图.<br>
 ![](./picture/1.png)
-2. 此时我们不着急直接运⾏ ORB-SLAM2，让我们⾸先来看它的代码结构。ORB-SLAM2 是⼀个
-cmake ⼯程，所以可以从 CMakeLists.txt 上⾯来了解它的组织⽅式。阅读 ORB-SLAM2 代码⽬录
+2. 此时我们不着急直接运⾏ ORB-SLAM2，让我们⾸先来看它的代码结构。ORB-SLAM2 是⼀个<br>
+cmake ⼯程，所以可以从 CMakeLists.txt 上⾯来了解它的组织⽅式。阅读 ORB-SLAM2 代码⽬录<br>
 下的 CMakeLists.txt，回答问题：<br>
 (a) ORB-SLAM2 将编译出什么结果？有⼏个库⽂件和可执⾏⽂件？<br>
 (b) ORB-SLAM2 中的 include, src, Examples 三个⽂件夹中都含有什么内容？<br>
@@ -56,6 +56,10 @@ c. 可以ldd 一个可执行文件 进行查看,有很多的库. 三方库:libOR
 libDBWod.so libopencv_core.so<br>
 
 
-
-
-   
+### 5. 自己跑ORB
+因为视频大概 300M，就截取了图片上传
+![](./picture/2.png)
+![](./picture/3.png)
+![](./picture/4.png)
+![](./picture/5.png)
+![](./picture/6.png)
