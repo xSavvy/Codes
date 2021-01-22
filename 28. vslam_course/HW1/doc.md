@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-16 21:41:22
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-16 22:11:27
+ * @LastEditTime: 2021-01-21 21:03:19
  * @Description: 
 -->
 ### 1. 熟悉Linux
@@ -49,12 +49,11 @@ cmake ⼯程，所以可以从 CMakeLists.txt 上⾯来了解它的组织⽅式�
 (a) ORB-SLAM2 将编译出什么结果？有⼏个库⽂件和可执⾏⽂件？<br>
 (b) ORB-SLAM2 中的 include, src, Examples 三个⽂件夹中都含有什么内容？<br>
 (c) ORB-SLAM2 中的可执⾏⽂件链接到了哪些库？它们的名字是什么？<br>
-a. 三个库:lib/libORB_SLAM.so ThirdParty/g2o/lib/libg2o.so ThirdParty/DBWod/lib/libDBWod.so <br>
+a. 一个主要库:lib/libORB_SLAM.so 还有两个附带的第三方库 ThirdParty/g2o/lib/libg2o.so ThirdParty/DBWod/lib/libDBWod.so <br>
 超级多的可执行文件: i.e. Example/ROS/ORB_SLAM/Stereo Mono RGBD<br>
 b. include: 头文件 src:源文件 Examples: 主函数文件 和配置文件<br>
 c. 可以ldd 一个可执行文件 进行查看,有很多的库. 三方库:libORB_SLAM.so libg2o.so
 libDBWod.so libopencv_core.so<br>
-
 
 
 
