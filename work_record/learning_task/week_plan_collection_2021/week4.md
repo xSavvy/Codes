@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-18 09:03:45
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 21:06:14
+ * @LastEditTime: 2021-01-23 22:46:20
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week4.md
  * @Description: 
 -->
@@ -24,8 +24,9 @@ b. 记录时间使用<br>
         |__ 编写对极几何\Pnp等基础
             |__ 搭建仿真环境           完成
             |__ 搭建Pangolin显示环境   完成
-            |__ 对极约束               
-            |__ PnP ICP                    需要参考  an invitation to 3d
+            |__ 对极约束              半完成
+            |__ PnP ICP              完成   需要参考  an invitation to 3d
+            |__ 三角化
         |__ 光流基础pipeline+光流opencv pipeline   合并为编写 inverse compositional KLT 合并到VINS内部 
                                                  学习VINS 的框架 做IMU 四阶龙格库塔的预测  混合到 IMU 检测    
         |__ 到TrackLocalMap为止       
@@ -55,3 +56,7 @@ b. 记录时间使用<br>
 所以，最后的结论是：<br>
 我在别人表现不佳的时候，会产生快活的心态，是因为自己想要得到别人的高价值评判。而自己的高价值意味着高回报。<br>
 但是这个环境里面的高价值评判，真的会有高回报吗？<br>
+
+2021.1.22<br>
+接纳现状，改变能改变的，明确改变不了的。<br>
+可能这就是接受痛苦最好的方法了。<br>
