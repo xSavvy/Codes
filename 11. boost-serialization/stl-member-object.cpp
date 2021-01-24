@@ -2,9 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-27 19:29:05
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-28 15:43:07
- * @FilePath: /3rd-test-learning/13. boost-serialization/stl-member-object.cpp
- * @Description: 用于测试序列化 C++ STL 容器 vector 为例其他内容相同
+ * @LastEditTime: 2021-01-24 09:49:33
+ * @FilePath: /3rd-test-learning/11. boost-serialization/stl-member-object.cpp
+ * @Description: 
+ * 
+ *               重要内容提示：
+ *               1. 如果要想进行 STL 容器的序列化
+ *                  需要 include boost/serialization/${stl_container}.cpp
+ *                  i.e. boost/serialization/vector.hpp
+ *                 
+ * 
+ *               用于测试序列化 C++ STL 容器 vector 为例其他内容相同
  *               1. 序列化vector<内置类型> 
  *               2. 序列化vector<自定义class 类型>
  */

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-19 11:35:48
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-19 14:58:20
+ * @LastEditTime: 2021-01-24 16:02:22
  * @FilePath: /3rd-test-learning/doc/paper-21.1.18-21.1.30/reading.md
  * @Description: 
 -->
@@ -23,7 +23,7 @@ $$
     I^{L}_{k-1}\rightarrow I^{R}_{k-1} \rightarrow I^{R}_{k} \rightarrow I^{L}_{k} \rightarrow I^{L}_{k-1} 
 $$
 if IMU available then add predict <br>
-回环匹配完全，认为是高质量的特征，用于后续的分析<br>
+circular 匹配完全，认为是高质量的特征，用于后续的分析<br>
 feature 的descriptor 不进行更新。<br>
 每一次追踪都会和 initial desciptor 进行矫正 <br>
 descriptor更新能让feature 活更久，但是会更容易引入drift,所以这里保持descriptor 不变<br>

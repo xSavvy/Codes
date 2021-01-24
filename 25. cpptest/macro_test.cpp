@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-12-04 09:42:23
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-04 10:16:45
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-24 16:59:17
  * @Description: 用于测试宏
  */
 #define A(n) A##n
@@ -17,6 +17,8 @@ using A1 = string;
 
 #define returnContent(n)\
 Binlier##n * returnContent##n() {return &c##n;}
+
+#define USE_THIS
 
 class B
 {
@@ -39,7 +41,7 @@ class B
         returnContent(3)
         Binlier1 c1 = 1;
         Binlier2 c2 = 10.0;
-        Binlier3 c3 = "string";
+        USE_THIS Binlier3 c3 = "string";
     };
 };
 

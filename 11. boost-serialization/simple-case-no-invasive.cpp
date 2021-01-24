@@ -2,9 +2,27 @@
  * @Author: Liu Weilong
  * @Date: 2020-09-27 18:46:14
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-09-27 18:56:30
- * @FilePath: /3rd-test-learning/13. boost-serialization/boost-serialization-simple-case-no-invasive.cpp
+ * @LastEditTime: 2021-01-24 09:53:10
+ * @FilePath: /3rd-test-learning/11. boost-serialization/simple-case-no-invasive.cpp
  * @Description: 想对于 simple-case-test 这里的是一个非入侵式的编写方法
+ * 
+ *               重要内容提示:
+ *               1. non-invasive 方式进行 序列化函数编写
+ *                  需要进行namespace 的声明
+ *                  i.e.
+ *                  namespace boost
+ *                  {
+ *                      namespace serialization
+ *                      {
+ *                          template<typename Ar>
+ *                          void serialize(Ar & ar, ${class} & temp, unsigned int)
+ *                          {
+ *                              ...
+ *                          }
+ *                      }
+ *                  }
+ * 
+ * 
  */
 #include <fstream>
 #include <iostream>
