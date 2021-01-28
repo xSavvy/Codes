@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-16 22:12:11
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-25 08:34:09
+ * @LastEditTime: 2021-01-28 21:02:05
  * @Description: 
 -->
 ### 1. 熟悉 Eigen 矩阵运算
@@ -81,16 +81,24 @@ $$
 ### 5. 四元数性质验证
 验证点旋转
 $$
-   q^{+}q^{-1\bigoplus} = 
+   qpq^{-1}=q^{+}q^{-1\bigoplus}p = 
    \left[
       \begin{matrix}
       (ηI+\epsilon×)(ηI+\epsilon×)+\epsilon\epsilon^{T} &0\\
       0 &\epsilon^{T}\epsilon +η^{2}
       \end{matrix}
    \right]
+   \left[
+      \begin{matrix}
+         p\\
+         0
+      \end{matrix}
+   \right]
 $$
 所以p2 的实部也一定是0
 ### 6. 熟悉C++
-1. auto 类型推导
-2. for 的遍历方式
-3. lamda 匿名的函数
+使用的C++11 的内容有，
+1. for auto 的遍历， 替代了之前的for(;;)
+2. auto 进行自动类型的推导
+3. lamda 匿名函数
+4. avec{a1,a2,a3} uniform initialization
