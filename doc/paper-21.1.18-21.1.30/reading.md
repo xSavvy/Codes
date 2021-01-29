@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-19 11:35:48
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-24 16:02:22
+ * @LastEditTime: 2021-01-29 11:18:16
  * @FilePath: /3rd-test-learning/doc/paper-21.1.18-21.1.30/reading.md
  * @Description: 
 -->
@@ -28,7 +28,7 @@ feature 的descriptor 不进行更新。<br>
 每一次追踪都会和 initial desciptor 进行矫正 <br>
 descriptor更新能让feature 活更久，但是会更容易引入drift,所以这里保持descriptor 不变<br>
 一直在追踪的feature 会被认为更加可靠，但也会引入drift。所以新旧feature 的量需要保持平衡。
-在长期tracking上，选择点的策略平衡远近、新旧、部分三个部分。Kitt
+在长期tracking上，选择点的策略平衡远近(ORB在插入关键帧的时候也会有考虑)、新旧、部分三个部分。Kitt
 et al., 2010<br>
 tracking：<br>
 先估计旋转，然后旋转+平移一起重投影<br> 

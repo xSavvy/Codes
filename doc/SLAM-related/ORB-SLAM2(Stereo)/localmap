@@ -17,7 +17,7 @@ LocalMapping
             |__ mfCreateNewMapPoints()  相机运动过程中和共视程度比较高的关键帧，
                                         通过三角化恢复出一些MapPoints
                 |__ GetHighCovisualabilityKeyFrame()    得到更高共视关系的关键帧
-                |__ for each NeighborKeyFrame
+                |__ for each KeyFrame
                     |__ checkBaseLine() check1
                     |__ for each MapPoint match with mCurrentKeyFrame
                         |__ Triangulate()
