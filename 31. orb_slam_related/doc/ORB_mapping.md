@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-28 15:08:16
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 14:22:25
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-01-30 19:18:04
  * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/ORB_mapping.md
  * @Description: 
 -->
@@ -28,18 +28,21 @@
    (注：foundRatio  mnFound 来自于每一次TrackLocalMap PoseOptimization 优化之后 表示确实看到了\
                    mnVisible 来自于每一次SearchLocalPoints 在inFrustum 判断之后 表示应该能看到)\
 3. CreateNewMapPoints 在SearchForTriangulation的注释中得以看到这个函数存在的意义是为了生成一些没有跟踪上的MapPoint 没跟踪上的原因有很多\
+   有了一些新的思考，这里的确是Create 新的地图点，将一些之前没有跟踪上的，有高视差的点进行三角化,\
+   但是这个地方的确会重复创建地图点\
+   <font color="Red"> 这里就体现了，跟踪需要连续，三角化缺需要大视差的矛盾</font>
 3.a. 得到mpCurrentKeyFrame 高共视的关键帧\
 3.b. 对每一个关键帧\
      检测中位数深度/baseline 的ratio check1\
      生成Fundamenal Matrix F12\
      SearchForTriangulation 寻找CurrentFrame 和 关键帧之间的匹配\
      对每一个匹配点\
-        检查视差 check2\
+        检查视差(检查新两帧的视差和Stereo视差的大小，选择其中大的视差进行后面的三角化) check2\
         三角化\
         检测地图点到两幅图像的重投影误差    卡方分布 check3 \
         深度比例和金字塔层数的check             check4\
         生成新的地图点(加观测、深度、NormalVector更新、加入mlpRecentAddedMapPoints)\
-4. SearchInNeighbors (可以后面进行更换)\
+4.  SearchInNeighbors (可以后面进行更换)\
 4.a. 得到mpCurrentKeyFrame 高共视的关键帧，和这些关键帧的高共视关键帧\
 4.b. 对每一个目标关键帧 Fuse mpCurrentKeyFrame的地图点\
 4.c. 得到所有目标关键帧的 地图点\

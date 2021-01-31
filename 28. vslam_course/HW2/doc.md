@@ -1,13 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-16 22:12:11
-<<<<<<< HEAD
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-28 21:02:05
-=======
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 10:06:06
->>>>>>> 2a1013efd25489aa45a4e7587a22af703154d2fa
+ * @LastEditTime: 2021-01-30 07:19:52
  * @Description: 
 -->
 ### 1. 熟悉 Eigen 矩阵运算
