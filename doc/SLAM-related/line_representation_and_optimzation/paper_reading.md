@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-21 16:26:32
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-21 18:19:02
+ * @LastEditTime: 2021-01-31 13:35:51
  * @FilePath: /3rd-test-learning/doc/SLAM-related/line_representation_and_optimzation/paper_reading.md
  * @Description: 
 -->
@@ -24,11 +24,17 @@ Line Features
 5. Leveraging Planar Regularities for Point Line VisualInertial Odometry
 
 6. Guoxuan Zhang 一系列的线特征
+7. Building a 3-D Line-Based Map Using
+Stereo SLAM
+摘要:<br>
 
-7. Structure from motion using lines: Representation, triangulation and bundle adjustment<br>
+简介:<br>
+
+8. Structure from motion using lines: Representation, triangulation and bundle adjustment<br>
    摘要：<br>
    一个对于线特征优化的总结。<br>
-
-8. Plucker Coordinates for Lines in the Space
    
-9.  http://web.cs.iastate.edu/~cs577/ 一个小课程
+
+9. Plucker Coordinates for Lines in the Space
+   
+10. http://web.cs.iastate.edu/~cs577/ 一个小课程

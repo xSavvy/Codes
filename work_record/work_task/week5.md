@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 07:49:42
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-26 10:38:39
+ * @LastEditTime: 2021-01-29 16:42:35
  * @Description: 
 -->
 ### 主要任务
@@ -49,3 +49,6 @@ b. git 版本管理方法整理<br>
 c. 之后注意g2o初始化的问题<br>
 d. 单元测试(硬件单元测试+软件单元测试)<br>
 e. 测试结果管理(测试指标、测试环境、测试结果、测试评价)<br>
+
+### ORB 和 光流的差别就看出来了
+几何校验的问题

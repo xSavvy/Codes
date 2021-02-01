@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-26 07:39:21
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-01-31 13:43:26
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
@@ -42,10 +42,13 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
 
 
 3. QR 分解<br>
-   条件：<br>
+   原理：<br>
    $A\in{R^{m×n}}$ A是有n个独立的列<br>
    这个条件决定了 A 的行数需要大于列数<br>
-   相对于 
+   $A = QR$\
+   $Q\in{R^{m×n}} R\in{R^{n×n}}$
+
+   
    作用:<br>
    加速$Ax=b$
    $$
@@ -69,6 +72,12 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
    a. Gram_schmidt<br>
    这里只用一部分举例
    $$
+
+   A =    \left[
+      \begin{matrix}
+      a_1&a_2&a_3
+      \end{matrix}
+      \right] \in{R^{3×3}}\\
    \left[
       \begin{matrix}
       a_1&a_2&a_3
@@ -108,13 +117,32 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
    b. HouseHolder
 
    ![](./picture/8.png)
+   
+   2021.1.31添加<br>
+   在学习线特征的时候发现，
+   其实也可以分解成
+   $$
+      A = Q_2R_2 = Q_1R_1\\
+      Q_1\in{R^{m×n}} R_1\in{R^{n×n}}\\
+      Q_2\in{R^{m×m}} R_1\in{R^{m×n}}\\
+      Q_2 = \left[\begin{matrix}
+      Q_1,t(Q_1)\\
+      \end{matrix}
+      \right]\\
+      R_2 = \left[\begin{matrix}
+      R_1\\
+      \pmb{0}\in{R^{(m-n)×n}}
+      \end{matrix}
+      \right]
+   $$
+   
 
-
-   4. Schur Complement
+4. Schur Complement
    ![](./picture/6.png)
    过一次schur Complement 之后，进行进一步的加速
    
-
+5. SVD 求解
+   待续
 
 
 

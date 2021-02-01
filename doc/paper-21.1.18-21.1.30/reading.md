@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-19 11:35:48
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 11:18:16
+ * @LastEditTime: 2021-01-29 16:24:30
  * @FilePath: /3rd-test-learning/doc/paper-21.1.18-21.1.30/reading.md
  * @Description: 
 -->
@@ -53,3 +53,6 @@ Looping 内容相对较少<br>
 
 2. REMODE: Probabilistic, Monocular Dense Reconstruction in Real Time<br>
     摘要:<br>
+
+3. 2-Point-based Outlier Rejection for Camera-IMU Systems with
+applications to Micro Aerial Vehicles
