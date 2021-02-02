@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./devel)
 find_package(glog REQUIRED)
 
 message(STATUS "Glog has been found " ${GLOG_FOUND})
-message(STATUS ${GLOG_LIBRARY})
+message(STATUS glog)
 message(STATUS ${GLOG_INCLUDE_DIRS})
 
 # include_directories(${GLOG_INCLUDE_DIRS})

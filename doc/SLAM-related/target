@@ -8,10 +8,3 @@ MSCKF
 |__ 特殊的后端、OC-EKF、FEJ
 StructVIO 
 |__ 亚特兰大、曼哈顿假设、线匹配
-
-框架阅读流程：
-a. Process.md
-b. Theory.md
-c. Trick.md
-d. code_reading/ file
-e. time_consumption.md 
