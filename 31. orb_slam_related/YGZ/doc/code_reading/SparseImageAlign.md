@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-02 17:22:53
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-02 17:36:33
+ * @LastEditTime: 2021-02-03 08:58:16
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/code_reading/SparseImageAlign.md
  * @Description主要
 -->
@@ -20,6 +20,8 @@ Inverse Compositional LK 原理见 Supplement Material\
 ------
 1.a. precomputeReferencePatches 用于提前计算Jacobian\
 a.1. 对每一个点进行\
-       计算出优化变换的Jacobian求导(在template内部多次使用)\
+       计算出优化变换的Jacobian($J^{u,v}_{\xi}$)求导(在template内部多次使用)\
        双线性插值出每一个template 的数值\
+       计算出每一个template的综合Jacobian($J^I_{u,v}J^{u,v}_{\xi}$)\
+2.a. computeResiduals
        

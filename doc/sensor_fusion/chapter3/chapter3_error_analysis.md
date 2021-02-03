@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2020-11-19 09:40:37
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-02-03 13:53:31
+ * @FilePath: /3rd-test-learning/doc/sensor_fusion/chapter3/chapter3_error_analysis.md
+ * @Description: 
+-->
 
 
 ### IMU误差分析
@@ -43,10 +51,6 @@ tips： 因为运动环境在地球模型上运动比较小，所以当作平面
    ![](6.png)
    关于SO3+R3上的误差分析 参考ppt 即可<br>
    这里最主要但是学这里的分析套路
-
-
-
-
 <br>
 <br>
 还需要之后根据讲解再进一步的修正自己的想法

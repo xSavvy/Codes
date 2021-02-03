@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 11:14:38
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 15:15:34
- * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/ORB_tracking.md
+ * @LastEditTime: 2021-02-03 09:52:37
+ * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_tracking.md
  * @Description: 
 -->
 
@@ -30,7 +30,7 @@ a.4. 丢掉outlier<br>
 
 1.b. TrackWithLocalMap<br>
 b.1. UpdateLocalMap 汇集所有的observation related 的Keyframe 和这次Keyframe的临近Keyframe 到LocalMap 里面<br>
-                    汇集所有的LocalMap中Keyframe 中的MapPoints<br>
+     汇集所有的LocalMap中Keyframe 中的MapPoints<br>
 b.2. SearchLocalPoints 使用inFrustum 进行点筛选、根据距离更新PredictedLevel、使用SearchByProjection进行匹配<br>
 b.3. PoseOptimization<br> 
 

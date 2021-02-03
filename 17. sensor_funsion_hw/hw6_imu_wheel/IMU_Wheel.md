@@ -86,7 +86,31 @@ $$
 
 $$
     \dot{\delta{X}} = F\delta{X}+ BN
+    \\
+    \begin{aligned}
+    \delta{X}_{k+1} &= \delta{X}_{k} +  \dot{\delta{X}_{k}}\Delta{t}
+    \\&=(I+F\Delta{t})\delta{X}_k + BN\Delta{t}
+    
+    \end{aligned}
 $$
+
+#### 2021.2.3 添加
+$$
+\begin{matrix}
+    &\dot{\delta{X}} = F\delta{X}+BN
+    \\
+    & \delta{X}= (e^{Ft}+D)
+    \\
+    &\dot{\delta{X}} = F((e^{Ft}+D))+BN
+    \\
+    &-FD=BN
+\end{matrix}
+
+
+$$
+
+
+
 不断进行迭代进行方差计算了。
 
 ### r求导
