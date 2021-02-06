@@ -1,13 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-01 09:19:02
-<<<<<<< HEAD
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-06 11:22:01
-=======
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-04 07:54:49
->>>>>>> 48ccc92994f687d87ddd824e4a47fecfd6001192
+ * @LastEditTime: 2021-02-06 22:52:13
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week6.md
  * @Description: 
 -->
@@ -31,3 +26,6 @@
 12. 矩阵指数              
 13. SVO Inverse Compostional的理解  短时间内肯定完不成
 14. 深度滤波             概率
+   
+总结：
+1. 大量的时间都用来打游戏了，感觉非常的不好，下个周需要按照新的代码方针，认真地生活
