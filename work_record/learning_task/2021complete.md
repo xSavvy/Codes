@@ -1,3 +1,11 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2021-01-15 09:17:10
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-02-04 16:00:44
+ * @FilePath: /3rd-test-learning/work_record/learning_task/2021complete.md
+ * @Description
+-->
 
 ### Week1
 1. slambook2 ch13 双目光流阅读完毕
@@ -7,3 +15,7 @@
 ### Week2 or Week3
 4. 熟悉g2o ORB后端添加地面约束 SE3换成SO3 编写CovCollector
 5. 肤浅地学一手 Inverse Compositional 直接法和 光流方法
+
+### Week6
+1. ORB 正式入门
+2. YGZ (ORB 4x)代码阅读
