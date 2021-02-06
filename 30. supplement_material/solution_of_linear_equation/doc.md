@@ -1,14 +1,14 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-31 13:43:26
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-04 07:47:34
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
 reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
 
-1. LU 分解<br>
+1. LU 分解(高斯消元)<br>
    条件：<br>
    a. 方阵 b. 可逆 c.消元过程中没有0主元出现<br>
    作用：<br>
