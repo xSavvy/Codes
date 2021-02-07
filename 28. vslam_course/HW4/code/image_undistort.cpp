@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-06 22:54:35
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-07 07:46:52
+ * @LastEditTime: 2021-02-07 08:06:54
  * @Description: 
  * 
  *               在归一化坐标系上进行矫正
@@ -46,26 +46,28 @@ int main()
     Mat image = cv::imread("../../pictures/test.png",0);
 
     Mat img_undistort(image.rows,image.cols,image.type());
+    imshow("raw image",image);
+    waitKey(0);
     // undistortion 
-    for(int i=0;i<image.rows;i++)
+    for(int i=0;i<img_undistort.rows;i++)
     {
         
-        for(int j=0;j<image.cols;j++)
+        for(int j=0;j<img_undistort.cols;j++)
         {
-            Eigen::Vector3f p_un;
+            Eigen::Vector3f p_d;
             auto temp = PixelToNormal(j,i);
             float r_2 = temp.x()*temp.x()+temp.y()*temp.y();
             float r_4 = r_2*r_2;
-            p_un.x() = temp.x()*(1+k1*r_2+k2*r_4)+2*p1*temp.x()*temp.y()+p2*(r_2+2*temp.x()*temp.x());
-            p_un.y() = temp.y()*(1+k1*r_2+k2*r_4)+2*p2*temp.x()*temp.y()+p1*(r_2+2*temp.y()*temp.y());
+            p_d.x() = temp.x()*(1+k1*r_2+k2*r_4)+2*p1*temp.x()*temp.y()+p2*(r_2+2*temp.x()*temp.x());
+            p_d.y() = temp.y()*(1+k1*r_2+k2*r_4)+2*p2*temp.x()*temp.y()+p1*(r_2+2*temp.y()*temp.y());
 
-            int u_distorted = NormalToPixel(p_un).x(),v_distorted = NormalToPixel(p_un).y();
+            int u_distorted = NormalToPixel(p_d).x(),v_distorted = NormalToPixel(p_d).y();
 
             if (u_distorted >= 0 && v_distorted >= 0 && u_distorted < image.cols && v_distorted < image.rows) {
                 img_undistort.at<uchar>(j, i) = image.at<uchar>((int) v_distorted, (int) u_distorted);
             } else {
                 img_undistort.at<uchar>(j, i) = 0;
-        }
+            }
         }
     }
     
