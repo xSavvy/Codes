@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-21 17:41:03
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-01 16:09:55
- * @FilePath: /3rd-test-learning/33. vertical_line_slam/include/plucker.h
+ * @LastEditTime: 2021-02-07 16:42:40
+ * @FilePath: /3rd-test-learning/33. slam_test/include/features/plucker.h
  * @Description: 
  */
 #include <iostream>
@@ -45,5 +45,3 @@ bool GeneratorPlucker(Eigen::Vector4d plane_1,
     
     return true;
 }
-
-bool PluckerAtoB()

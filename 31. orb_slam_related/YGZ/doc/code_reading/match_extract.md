@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-02 17:22:53
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-04 16:50:21
+ * @LastEditTime: 2021-02-07 11:18:09
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/code_reading/match_extract.md
  * @Description主要
 -->
@@ -49,6 +49,8 @@ c. WarpAffine() 对p_ref 周围的template 进行反向包装\
 也就是把p_ref 一个平行四边形的template 通过Affine 变成 正方形，用于和cur 图像上的匹配\
 d. 去掉边缘的点
 e. Align2D()用ref的方块在cur 寻找合适的匹配\
+
+收敛了就说明匹配上了，但是感觉不怎么靠谱，应该没有别的方法\
 这里的具体理论看theory.md
 
 ### 关于特征的提取

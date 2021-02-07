@@ -55,3 +55,6 @@ Camera.fx: 307.3070580996126
 Camera.fy: 307.3070580996126
 Camera.cx: 372.865217584225
 Camera.cy: 240.0338623810578
+
+Camera.width: 752
+Camera.height: 480
