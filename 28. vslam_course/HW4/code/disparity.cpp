@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-07 08:13:36
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-07 08:16:18
+ * @LastEditTime: 2021-02-07 22:34:31
  * @Description: 
  */
 //
@@ -11,33 +11,42 @@
 
 #include <opencv2/opencv.hpp>
 #include <string>
-#include <Eigen/Core>
+#include <Eigen/Eigen>
 #include <pangolin/pangolin.h>
 #include <unistd.h>
 
 using namespace std;
 using namespace Eigen;
+// 内参
+double fx = 718.856, fy = 718.856, cx = 607.1928, cy = 185.2157;
+// 间距
+double d = 0.573;
+
+Eigen::Vector3f PixelToNormal(int u, int v)
+{
+    return Eigen::Vector3f(
+        (float(u)-cx)/fx,(float(v)-cy)/fy,1.0
+    );
+}
 
 // 文件路径，如果不对，请调整
-string left_file = "./left.png";
-string right_file = "./right.png";
-string disparity_file = "./disparity.png";
+string left_file = "../../pictures/left.png";
+string right_file = "../../pictures/right.png";
 
 // 在panglin中画图，已写好，无需调整
 void showPointCloud(const vector<Vector4d, Eigen::aligned_allocator<Vector4d>> &pointcloud);
 
 int main(int argc, char **argv) {
 
-    // 内参
-    double fx = 718.856, fy = 718.856, cx = 607.1928, cy = 185.2157;
-    // 间距
-    double d = 0.573;
-
     // 读取图像
     cv::Mat left = cv::imread(left_file, 0);
     cv::Mat right = cv::imread(right_file, 0);
-    cv::Mat disparity = cv::imread(disparity_file, 0); // disparty 为CV_8U,单位为像素
 
+    cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(
+        0, 96, 9, 8 * 9 * 9, 32 * 9 * 9, 1, 63, 10, 100, 32); 
+    cv::Mat disparity_sgbm,disparity;
+    sgbm->compute(left, right, disparity_sgbm);
+    disparity_sgbm.convertTo(disparity, CV_32F, 1.0 / 16.0f);
     // 生成点云
     vector<Vector4d, Eigen::aligned_allocator<Vector4d>> pointcloud;
 
@@ -51,8 +60,19 @@ int main(int argc, char **argv) {
             // start your code here (~6 lines)
             // 根据双目模型计算 point 的位置
             // end your code here
+            
+            Eigen::Vector3f p_un = PixelToNormal(u,v);
+            double depth = d*fx/disparity.at<float>(v,u);
+            p_un *=depth;
+            point.x()=p_un.x();
+            point.y()=p_un.y();
+            point.z()=p_un.z();
+            pointcloud.push_back(point);
         }
 
+
+    cv::imshow("the disparity",disparity);
+    cv::waitKey(0);
     // 画出点云
     showPointCloud(pointcloud);
     return 0;
