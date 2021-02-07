@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-07 11:31:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-07 17:05:46
+ * @LastEditTime: 2021-02-07 17:08:07
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week7.md
  * @Description: 
 -->
@@ -19,3 +19,4 @@
 6.  深度滤波             概率
 7.  重新理解 Error State
 8.  逆函数 求导优化
+9.  MSCKF
