@@ -10,8 +10,10 @@
 1. ORB垂直线特征           
 2. 深度滤波
 3. 光流+运动先验
-4. RANSAC各种几何校验 GRIC
+4. RANSAC各种几何校验 GRIC L1 范数 outlier 去除
 5. SOFT_SLAM 的 Blob 跟踪
 6. VINS on wheel 带出的 observability 分析
 7. 零空间操作 FEJ OC DSO
-8. 旋转平均？？ 三维重建的概念
+8. 旋转平均 平移平均 三维重建的概念
+9. BlockMatching
+10. Python 风变编程

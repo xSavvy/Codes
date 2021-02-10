@@ -1,13 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-30 23:35:36
-<<<<<<< HEAD
  * @LastEditors: Liu Weilong 
  * @LastEditTime: 2021-02-01 09:18:16
-=======
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-31 20:49:05
->>>>>>> 57f1ed43708ceb779ede509b8dc84b0a2a89b73f
  * @Description: 
 -->
 ### 1. 群的性质

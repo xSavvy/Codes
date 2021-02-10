@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-19 09:53:45
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-10 18:12:51
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -42,8 +42,32 @@ J^{X_{k+2}}_{b_k} &=J^{f_{k+1}}_{X_{k+1}}( J^{f_k}_{b_k}(b_k-\hat{b_k}))+ J^{f_{
  &=( J^{X_{k+2}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
 \end{aligned}
 $$
+
 这里就可以发现，通过不断迭代我们最终可以找到一个不是近似的$J^{X}_b$
-2020.12.25 添加
+
+<font color="Red">2021.2.10 添加</font>\
+加入 IMU Jacobian 更新部分的讨论\
+这里讨论$\alpha$ 为例
+$$
+    \alpha_{k+1} = f(\alpha_k,b)
+    \\
+    \alpha_{k+1} = f_0 + F_{\alpha}(\alpha_k - \hat{\alpha_k}) + J_{b}(b-\hat{b})
+    \\
+    \alpha_{k+1} + \delta{\alpha_{k+1}} = f_0 + F_{\alpha}(\alpha_k - \hat{\alpha_k}) + J_{b}(b-\hat{b})+F_{\alpha}\delta{\alpha_{k}} +  J_{b}\delta{b}
+    \\
+     \delta{\alpha_{k+1}} = 
+    F_{\alpha}\delta{\alpha_{k}} +  J_{b}\delta{b}
+$$
+最后发现 $\delta{X}$ 的 $F$ 和 $X(State)$ 的 $F$ 等价
+
+<br>
+IMU 在更新的时候，存在一个逆向的过程，也就是 F从误差状态当中得到的。但是因为等价的原因，就可以用在之后优化的过程中
+<br>
+
+
+
+
+<font color="Red">2020.12.25 添加</font><br>
 在阅读代码的时候发现实际上，一开始担心的雷，也就是每一次涉及到Bias 的线性化，IMU都要重新进行预积分的事情
 <br>
 在代码的时间编写的时候，是把Bias限制在了一个点上，然后Bias变量进行不断的变化。<br>
@@ -100,3 +124,22 @@ VINS 中对于IMU误差项的方差分析，就变成了对IMU的递推的方差
 也是 用CostFunction Evaluate 自己算
 类似 我写的CovCollector
 
+### VINS 预积分中IMU Jaocobian 的更新
+
+松哥，我这里的意思是\
+
+这里
+$$
+    \delta{\alpha}_{k+1} = \delta{\alpha}_k + J_{ba}\delta{b}_a
+$$
+
+如果
+$$
+
+    J^{\delta{\alpha}}_{bak+1}=FJ^{\delta{\alpha}}_{bak}
+$$
+我决定还是很对的
+
+但是如果
+
+    J^{\delta{\alpha}}_{bak+1}=FJ^{\delta{\alpha}}_{bak}

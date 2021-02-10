@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-06 22:52:42
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-07 23:09:35
+ * @LastEditTime: 2021-02-08 08:37:23
  * @Description: 
 -->
 ### 1. 图像去畸变
@@ -38,7 +38,6 @@ $$
         = a_1x_1 +a_2x_2+a_3x_3
     \\
     Axx^T
-
 $$
 
 时间不足，没有想到证明方法
@@ -56,7 +55,6 @@ $$
     y_3 = x_3 \\
     y_2 = x_2 \\
     y_1 = x_1 \\
-
     H= \left[
         \begin{matrix}
             -1&1&0&0\\

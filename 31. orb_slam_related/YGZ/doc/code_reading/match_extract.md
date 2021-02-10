@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-02 17:22:53
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-07 11:18:09
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-10 01:12:42
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/code_reading/match_extract.md
  * @Description主要
 -->
@@ -15,7 +15,8 @@ GFTT 的response\
 
 
 ### SparseImageAlign
-利用五层金字塔图像，进行从粗到细的InverseCompositional 直接法
+利用五层金字塔图像，进行从粗到细的InverseCompositional 直接法\
+但是这里只是算出 mCurrentFrame 的位置，并没有对CurrentFrame 的Key 和 MapPoint 进行填充。\
 
 
 ### InverseCompositional 直接法
@@ -55,3 +56,13 @@ e. Align2D()用ref的方块在cur 寻找合适的匹配\
 
 ### 关于特征的提取
 1. 有了一个变化，左目没有再提取ORB特征，右目继续使用ORB特征，这里的匹配竟然能匹配上也是很神奇。
+
+### TrackLocalMapDirect 
+1. SearchLocalPointsDirect 寻找 子图在CurrentFrame 上面的匹配关系，然后填在CurrentFrame 的mvKey 和mvMapPoint 上面。<br>
+a.1. 先从Cache 内部，进行历遍，如果点不够，走一次SearchLocalMap,填充LocalMap点\
+a.2. 对于每一个MapPoint
+        对于这个MapPoint 的每一个观测做一次 块匹配
+        统计在CurrentFrame 上面的投影平均值
+        填充CurrentFrame的 Key 和 MapPoint
+a.3. PoseOptimization
+        
