@@ -1,10 +1,15 @@
 '''
 Author: Liu Weilong
 Date: 2020-12-25 10:27:13
-LastEditors: Liu Weilong 
-LastEditTime: 2020-12-27 13:14:08
+LastEditors: Liu Weilong
+LastEditTime: 2021-02-11 09:57:13
 FilePath: /3rd-test-learning/30. python_basic/basic.py
 Description: 
+
+    主要内容：
+    1. 基础输入输出
+
+
 '''
 
 print('hello world')

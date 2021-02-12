@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-10 18:12:51
+ * @LastEditTime: 2021-02-10 20:00:41
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -46,8 +46,8 @@ $$
 这里就可以发现，通过不断迭代我们最终可以找到一个不是近似的$J^{X}_b$
 
 <font color="Red">2021.2.10 添加</font>\
-加入 IMU Jacobian 更新部分的讨论\
-这里讨论$\alpha$ 为例
+加入 IMU Jacobian 更新部分的讨论,算是一种近似\
+这里讨论$\alpha$ 为例,忽略掉了白噪声\
 $$
     \alpha_{k+1} = f(\alpha_k,b)
     \\
@@ -58,7 +58,10 @@ $$
      \delta{\alpha_{k+1}} = 
     F_{\alpha}\delta{\alpha_{k}} +  J_{b}\delta{b}
 $$
-最后发现 $\delta{X}$ 的 $F$ 和 $X(State)$ 的 $F$ 等价
+最后发现 $\delta{X}$ 的 $F$ 和 $X(State)$ 的 $F$ 等价\
+迭代的时候就可以直接 J = FJ了 和 论文一致\
+解决了之前一直困扰的 为什么 J_b 的更新一直使用 \deltaX 的 F 的问题\
+
 
 <br>
 IMU 在更新的时候，存在一个逆向的过程，也就是 F从误差状态当中得到的。但是因为等价的原因，就可以用在之后优化的过程中
