@@ -2,7 +2,7 @@
 Author: Liu Weilong
 Date: 2021-02-11 18:48:19
 LastEditors: Liu Weilong
-LastEditTime: 2021-02-12 07:57:42
+LastEditTime: 2021-02-14 15:42:08
 Description: 
 
 主要内容：
@@ -84,7 +84,7 @@ print_user_info3( name = '两点水' , age = 18 , sex = '女', hobby = ('打篮�
 
 
 # 1.5 参数传递  引用传递 和 值传递
-# 只有list 和 dict 是应用传递
+# 只有list 和 dict 是值传递
 def unchange(b):
     b=1000.0
 
@@ -98,3 +98,8 @@ a=[222]
 change(a)
 print(a)
 
+# 1.6 匿名函数 lamda 
+
+sum1 = lambda a,b,c:print(a) return a+b+c;
+
+sum1(1,2,3)
