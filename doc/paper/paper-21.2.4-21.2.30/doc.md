@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-04 15:39:23
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-04 15:57:32
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-16 09:15:03
  * @FilePath: /3rd-test-learning/doc/paper/paper-21.2.4-21.2.30/doc.md
  * @Description: 
 -->
@@ -17,3 +17,14 @@
    Depth Filter
 3. Motion Piror
    直接当作优化项写在SparseImageAligned里面
+
+### Accurate and Robust Scale Recovery for Monocular Visual Odometry
+摘要： 用地面点进行坐标scale 恢复<br>
+内容：<br>
+1. 提取单帧地面点
+2. 汇集多帧地面点
+3. 进行综合的优化
+4. 用 地面点建模的plane 生成一个ratio 进行scale恢复
+
+
+### Leveraging Planar Regularities for Point Line Visual-Inertial Odometry

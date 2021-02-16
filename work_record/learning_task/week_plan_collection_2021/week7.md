@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-07 11:31:59
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-12 18:13:57
+ * @LastEditTime: 2021-02-16 09:19:37
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week7.md
  * @Description: 
 -->
@@ -22,6 +22,8 @@
 8.  完善线性系统小手册     3
 9.  搬运一个前端出来
 10. SO3 SE3 插值 SLERP
+11. neon sse2 优化编写
+12. python 简单入门 
 
 
 2021.2.11<br>
