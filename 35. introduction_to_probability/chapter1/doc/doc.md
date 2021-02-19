@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-07 14:09:32
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-08 10:53:48
+ * @LastEditTime: 2021-02-19 12:20:57
  * @FilePath: /3rd-test-learning/35. introduction_to_probability/chapter1/doc/doc.md
  * @Description: 
 -->
@@ -18,7 +18,7 @@
 3.a. Multiplication rule a个subset 然后每个有b种可能，一共 ab 种可能。\
 这里直接涉及到，有顺序和无顺序的问题\
 还有就是 subset 有重叠和无重叠的问题\
-可以先考虑有熟悉,然后再考虑无顺序会简单很多\
+可以先考虑有顺序,然后再考虑无顺序会简单很多\
 3.b. Sampling with/without replacement\
 i.e. Birthday Problem  5个人里有两个人同一天生日\
 $$
@@ -143,3 +143,9 @@ tips：Bose-Einstein 并不合适naive definition of probability 因为各种情
    Commitee and teams 的故事\
     i.e. 
 
+### 总结：如何数数
+1. 学会对问题对象进行标记，先有顺序，再无顺序，先无重复，再有重复
+2. 朴素的概率
+3. Multiple rule      a个subset  每个有b种情况，一共 多少种情况                    适合朴素的概率
+4. Binomial Condinator 无顺序         不适合朴素的概率
+5. Bose-Einsterin Problem 无顺序的方法 不适合朴素的概率
