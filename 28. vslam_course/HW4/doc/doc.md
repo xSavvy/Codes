@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-06 22:52:42
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-08 08:37:23
+ * @LastEditTime: 2021-02-20 17:24:24
  * @Description: 
 -->
 ### 1. 图像去畸变
@@ -23,24 +23,18 @@ $$
     \frac{dx^TAx}{dx} = 2A
 $$
 3. 
+<font color = "Red">
+作业修改的部分
+</font><br>
+使用矩阵迹的一个性质
 $$
-    x^TAx = tr(Axx^T)
-    Ax = \left[
-        \begin{matrix}
-        a_1 &a_2 &a_3
-        \end{matrix}
-        \right]
-        \left[
-        \begin{matrix}
-        x_1 &x_2 &x_3
-        \end{matrix}
-        \right]
-        = a_1x_1 +a_2x_2+a_3x_3
-    \\
-    Axx^T
+    \operatorname{tr}(ABC) = \operatorname{tr}(BCA)
 $$
 
-时间不足，没有想到证明方法
+最终可以得到
+$$
+        x^TAx=\operatorname{tr}(x^TAx) = \operatorname{tr}(Axx^T)
+$$
 
 ### 4. GN 优化
 最终结果:

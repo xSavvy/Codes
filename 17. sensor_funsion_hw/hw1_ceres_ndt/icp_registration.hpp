@@ -2,13 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-12 21:27:47
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-04 08:21:33
+ * @LastEditTime: 2021-02-21 22:04:01
  * @Description: 
  */
 #pragma once
 #include "pcl/registration/gicp.h"
-#include "lidar_localization/models/registration/registration_interface.hpp"
-#include "glog/logging.h"
 #include "ceres/ceres.h"
 #include "pcl/kdtree/kdtree_flann.h"
 #include "pcl/io/pcd_io.h"

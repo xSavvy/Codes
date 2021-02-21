@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-07 14:09:32
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-19 12:20:57
+ * @LastEditTime: 2021-02-19 12:22:05
  * @FilePath: /3rd-test-learning/35. introduction_to_probability/chapter1/doc/doc.md
  * @Description: 
 -->
@@ -143,7 +143,7 @@ tips：Bose-Einstein 并不合适naive definition of probability 因为各种情
    Commitee and teams 的故事\
     i.e. 
 
-### 总结：如何数数
+### <font color="Red">总结：如何数数</font>
 1. 学会对问题对象进行标记，先有顺序，再无顺序，先无重复，再有重复
 2. 朴素的概率
 3. Multiple rule      a个subset  每个有b种情况，一共 多少种情况                    适合朴素的概率
