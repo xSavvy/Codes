@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 08:54:24
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 15:11:53
- * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/ORB_extract_and_match.md
+ * @LastEditTime: 2021-02-22 13:05:16
+ * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_extract_and_match.md
  * @Description: 
 -->
 ### ORB 提取
@@ -50,7 +50,7 @@ https://zhuanlan.zhihu.com/p/61738607
 -----
 1.a. SearchByProjection Used in TrackWithMotionModel<br>
 a.1. 进行帧间Project 投影<br>
-a.2. 根据前后移动 判断 Forward Backward NotSure 三种情况，按照情况判断进行SearchInArea<br>
+a.2. 根据前后移动 判断 Forward Backward NotSure 三种情况，按照情况判断进行SearchInArea,寻找匹配的candidate<br>
 a.3. DescriptorDist 计算<br>
 a.4. DescriptorAngleConsistency 判断<br>
      计算两帧之前所有对应点的FastAngle差别，最后只取，histogram中最大段区间中的匹配点<br>

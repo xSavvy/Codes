@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-10-26 07:16:54
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-21 22:30:47
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-02-22 10:54:35
  * @Description: 主要是为了测试和学习LocalParameter 
  *              
  *               ie.   Analystic Diff SE3 上的优化
@@ -186,8 +186,6 @@ bool ICPRegistrationSingle(pcl::PointCloud<pcl::PointXYZ>::Ptr t_pc_ptr,pcl::KdT
         options.max_num_iterations = 30;
         options.function_tolerance = 1e-3;
         
-        
-
         // 这个Solve 和那个不能用的solve 看起来还是有区分度的
         ceres::Solve(options,&problem,&summary);
         // std::cout<<summary.BriefReport()<<endl;
@@ -322,10 +320,7 @@ int main()
     EigenToPCL(t,*t_p);
 
     // DrawTrajectory(gt,t);
-
     
-
-
     pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree(new pcl::KdTreeFLANN<pcl::PointXYZ>());
     
 

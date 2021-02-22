@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-04 15:39:23
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-16 09:15:03
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-02-22 14:44:50
  * @FilePath: /3rd-test-learning/doc/paper/paper-21.2.4-21.2.30/doc.md
  * @Description: 
 -->
@@ -28,3 +28,15 @@
 
 
 ### Leveraging Planar Regularities for Point Line Visual-Inertial Odometry
+
+
+
+### Online Temporal Calibration of Camera and IMU using Nonlinear Optimization
+在进行IMU误差分析的时候，将$\DeltaT$引入进行误差分析
+
+### Online Temporal Calibration for Monocular Visual-Inertial Systems
+利用匀速假设在优化的时候调整 p2d(u,v) 在像素平面上的位置。最终优化得到td   <br>
+优化公式
+$$
+   e = p_{2d(u,v)} - \pi{p_{3d(x,y,z)}}
+$$

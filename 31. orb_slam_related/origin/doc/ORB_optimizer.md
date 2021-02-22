@@ -2,11 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 10:38:09
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-29 13:59:54
- * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/ORB_optimizer.md
+ * @LastEditTime: 2021-02-22 12:21:10
+ * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_optimizer.md
  * @Description: 
 -->
-### ORB Optimizer 
+### ORB Optimizer 是几何上的优化 而不是图像灰度上的优化
 PoseOptimization、LocalBundleAdjustment<br>
 老生常谈的重投影误差<br>
 不进一步展开了<br>
