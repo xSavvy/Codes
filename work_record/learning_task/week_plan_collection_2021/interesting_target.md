@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 16:41:49
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-01 15:45:54
+ * @LastEditTime: 2021-02-23 15:17:11
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/interesting_target.md
  * @Description: 
 -->
@@ -17,3 +17,4 @@
 8. 旋转平均 平移平均 三维重建的概念
 9. BlockMatching
 10. Python 风变编程
+11. 设计SLAM流程  

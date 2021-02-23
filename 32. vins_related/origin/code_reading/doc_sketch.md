@@ -1,9 +1,9 @@
 <!--
  * @Author: Liu Weilong
- * @Date: 2021-01-28 08:56:06
+ * @Date: 2021-02-23 09:30:56
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-23 13:11:19
- * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/doc_sketch.md
+ * @LastEditTime: 2021-02-23 13:15:46
+ * @FilePath: /3rd-test-learning/32. vins_related/origin/code_reading/doc_sketch.md
  * @Description: 
 -->
 ### 代码框架整理内部
@@ -13,7 +13,7 @@
 
 序号|模块名|对应doc|状态
 ---|---|----|----
-1. |特征提取|                ORB_extract_and_match.md|完成
+1. |特征提取|                vins_feature_tracker.md|完成
 2. |Odometry Matching|      ORB_tracking.md  + ORB_extract_and_match.md|完成
 3. |特征管理  |              ORB的特征管理分散在 Tracking 和 Mapping当中，有些混乱|完成
 4. |Mapping Matching|       ORB_mapping.md + ORB_extract_and_match.md|完成

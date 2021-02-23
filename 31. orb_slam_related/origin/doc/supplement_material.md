@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 09:58:50
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-01 10:09:27
- * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/supplement_material.md
+ * @LastEditTime: 2021-02-23 15:11:22
+ * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/supplement_material.md
  * @Description: 
  * 
 -->
@@ -14,7 +14,7 @@ https://blog.csdn.net/jessecw79/article/details/82945918#control_points_64 \
 https://zhuanlan.zhihu.com/p/59070440
 
 ------
-<font color = "Red"> 目的：从3D-2D 匹配关系里面得到Transform</font>
+<font color = "Red"> 目的：从3D-2D 匹配关系里面得到Transform</font><br>
 基础1：
 $$
     p_i^w = \sum_{j=1}^{4}\alpha_{ij}c_j^{w}\\
@@ -64,7 +64,8 @@ $$
     &=\sum_{j=1}^{4}\alpha_{ij}c_j^{c}
     \end{aligned}
 $$
-可见$\alpha$关系从world 坐标系带到了camera坐标系
+<font color="Red">可见$\alpha$关系从world 坐标系带到了camera坐标系,这里是从2D算出$c^{c}$的关键</font>
+
 
 -----
 正文开始：<br>
@@ -132,7 +133,14 @@ $$
    且存在匹配关系，可以直接ICP出最终结果<br>
 
 -----
-ORB用这个进行几何校验
+ORB用EPnP+RANSAC进行几何校验<br>
+问题1：<br>
+为什么EPnP 需要有3个
+
+
+
+
+
 
 ### Sim3 群
 未完待续
