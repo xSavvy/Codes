@@ -2,14 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-20 22:07:19
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 22:32:19
+ * @LastEditTime: 2021-02-23 08:28:49
  * @Description: 
  */
 #include "linear_list.h"
-
+#include "assert.h"
 class Item
 {
     public:
+    Item():a(9999),b(9999){}
+    Item(int a_t,int b_t=1000):a(a_t),b(b_t){}
+
     bool operator==(const Item & item)
     {
         if(a==item.a&&b ==item.b)
@@ -19,59 +22,70 @@ class Item
     int a,b;
 };
 
-template <typename T>
-class SequenceList:public LinearList<T>
+template <typename T1>
+class SequenceList:public LinearList<T1>
 {
     public:
-
     SequenceList(size_t capacity);
     virtual bool Init()  override ;
     virtual bool Destroy()  override;
     virtual bool ClearList()  override;
-    virtual bool GetElem(size_t idx, T &e) const override;
-    virtual bool LocateElem(const T & e,size_t & idx)const  override;
-    virtual bool PriorElem(const T & cur_e, T & pre_e)const  override;
-    virtual bool NextElem(const T & cur_e, T & next_e) const override;
-    virtual bool InsertElem(size_t idx, const T & e)  override;
-    virtual bool DeleteElem(size_t idx, T & e)  override;
-    virtual bool Traverse(std::function<void(T&)> f)  override;
-    T * pool_;
+    virtual bool GetElem(size_t idx, T1 &e) const override;
+    virtual bool LocateElem(const T1 & e,size_t & idx)const  override;
+    virtual bool PriorElem(const T1 & cur_e, T1 & pre_e)const  override;
+    virtual bool NextElem(const T1 & cur_e, T1 & next_e) const override;
+    virtual bool InsertElem(size_t idx, const T1 & e)  override;
+    virtual bool DeleteElem(size_t idx, T1 & e)  override;
+    virtual bool Traverse(std::function<void(T1&)> f)  override;
+    const T1 * data_c() const{return pool_;}
+    T1 * data() {return pool_;}
+    T1 * pool_;
 };
 
 
-template<typename T>
-SequenceList<T>::SequencesList(size_t capacity):LinearList<T>(capacity){Init();}
+template<typename T1>
+SequenceList<T1>::SequenceList(size_t capacity):LinearList<T1>(capacity){Init();}
 
-template<typename T>
-bool SequenceList<T>::Init()
+template<typename T1>
+bool SequenceList<T1>::Init()
 {
-    pool_ = new T[capacity_]();
-    length_ = 0;
+    pool_ = new T1[this->capacity_]();
+    this->length_ = 0;
     cout<<"the SequenceList init "<<endl;
 }
 
-template<typename T>
-bool SequenceList<T>::Destroy()
+template<typename T1>
+bool SequenceList<T1>::Destroy()
 {
     delete [] pool_;
-}
-
-template<typename T>
-bool SequenceList<T>::GetElem(size_t idx, T &e) const
-{
-    if(!CheckIdx(idx))
-    return false;
-    e = T[idx];
+    this->capacity_ = 0;
+    this->length_ = 0;
     return true;
 }
 
-template<typename T>
-bool SequenceList<T>::LocateElem(const T & e,size_t & idx)const
+template<typename T1>
+bool SequenceList<T1>::ClearList() 
 {
-    if(!CheckIdx(idx))
+    LinearList<T1>::ClearList();
+    Destroy();
+    pool_ = new T1[this->capacity_]();
+    this->length_ = 0;
+    return true;
+}
+
+template<typename T1>
+bool SequenceList<T1>::GetElem(size_t idx, T1 &e) const
+{
+    if(!this->CheckIdx(idx))
     return false;
-    
-    for(size_t i=0;i<length_;i++)
+    e = pool_[idx];
+    return true;
+}
+
+template<typename T1>
+bool SequenceList<T1>::LocateElem(const T1 & e,size_t & idx)const
+{ 
+    for(size_t i=0;i<this->length_;i++)
     {
         if(pool_[i]==e)
         {
@@ -82,8 +96,8 @@ bool SequenceList<T>::LocateElem(const T & e,size_t & idx)const
     return false;
 }
 
-template<typename T>
-bool SequenceList<T>::PriorElem(const T & cur_e, T & pre_e)const
+template<typename T1>
+bool SequenceList<T1>::PriorElem(const T1 & cur_e, T1 & pre_e)const
 {
     size_t idx =0;
     bool ok = LocateElem(cur_e,idx);
@@ -93,26 +107,27 @@ bool SequenceList<T>::PriorElem(const T & cur_e, T & pre_e)const
     return true;
 }
 
-template<typename T>
-bool SequenceList<T>::NextElem(const T & cur_e, T & next_e) const
+template<typename T1>
+bool SequenceList<T1>::NextElem(const T1 & cur_e, T1 & next_e) const
 {
     size_t idx =0;
     bool ok = LocateElem(cur_e,idx);
-    if(idx==(length_-1)||!ok)
+    if(idx==(this->length_-1)||!ok)
     return false;
     GetElem(idx+1,next_e);
     return true;
 }
 
-template<typename T>
-bool SequenceList<T>::InsertElem(size_t idx, const T & e) 
+template<typename T1>
+bool SequenceList<T1>::InsertElem(size_t idx, const T1 & e) 
 {
-    if(!CheckIdx(idx)&& length_!=0)
+    if(!this->CheckIdx(idx)&& this->length_!=0)
     return false;
-    if(length_==capacity_)
+    assert(this->length_<=this->capacity_);
+    if(this->length_==this->capacity_)
     return false;
-    length_++;
-    for(size_t i = length_-1;i!=idx,i--)
+    this->length_++;
+    for(size_t i = this->length_-1;i!=idx;i--)
     {
         pool_[i] = pool_[i-1];
     }
@@ -120,26 +135,26 @@ bool SequenceList<T>::InsertElem(size_t idx, const T & e)
     return true;
 }
 
-template<typename T>
-bool SequenceList<T>::DeleteElem(size_t idx, T & e)
+template<typename T1>
+bool SequenceList<T1>::DeleteElem(size_t idx, T1 & e)
 {
-    if(!CheckIdx(idx))
+    if(!this->CheckIdx(idx))
     return false;
 
     e=pool_[idx];
     
-    for(size_t i = idx;i<(length_-1);i++)
+    for(size_t i = idx;i<(this->length_-1);i++)
     {
         pool_[i] = pool_[i+1];
     }
-    length_--;
+    this->length_--;
     return true;    
 }
 
-template<typename T>
-bool SequenceList<T>::Traverse(std::function<void(T&)> f)
+template<typename T1>
+bool SequenceList<T1>::Traverse(std::function<void(T1&)> f)
 {
-    for(size_t i=0;i<length_;i++)
+    for(size_t i=0;i<this->length_;i++)
     {
         f(pool_[i]);
     }

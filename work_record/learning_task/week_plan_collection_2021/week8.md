@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-21 22:40:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-21 22:40:59
+ * @LastEditTime: 2021-02-23 07:26:20
  * @Description: 
 -->
 ### main task
@@ -19,3 +19,4 @@
 10. neon sse2 优化编写
 11. 欠帐系统编程
 12. 线特征优化尝试
+13. 算法week2            1

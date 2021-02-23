@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-20 21:42:24
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-21 22:33:40
+ * @LastEditTime: 2021-02-22 19:51:37
  * @Description: 
  */
 #include <iostream>
@@ -13,7 +13,6 @@ template<typename T>
 class LinearList
 {
     public:
-
     LinearList(size_t capacity):capacity_(capacity){}
     virtual bool Init() =0 ;
     virtual bool Destroy() =0;

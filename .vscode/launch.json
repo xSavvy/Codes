@@ -15,7 +15,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/lwl/workspace/3rd-test-learning/28. vslam_course/HW5/code/build/GN",
+            "program": "/home/lwl/workspace/3rd-test-learning/29. algothrim_and_data_structure/week2/code/build/sequence_list_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
