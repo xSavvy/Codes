@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-20 21:42:24
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-23 20:50:13
+ * @LastEditTime: 2021-02-23 21:05:27
  * @Description: 
  */
 #include <iostream>
@@ -12,8 +12,8 @@ using namespace std;
 class Item
 {
     public:
-    Item():a(9999),b(9999){pnext = nullptr; pfront = nullptr;}
-    Item(int a_t,int b_t=1000):a(a_t),b(b_t){pnext = nullptr; pfront = nullptr;}
+    Item():a(9999),b(9999){}
+    Item(int a_t,int b_t=1000):a(a_t),b(b_t){}
 
     bool operator==(const Item & item)
     {
@@ -22,12 +22,17 @@ class Item
         return false;
     }
     int a,b;
-
-    Item * pnext, *pfront;
 };
 
 
+class Node
+{
+    public:
+    Item content_;
+    Node * pnext_;
+};
 
+typedef Node* Linklist;
 
 template<typename T>
 class LinearList

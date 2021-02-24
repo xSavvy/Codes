@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-21 22:32:39
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-23 08:37:07
+ * @LastEditTime: 2021-02-23 20:33:24
  * @Description: 
  */
 #include "sequence_list.h"
@@ -63,5 +63,7 @@ int main()
     
     // 
     
-    sl.Traverse
+    sl.Traverse(sum);
+
+    showItem(sl);
 }

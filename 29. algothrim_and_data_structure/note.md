@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-23 07:25:43
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-23 07:40:30
+ * @LastEditTime: 2021-02-24 21:55:31
  * @Description: 
 -->
 ###  week2 
@@ -12,3 +12,7 @@
    a.2. 模板示例化阶段，和模板有关的对象开始进行查找<br>
 2. 子类中，调用基类。<br>
    LinearList\<T1>::ClearList()
+
+###  week3
+1. 继承一个模板导致编译不通过的情况。<br>
+   尴尬，最后发现是因为一些函数没有进行定义，导致有的函数是pure virtual 的原因。<br>

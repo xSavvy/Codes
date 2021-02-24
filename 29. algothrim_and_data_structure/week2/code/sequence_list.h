@@ -2,25 +2,12 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-20 22:07:19
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-23 08:28:49
+ * @LastEditTime: 2021-02-23 20:47:02
  * @Description: 
  */
 #include "linear_list.h"
 #include "assert.h"
-class Item
-{
-    public:
-    Item():a(9999),b(9999){}
-    Item(int a_t,int b_t=1000):a(a_t),b(b_t){}
 
-    bool operator==(const Item & item)
-    {
-        if(a==item.a&&b ==item.b)
-        return true;
-        return false;
-    }
-    int a,b;
-};
 
 template <typename T1>
 class SequenceList:public LinearList<T1>
