@@ -1,0 +1,40 @@
+test_pipeline
+    |__ RunFromFolder
+        |__ vo_.addImage()   VO 入口
+vo.addImage()
+    |__ startFrameProcessingCommon(timestamp) 时间戳 check
+    |__ CreatePyrmird 初始化特征点 + 建立图像金字塔
+    |__ 是整个系统第一个图像 processFirstFrame()
+        |__ addFirstFrame()
+        |__ setKeyFrame()
+    |__ 是整个系统第二个图像 processSecondFrame()
+        |__ addSecondFrame()
+        |__ 
+    |__ 
+
+
+=============================
+addFirstFrame\ 均来自于KltHomographyInit
+
+KltHomographyInit
+    |__ 重要member
+        |__ px_cur_\px_prev_\px_ref_ 用法存疑
+        |__ frame_ref_    用于Track 的Frame
+        |__ 
+    |__ addFirstFrame()
+        |__ detectFeatures() 提取针对的金字塔层数存疑？？ 为每一个点建立种子
+        |__ CheckFeatureNum\CheckCenterFeatureNum 检查特征数量和图像中间特征的数量 可以结合 ORB Fast 的角度 作为一种预处理 
+    |__ addSecondFrame()
+        |__ trackKlt()
+        |__ CheckDisparity()
+        |__ 通过Disparity 选择 H E 的选择，进行RANSAC inliner 选择
+    
+
+
+
+
+
+
+
+
+

@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-04 09:16:13
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-23 18:06:57
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-25 08:28:30
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/Theory.md
  * @Description: 
 -->
@@ -130,8 +130,8 @@ tips: 关于代码中的Jacobian的问题 SparseImageAlign 负号组合进了 J
 Align2D 的 J_I 负号没有组合进去 所以最后更新Warp 的时候是直接加而不是减
 做的时候似乎都是在和金字塔有关。具体实现有些忘记了<br>
 
-
+</font color = "Red">2021.2.23添加</font><br>
 大概知道维和感是从哪里来的了<br>
-SparseImageAlign 是围绕灰度的图像误差项
-Align2D 最后的优化是围绕着2d-3d的几何误差项
+SparseImageAlign 是围绕灰度的图像误差项<br>
+Align2D 最后的优化是围绕着2d-3d的几何误差项<br>
 Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 对应的灰度

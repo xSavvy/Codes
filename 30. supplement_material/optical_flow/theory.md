@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-02 15:44:46
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-02 17:12:08
+ * @LastEditTime: 2021-02-24 10:07:29
  * @FilePath: /3rd-test-learning/30. supplement_material/optical_flow/theory.md
  * @Description: 
 -->
@@ -115,3 +115,42 @@ $$
 ---------
 
 <font color="Red">这里也是证明了只要W是一个群就可以为所欲为。</font>
+
+
+<font color = "Red">2021.2.23 更新</font><br>
+在阅读论文 光流20年的时候大概知道了，
+真正的公式推导应该是
+$$
+    \underset{T}{\sum} I(W(W(x;\Delta{p});p))-T(x)
+\\
+\downarrow y=W(x;\Delta p)
+\\
+\underset{W(T;\Delta p)}{\sum} I(W(y;p)) - T(W^{-1}(y;\Delta p))
+\\
+\downarrow \Delta p \rightarrow 0, W(x;\Delta p) = x
+\\
+\underset{T}{\sum} I(W(y;p)) - T(W^{-1}(y;\Delta p)) 
+$$
+至于为什么差了一个符号，还可以在直接法当中使用？
+因为存在
+$$
+    W^{-1}(x;\Delta p) = W(x;-\Delta p)
+$$
+这个值$\Delta p$可以在更新的时候换一个正负号就可以补上。<br>
+所以可以写成如下的形式
+
+$$
+    \underset{p}{argmin}\sum[I(W(x;p))-T(W(x;\Delta{p}))]^{2}
+    \\
+    W(x;p) =\pi{(\exp(p)x)}
+$$
+
+<font color = "Red">进一步进行拓展：</font><br>
+四种方法耗时：<br>
+![](./picture/4.png)
+四种方法Warp的条件：<br>
+![](./picture/5.png)
+四种方法对于噪声的鲁棒性:<br>
+![](./picture/6.png)
+
+最后的结论是，Forward method 虽然耗时要大得多，但是对于噪声会更加鲁棒。

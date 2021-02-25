@@ -6,6 +6,10 @@ message(STATUS "This is SOURCE dir "${PROJECT_SOURCE_DIR})
 
 include_directories(include)
 set(libhello_src src/hello.cpp)
+
+# 设置库产生的位置
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 # 生成名称相同的动态库和静态库
 add_library(hello SHARED ${libhello_src})
 add_library(hello_static STATIC ${libhello_src})
