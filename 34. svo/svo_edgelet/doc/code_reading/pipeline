@@ -10,7 +10,11 @@ vo.addImage()
     |__ 是整个系统第二个图像 processSecondFrame()
         |__ addSecondFrame()
         |__ 
-    |__ 
+    |__ 剩下的情况 processFrame()
+        |__ SparseImageAlign()
+        |__ Align2D()
+        |__ PoseOptimization()
+        |__ StructureOptimization()
 
 
 =============================
@@ -18,16 +22,18 @@ addFirstFrame\ 均来自于KltHomographyInit
 
 KltHomographyInit
     |__ 重要member
-        |__ px_cur_\px_prev_\px_ref_ 用法存疑
+        |__ px_cur_\px_prev_\px_ref_  这个应该是实际pixel存储
         |__ frame_ref_    用于Track 的Frame
-        |__ 
+        |__ f_ref_ f_cur_   这个是keypoint 的归一化坐标
+        |__ disparities_    xy 上的视差都有保存
+        |__ ftr_type_       Vector3f 前xy是梯度值，z表示类型 1 是 edgelet 0 是普通的点
     |__ addFirstFrame()
         |__ detectFeatures() 提取针对的金字塔层数存疑？？ 为每一个点建立种子
         |__ CheckFeatureNum\CheckCenterFeatureNum 检查特征数量和图像中间特征的数量 可以结合 ORB Fast 的角度 作为一种预处理 
     |__ addSecondFrame()
         |__ trackKlt()
         |__ CheckDisparity()
-        |__ 通过Disparity 选择 H E 的选择，进行RANSAC inliner 选择
+        |__ 通过Disparity 选择 H E 的选择 小视差用H 大视差用E，进行RANSAC inliner 选择
     
 
 

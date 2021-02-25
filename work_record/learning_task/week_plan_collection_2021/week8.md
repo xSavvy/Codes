@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-21 22:40:51
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-25 07:59:30
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-02-25 15:12:53
  * @Description: 
 -->
 ### main task
@@ -12,7 +12,7 @@
 1.  |四元数的问题||          1 
 2.  |矩阵指数|完成|
 3.  |SVO Inverse Compostional的理解|完成|
-4.  |深度滤波|   |
+4.  |深度滤波|短时间内很难完成|
 5.  |重新理解Error State ||4 
 6.  |VINS-Mono 代码阅读||   2 
 7.  |完善线性系统小手册|完成|
