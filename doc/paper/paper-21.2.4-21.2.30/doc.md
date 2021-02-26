@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 15:39:23
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-22 14:44:50
+ * @LastEditTime: 2021-02-26 09:41:33
  * @FilePath: /3rd-test-learning/doc/paper/paper-21.2.4-21.2.30/doc.md
  * @Description: 
 -->
@@ -40,3 +40,5 @@
 $$
    e = p_{2d(u,v)} - \pi{p_{3d(x,y,z)}}
 $$
+
+### Video-based, Real-Time Multi View Stereo

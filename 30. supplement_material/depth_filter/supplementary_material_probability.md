@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-25 10:59:33
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-25 14:16:46
+ * @LastEditTime: 2021-02-26 14:47:05
  * @FilePath: /3rd-test-learning/30. supplement_material/depth_filter/supplementary_material_probability.md
  * @Description: 
 -->
@@ -35,7 +35,14 @@
     \operatorname{Beta(a,b)} = p(theta|a,b) = \cfrac{\theta^{a-1}(1-\theta)^{b-1}}{B(a,b)}\propto \theta^{a-1}(1-\theta)^{b-1}
    $$
    $B(a,b)$只是为了进行归一化
-   Beta分布是将在1. 中固定的$\theta$ 用一个分布来进行表示。a和b 就是01的假定次数。
+   Beta分布是将在1. 中固定的$\theta$ 用一个分布来进行表示。a和b 就是01的假定次数。<br>
+   <font color="Red">2021.2.16添加:</font><br>
+   $$
+   B(a.b) = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+   \\
+   \Gamma(a) = a!
+
+   $$
 3. Beta分布的Conjugate Piror to Binomial属性<br>
    $$
    \begin{aligned}
@@ -51,4 +58,11 @@
    \end{aligned}
    $$
    依旧是一个Beta 分布
-4. 从Binomial 到 Gamma 分布<br>
+4. Gamma 分布<br>
+   Gamma分布对于正整数来看 = $n!$<br>
+   也就是n个人有多少种排列方式<br>
+5. B分布<br>
+   B分布:
+   $$
+      B(a,b) = \cfrac{\Gamma(a)\Gamma(b){\Gamma(a+b)}
+   $$
