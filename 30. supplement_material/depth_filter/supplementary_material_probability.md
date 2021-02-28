@@ -64,5 +64,5 @@
 5. B分布<br>
    B分布:
    $$
-      B(a,b) = \cfrac{\Gamma(a)\Gamma(b){\Gamma(a+b)}
+      B(a,b) = \cfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
    $$

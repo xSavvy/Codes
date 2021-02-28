@@ -1,13 +1,16 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-25 13:30:00
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-26 15:55:17
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-02-27 22:09:24
  * @FilePath: /3rd-test-learning/30. supplement_material/depth_filter/supplementary_material_depth_filter.md
  * @Description: 
 -->
 ### 参考
 https://www.cnblogs.com/ilekoaiq/p/8228324.html
+
+<font color="Red">遗留问题：</font>
+存疑的问题2
 
 ### 问题理解
 输入：多次对于同一个KeyPoint 的深度观测<br>
@@ -171,7 +174,9 @@ $$
 具体计算见depth_filter.pdf
 
 ### 存疑的问题 
-1. 为什么可以通过一二阶矩进行近似？ 单峰似乎是可以的，但是多峰的情况呢？
-答：上面的近似满足条件$Beta_1×Gaussian_1 + Beta_2×Gaussian_2$ 和$Beta_{target}×Gaussian_{target}$的峰相差不远，可以近似出一个单峰分布。
+1. 为什么可以通过一二阶矩进行近似？ 单峰似乎是可以的，但是多峰的情况呢？<br>
+答：<br>
+   1.Beta×Gaussian是一个单峰二维分布。上面的近似满足条件$Beta_1×Gaussian_1 + Beta_2×Gaussian_2$ 和$Beta_{target}×Gaussian_{target}$的峰相差不远，可以近似出一个单峰分布。<br>
+   2.一二阶矩的拟合构成的方程已经足够构造拟合Beta×Gaussian<br>
 2. 为什么可以默认$p(\hat{Z},\pi|X_n)$符合Beta×Gaussian 分布？
-也就是说 http://george-vogiatzis.org/publications/ivcj2010supp.pdf 推断的部分我没有看懂
+也就是说 http://george-vogiatzis.org/publications/ivcj2010supp.pdf 推断的部分我没有看懂，存在知识点上的缺少，需要statistic inference chapter10.1的内容

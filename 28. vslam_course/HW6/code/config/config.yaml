@@ -1,0 +1,6 @@
+%YAML:1.0
+
+
+TrackerBaseOptions.Level: 7
+TrackerBaseOptions.TemplateSize: 8
+TrackerBaseOptions.Scale: 0.7
