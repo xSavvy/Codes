@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-01 13:12:18
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-01 16:31:38
+ * @LastEditTime: 2021-03-01 17:48:26
  * @FilePath: /3rd-test-learning/34. svo/edgelet/paper.md
  * @Description: 
 -->
@@ -14,3 +14,7 @@
 5.  A realtime tracker for markerless augmented reality
 6.  Combining edge and texture information for real-time accurate 3d camera tracking
 7.  Going out: robust model-based tracking for outdoor augmented reality
+
+
+### Vanishing Point:
+Auto-rectification of user photos

@@ -1,8 +1,11 @@
 project(tracker)
 cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_CXX_FLAGS "-std=c++14 -o3")
-set(CMAKE_BUILD_TYPE  "Debug")
+add_definitions("-DENABLE_SSE")
+set(CMAKE_CXX_FLAGS "-std=c++14 -o3 ${SSE_FLAGS} -g")
+set(CMAKE_BUILD_TYPE  "Release")
+
+message("sse: " ${SSE_FLAGS})
 
 include_directories(.)
 
@@ -15,3 +18,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_executable(test_common  test_common.cpp)
 add_executable(test_case test_case.cpp)
+add_executable(test_df test_double_float.cpp)
