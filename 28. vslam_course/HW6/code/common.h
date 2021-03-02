@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:30:44
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-28 20:11:34
+ * @LastEditTime: 2021-03-02 07:37:27
  * @Description: 
  */
 
@@ -39,7 +39,8 @@ void eigen2cv(const vector<Eigen::Vector2d,Allocator> & input,
         output.push_back(cv::Point2f(p.x(),p.y()));
 }
 
-void DrawCorners(cv::Mat & img, std::vector<cv::Point2f> & corners, const cv::Scalar & color = cv::Scalar(0,255,0))
+void DrawCorners(cv::Mat & img, std::vector<cv::Point2f> & corners,
+                 const cv::Scalar & color = cv::Scalar(0,255,0))
 {
     const float r = 5;
     int idx =0;
@@ -56,6 +57,12 @@ void DrawCorners(cv::Mat & img, std::vector<cv::Point2f> & corners, const cv::Sc
                                     color, 1, 5);
         idx ++;
     }
+}
+
+void DrawCornersWithLine(cv::Mat & img, std::vector<cv::Point2f> & corners,const std::vector<bool> & success,
+                         const cv::Scalar & color = cv::Scalar(0,255,0))
+{
+    
 }
 
 inline float GetPixelValue(const cv::Mat &img, double x, double y) {

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-28 17:59:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-28 21:51:15
+ * @LastEditTime: 2021-03-02 08:28:14
  * @Description: 
  */
 #include "tracker_base.h"
@@ -28,35 +28,38 @@ class LKtracker:public TrackerBase
 
 void LKtracker::Impl()
 {
-    Corners t_pre_corners,t_cur_corners;
-    t_cur_corners.reserve(pre_corners_.size());
-    t_pre_corners.reserve(pre_corners_.size());
-    vector<float> scale_array;
-    scale_array.reserve(options_ptr_->level_);
-    scale_array.push_back(1.0);
+    // Corners t_pre_corners,t_cur_corners;
+    // t_cur_corners.reserve(pre_corners_.size());
+    // t_pre_corners.reserve(pre_corners_.size());
+    // vector<float> scale_array;
+    // scale_array.reserve(options_ptr_->level_);
+    // scale_array.push_back(1.0);
 
-    for(int i=1;i<options_ptr_->level_;i++)
-        scale_array.push_back(scale_array[i]*options_ptr_->scale_);
+    // for(int i=1;i<options_ptr_->level_;i++)
+    //     scale_array.push_back(scale_array[i-1]*options_ptr_->scale_);
 
-    for(int i =0;i<pre_corners_.size();i++)
-    {
-        Eigen::Vector2d p = pre_corners_[i]*scale_array.back();
-        t_pre_corners.push_back(p);
-        t_cur_corners.push_back(p);
-    }
-    double larger = 1.0/options_ptr_->scale_;
-    for(int i = scale_array.size()-1;i<0;i--)
-    {
-        LKSingleLayer(pyr_pre_img_[i],pyr_pre_img_[i],t_pre_corners,t_cur_corners,success_);
-        if(i!=0)
-        {
-            for(auto &p:t_pre_corners) p *= larger;
-            for(auto &p:t_cur_corners) p *= larger;
-        }
-    }
+    // for(int i =0;i<pre_corners_.size();i++)
+    // {
+    //     Eigen::Vector2d p = pre_corners_[i]*scale_array.back();
+    //     t_pre_corners.push_back(p);
+    //     t_cur_corners.push_back(p);
+    // }
+    // double larger = 1.0/options_ptr_->scale_;
+    // for(int i = scale_array.size()-1;i>=0;i--)
+    // {
+    //     LKSingleLayer(pyr_pre_img_[i],pyr_pre_img_[i],t_pre_corners,t_cur_corners,success_);
+    //     if(i>0)
+    //     {
+    //         for(auto &p:t_pre_corners) p *= larger;
+    //         for(auto &p:t_cur_corners) p *= larger;
+    //     }
+    // }
 
-    for(auto & p :t_cur_corners)
-    cur_corners_.push_back(p);
+    // for(auto & p :t_cur_corners)
+    // cur_corners_.push_back(p);
+    cur_corners_ = pre_corners_;
+
+    LKSingleLayer(pre_img_,cur_img_,pre_corners_,cur_corners_,success_);
 }
 
 void LKtracker::LKSingleLayer(cv::Mat pre_img,cv::Mat cur_img,
@@ -64,12 +67,10 @@ void LKtracker::LKSingleLayer(cv::Mat pre_img,cv::Mat cur_img,
                               std::vector<bool> & success,
                               bool inverse, bool has_initial)
 {
-    omp_set_num_threads(4);
-    success.resize(pre_corners_.size(),false);
-    #pragma omp parallel for 
-    for (int i = 0; i < pre_corners_.size(); i++)
+    success.resize(pre_corners.size(),false);
+    for (int i = 0; i < pre_corners.size(); i++)
     {
-        success[i] = SinglePixelOperation(pre_img,cur_img,pre_corners_[i],cur_corners_[i]);
+        success[i] = SinglePixelOperation(pre_img,cur_img,pre_corners[i],cur_corners[i]);
     }
 }
 
@@ -84,7 +85,6 @@ bool LKtracker::SinglePixelOperation(cv::Mat pre_img,cv::Mat cur_img,
     Eigen::Vector2d b;
     Eigen::Vector2d J;
     Eigen::Vector2d temp_pos = cur_origin;
-    H.setZero();b.setZero();J.setZero();
 
     double temp_x = temp_pos.x();
     double temp_y = temp_pos.y();
@@ -96,6 +96,8 @@ bool LKtracker::SinglePixelOperation(cv::Mat pre_img,cv::Mat cur_img,
     // 这里先使用自己的理解
     for(int i =0;i<iterations ; i++)
     {
+        H.setZero();
+        b.setZero();
         // 出 Jacobian 和 cost
         for(int x = -half_path_size;x<= half_path_size;x++)
             for(int y = -half_path_size;y<half_path_size;y++)
@@ -117,6 +119,10 @@ bool LKtracker::SinglePixelOperation(cv::Mat pre_img,cv::Mat cur_img,
             if (std::isnan(update[0])) {
                 // sometimes occurred when we have a black or white patch and H is irreversible
                 cout << "update is nan" << endl;
+                return false;
+            }
+
+            if (i > 0 && cost > lastCost) {
                 return false;
             }
 
