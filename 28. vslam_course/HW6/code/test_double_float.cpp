@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-02 14:23:08
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:29:16
+ * @LastEditTime: 2021-03-02 14:39:08
  * @FilePath: /3rd-test-learning/28. vslam_course/HW6/code/test_double_float.cpp
  * @Description: 
  * 确定 double 和 float 哪个计算更快
@@ -24,8 +24,6 @@ int main()
         a_d /=0.1;
         a_d *=0.1;
     }
-
-
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> diff = end - start;
     cout<<"Total: "<< diff.count()<<" s"<<endl;
