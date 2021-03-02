@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 22:49:02
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:09:25
+ * @LastEditTime: 2021-03-02 14:46:13
  * @Description: 
  */
 
@@ -88,6 +88,7 @@ const Corners & TrackerBase::GetCorners()const
 
 bool TrackerBase::CreatePyramid()
 {
+    auto start = chrono::high_resolution_clock::now();
     if(pre_img_.empty()||cur_img_.empty())
     {
         cerr<<"the pre_img or cur_img is empty!"<<endl;
@@ -104,6 +105,10 @@ bool TrackerBase::CreatePyramid()
         cv::resize(pyr_cur_img_[i-1],pyr_cur_img_[i],
                    cv::Size(pyr_cur_img_[i-1].cols*options_ptr_->scale_,pyr_cur_img_[i-1].rows*options_ptr_->scale_));           
     }
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> diff = end - start;
+    cout<<"Create Pyr : "<< diff.count()<<" s"<<endl;
     return true;
 }
 

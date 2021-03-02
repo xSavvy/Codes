@@ -2,10 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:59:23
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:18:40
+ * @LastEditTime: 2021-03-02 14:47:21
  * @Description: 
  * 
- * opencv GFTT 速度大概 1ms 已经不错了
+ * opencv tracker 速度大概 1ms 已经不错了
  * 
  * 
  */

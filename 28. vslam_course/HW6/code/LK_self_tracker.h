@@ -2,15 +2,20 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-28 17:59:18
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:37:08
+ * @LastEditTime: 2021-03-02 14:48:10
  * @Description: 
  * 
  * 进一步加速: 
  * 1. double 换成 float 应该基本能跑到opencv 的速度 为了精度这个不进行改进
- * 2. openmp 加速效果不明显  不知道为什么,可以看一下有没有机会加速
+ * 2. openmp 加速效果不明显  不知道为什么,可以看一下为什么没有加速
  * 3. 换成 inverse 方法     在噪声的情况下，会出现不够稳定的情况，可以实现一下
+ * 4. 换成 opencv 的 parallel_for 进行并行加速  可以实现一下
+ * 
+ * 
  * 
  */
+
+
 #include "tracker_base.h"
 #include "common.h"
 #include "omp.h"

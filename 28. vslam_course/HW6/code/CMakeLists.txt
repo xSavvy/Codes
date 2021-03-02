@@ -1,6 +1,8 @@
 project(tracker)
 cmake_minimum_required(VERSION 3.5)
 
+# 不知道 openmp 没有加速的原因是不是因为这里 感觉应该不是
+
 add_definitions("-DENABLE_SSE")
 set(CMAKE_CXX_FLAGS "-std=c++14 -o3 ${SSE_FLAGS} -g")
 set(CMAKE_BUILD_TYPE  "Release")
