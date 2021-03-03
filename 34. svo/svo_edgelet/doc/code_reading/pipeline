@@ -1,20 +1,30 @@
 test_pipeline
     |__ RunFromFolder
         |__ vo_.addImage()   VO 入口
-vo.addImage()
-    |__ startFrameProcessingCommon(timestamp) 时间戳 check
-    |__ CreatePyrmird 初始化特征点 + 建立图像金字塔
+vo.addImage(img)
+    |__ startFrameProcessingCommon(timestamp)     时间戳 check
+    |__ Frame (img)                               构建多层金字塔
     |__ 是整个系统第一个图像 processFirstFrame()
-        |__ addFirstFrame()
-        |__ setKeyFrame()
+        |__ KltHomographyInit->addFirstFrame()    提取特征
+        |__ setKeyFrame()                         对Frame的key_pts_进行设置，SVO的关键特征点一个Frame 只有 5个 
+                                                  中间一个然后划分四个块，一个块一个最优，让特征尽可能在视野中央。
+        |__ map_->addKeyFrame()                   一个简单的push_back
     |__ 是整个系统第二个图像 processSecondFrame()
-        |__ addSecondFrame()
-        |__ 
+        |__ KltHomographyInit->addSecondFrame()   进行了一次klt追踪,HE inliner extract 添加匹配的fts_到cur_frame_
+        |__ (options) TwoViewBA
+        |__ getSceneDepth()                       用于seed 的mean_depth 和 min_depth 的初始化
+        |__ depth_filter ->addKeyframe()          开始对frame的_cur 进行初始化，种子点进行那初始化
+        |__ map_->addKeyframe()                   
     |__ 剩下的情况 processFrame()
-        |__ SparseImageAlign()
-        |__ Align2D()
+        |__ SparseImageAlign()                    出简单估计的位姿
+        |__ Reprojector->reprojectMap() (Align2D) 
         |__ PoseOptimization()
         |__ StructureOptimization()
+        |__ getSceneDepth()
+        |__ depth_filter->addKeyframe()
+        |__ map_->addKeyframe()
+    |__ show()                                    一大段用于显示的代码
+    |__ finishFrameProcessingCommon()             一些push_back 没有太多内容
 
 
 =============================
@@ -35,10 +45,28 @@ KltHomographyInit
         |__ CheckDisparity()
         |__ 通过Disparity 选择 H E 的选择 小视差用H 大视差用E，进行RANSAC inliner 选择
     
+============================
+SparseAlign
+    |__ Inverse Compostional Direct Method
+
+============================
+Reprojector
+    |__ reprojectMap()
+        |__ map_->getCloseKeyframes()
+        |__ reproject_candidates()
+        |__ Align1D\Align2D
+
+============================
+initialization.H
+    |__ detectFeatures()               Edgelet 和 Point 采用同一种Frame进行存储，只是type 不同
+        |__ detectFast                 
+        |__ detectEdgelet              GaussianBlur + Scharr_X Scharr_Y + Canny
+    |__ trackKlt()                     OpenCV calcPyrOpticFlow
 
 
-
-
+============================
+DepthFilter
+    |__ initializeSeeds()
 
 
 

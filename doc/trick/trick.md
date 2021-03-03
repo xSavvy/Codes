@@ -34,6 +34,8 @@ motion" <br>
       b. (LARVIO)描述子去误匹配
       c. (DSM) T 分布去outlier ？？ 没有仔细看这里存疑
       d. (SELF) 待验证 先验运动用于去掉误匹配
+   4. 特征尽可能在视野中央(SVO SOFT2 都有提到这个问题)
+   
 #### 光流/Direct 
 
    1. Data Assoicate 的问题<br>

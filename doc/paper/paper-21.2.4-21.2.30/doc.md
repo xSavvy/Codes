@@ -41,4 +41,3 @@ $$
    e = p_{2d(u,v)} - \pi{p_{3d(x,y,z)}}
 $$
 
-### Video-based, Real-Time Multi View Stereo

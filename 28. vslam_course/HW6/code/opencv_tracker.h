@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:18:39
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-28 17:30:28
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-02 14:11:10
  * @Description: 
  */
 
@@ -29,8 +29,7 @@ void OpencvTracker::Run()
     Impl();
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> diff = end - start;
-    int ms = std::chrono::duration_cast<chrono::milliseconds>(diff).count();
-    cout<<"Total: "<< ms<<" ms"<<endl;
+    cout<<"Total: "<< diff.count()<<" s"<<endl;
     cv2eigen(cv_cur_corners_,cur_corners_);
 }
 

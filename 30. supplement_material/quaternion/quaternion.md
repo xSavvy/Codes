@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-08 17:37:13
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-22 08:17:27
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-01 11:32:32
  * @Description: 
 -->
 ### Element of Quaternion 来自 indirect KF 目前还不知道是JPL 还是 Hamintion 的表示
@@ -154,7 +154,3 @@ $$
 ![](./pic/1.png)
 
 4. 四元数和旋转矩阵的关系
-   $$
-
-    
-   $$

@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2020-10-10 08:51:23
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-10-10 09:00:38
- * @FilePath: /3rd-test-learning/14. random-generator/random_generator.cpp
+ * @LastEditTime: 2021-03-01 10:57:59
+ * @FilePath: /3rd-test-learning/12. random-generator/random_generator.cpp
  * @Description: 用于生成各种随机数
  */
 
