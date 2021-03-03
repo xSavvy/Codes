@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-28 17:59:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-03 08:27:17
+ * @LastEditTime: 2021-03-03 08:32:16
  * @Description: 
  * 
  * 进一步加速: 
@@ -146,7 +146,11 @@ bool LKtracker::SinglePixelOperation(const cv::Mat & pre_img,const cv::Mat & cur
                     0.5 * (GetPixelValue(cur_img, temp_x+dx+x, temp_y+dy+y + 1) -
                             GetPixelValue(cur_img, temp_x+dx+x, temp_y+dy+y - 1))
                 );   
+                if(inverse_)
                 b += -error * GetJ(x,y);
+                else
+                b += -error * J;
+                
                 cost += error * error;
                 if(!inverse_)
                 H += J * J.transpose();
