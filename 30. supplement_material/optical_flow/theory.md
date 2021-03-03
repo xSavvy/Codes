@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-02 15:44:46
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-24 10:07:29
+ * @LastEditTime: 2021-03-03 11:11:55
  * @FilePath: /3rd-test-learning/30. supplement_material/optical_flow/theory.md
  * @Description: 
 -->
@@ -92,9 +92,8 @@ $$
     \\&\downarrow W(x;\Delta{p})=y
 \\ =& \sum_{W(T(x);p)}[I(W(y;p))-T(W^{-1}(y;\Delta{p}))]^2
 \end{aligned}
-\\
+\、
 W(x;p)\leftarrow{W(x;p)\circ{W^{-1}(x;\Delta{p})}}
-
 $$
 ------
 方便理解的版本<br>
@@ -154,3 +153,61 @@ $$
 ![](./picture/6.png)
 
 最后的结论是，Forward method 虽然耗时要大得多，但是对于噪声会更加鲁棒。
+
+
+<font color="Red">2021.3.3为串讲敲的公式</font>
+1. 基础光流的公式:
+   问题:
+   $$
+    \underset{\Delta p}{\operatorname{argmax}}
+    \underset{\Delta x\in T}{\sum} I_{pre}(x_{pre}+\Delta x) - 
+    \\
+    I_{cur}(W(x_{pre}+\Delta x;p+\Delta p))
+   $$
+   更新:
+   $$
+    p\leftarrow p+\Delta p
+   $$
+2. 更新Warp(Compositional)的光流公式:
+   问题:
+   $$
+    \underset{\Delta p}{\operatorname{argmax}}
+    \underset{\Delta x\in T}{\sum} I_{pre}(x_{pre}+\Delta x) - 
+    \\
+    I_{cur}(W(W(x_{pre}+\Delta x;\Delta p);p) 
+   $$
+   更新:
+   $$
+    W(x;p)\leftarrow W(W(x;\Delta p);p)
+   $$
+3. 从更新Warp的光流公式推导 Inverse Compositional 的光流:
+   (给上面的公式加上了一个负号)
+$$
+\underset{\Delta x\in T}{\sum} I_{cur}(W(W(x_{pre}+\Delta x;\Delta{p});p))- I_{pre}(x_{pre}+\Delta x) 
+\\
+\downarrow y + \Delta y=W(x_{pre}+\Delta x;\Delta p)
+\\
+\underset{W(T;\Delta p)}{\sum} I_{cur}(W(y+\Delta y;p)) - I_{pre}(W^{-1}(y+\Delta y;\Delta p))
+\\
+\downarrow \Delta p \rightarrow 0, W(\Delta x;\Delta p) = \Delta x, \Delta y = \Delta x
+\\
+\underset{\Delta x\in T}{\sum} I_{cur}(W(x+\Delta x;p)) - I_{pre}(W^{-1}(x+\Delta x;\Delta p))
+$$
+    更新:
+    因为3从2 更新过来，3的更新应该是作用在2上
+    $$
+    W(x;p)\leftarrow W(W(x;\Delta p);p)
+    $$
+
+4. 从光流到直接法:
+   什么是直接法？
+   也就是把Warp 从光流中的$+(u,v)$ 换成$exp([\xi×])$
+   $x$从像素坐标，变成齐次坐标
+   $I$从原本的像素到灰度的变换，变成先对点投影到归一化平面上，然后转换到像素坐标在取灰度的变换。
+
+5. Inverse Compostional 为什么加速？
+   雅克比只需要进行一次计算
+   ![](./picture/4.png)
+
+6. 对于Warp的要求：
+   ![](./picture/5.png)

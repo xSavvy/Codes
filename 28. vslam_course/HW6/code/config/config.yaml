@@ -4,3 +4,6 @@
 TrackerBaseOptions.Level: 4
 TrackerBaseOptions.TemplateSize: 8
 TrackerBaseOptions.Scale: 0.5
+
+LKTracker.Inverse: 1
+# 并行的设置在 LK_slef_tracker.h 中进行设置

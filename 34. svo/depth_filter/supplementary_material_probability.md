@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-25 10:59:33
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-26 14:47:05
- * @FilePath: /3rd-test-learning/30. supplement_material/depth_filter/supplementary_material_probability.md
+ * @LastEditTime: 2021-03-03 11:21:45
+ * @FilePath: /3rd-test-learning/34. svo/depth_filter/supplementary_material_probability.md
  * @Description: 
 -->
 ### 各种在Depth Filter 中，能用到的分布
@@ -32,7 +32,7 @@
    从均值开始，Beta的均值直接来自于二值测试<br>
    假如历史过过程中，0发生过$\alpha$次1发生过$\beta$次,Beta分布的均值就是$\cfrac{a}{a+b}$
    $$
-    \operatorname{Beta(a,b)} = p(theta|a,b) = \cfrac{\theta^{a-1}(1-\theta)^{b-1}}{B(a,b)}\propto \theta^{a-1}(1-\theta)^{b-1}
+    \operatorname{Beta(a,b)} = p(\theta|a,b) = \cfrac{\theta^{a-1}(1-\theta)^{b-1}}{B(a,b)}\propto \theta^{a-1}(1-\theta)^{b-1}
    $$
    $B(a,b)$只是为了进行归一化
    Beta分布是将在1. 中固定的$\theta$ 用一个分布来进行表示。a和b 就是01的假定次数。<br>
@@ -41,7 +41,6 @@
    B(a.b) = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
    \\
    \Gamma(a) = a!
-
    $$
 3. Beta分布的Conjugate Piror to Binomial属性<br>
    $$

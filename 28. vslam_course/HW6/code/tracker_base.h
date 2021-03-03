@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 22:49:02
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:46:13
+ * @LastEditTime: 2021-03-03 09:24:57
  * @Description: 
  */
 
@@ -18,7 +18,7 @@
 #include "sophus/se3.hpp"
 
 
-using Corners = std::vector<Eigen::Vector2d,Eigen::aligned_allocator<Eigen::Vector2d>>;
+using Corners = std::vector<Eigen::Vector2f,Eigen::aligned_allocator<Eigen::Vector2f>>;
 using namespace std;
 
 class TrackerBaseOptions

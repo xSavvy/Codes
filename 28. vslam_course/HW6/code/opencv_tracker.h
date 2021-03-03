@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:18:39
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 14:11:10
+ * @LastEditTime: 2021-03-03 19:01:07
  * @Description: 
  */
 
@@ -13,6 +13,8 @@
 class OpencvTracker:public TrackerBase
 {
     public:
+
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     using OpencvCorners = std::vector<cv::Point2f>;
 
     OpencvTracker(const std::string config):TrackerBase(config){}

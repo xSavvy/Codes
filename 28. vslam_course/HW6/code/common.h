@@ -1,13 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:30:44
-<<<<<<< HEAD
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-03 07:05:14
-=======
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 13:10:01
->>>>>>> 04dec323d4ee612e088ff1bbd879d64fa005d46d
+ * @LastEditTime: 2021-03-03 09:32:32
  * @Description: 
  */
 
@@ -25,18 +20,18 @@ using namespace std;
 
 template<typename Allocator>
 void cv2eigen(const vector<cv::Point2f> & input, 
-              vector<Eigen::Vector2d,Allocator> & output)
+              vector<Eigen::Vector2f,Allocator> & output)
 {
     output.clear();
     for(auto & p:input)
-        output.push_back(Eigen::Vector2d(p.x,p.y));
+        output.push_back(Eigen::Vector2f(p.x,p.y));
 }
 
 
 
 
 template<typename Allocator>
-void eigen2cv(const vector<Eigen::Vector2d,Allocator> & input,
+void eigen2cv(const vector<Eigen::Vector2f,Allocator> & input,
               vector<cv::Point2f> & output)
 {
     output.clear();
@@ -83,7 +78,7 @@ void DrawForMatchResult(cv::Mat & img, const std::vector<cv::Point2f> & origin,
     }
 }
 
-inline float GetPixelValue(const cv::Mat &img, double x, double y) {
+inline float GetPixelValue(const cv::Mat &img, float x, float y) {
     // boundary check
     if (x < 0) x = 0;
     if (y < 0) y = 0;
