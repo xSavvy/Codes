@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-04 09:16:13
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-25 08:28:30
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-04 15:37:14
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/Theory.md
  * @Description: 
 -->
@@ -135,3 +135,54 @@ Align2D 的 J_I 负号没有组合进去 所以最后更新Warp 的时候是直�
 SparseImageAlign 是围绕灰度的图像误差项<br>
 Align2D 最后的优化是围绕着2d-3d的几何误差项<br>
 Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 对应的灰度
+
+
+<font color="Red">2021.3.4 为Align2D串讲添加</font><br>
+1. 大概介绍:<br>
+   a.1. 加仿射<br>
+    因为这一部分主要是发生在相隔比较大的两帧之间，进行光流匹配的问题。需要考虑的是原本光流的Template对于光流的匹配是不是还是合适的。在SVO里面，是把这里的变换换成了仿射变换。但是为了实时性的考虑，并不是把Warp当作一个仿射变换进行优化。<br>
+   a.2. 金字塔层数调整<br>
+   因为是相隔比较大的两帧之间进行匹配，所以难免涉及到尺度的问题，SVO对此通过面积也进行了一次金字塔层数上的调整。
+   a.3. 克服自动曝光<br>
+   添加一个光流的补偿项，两帧之间的亮度进行补偿。
+
+2. 加仿射:
+   修改光流目标误差项<br>
+   $$
+    r = \underset{\Delta x}{\sum}I_{cur}(W(x+\Delta x;p))-I_{pre}(W(x+A\Delta x';\Delta p)),
+    A\Delta x' = \Delta x
+   $$
+   a.1. 如何得到仿射？
+   将$I_pre$ 正方形template 的像素投影到$I_cur$ 就可以得到Affine变换。示例:
+   调整前|调整后
+   ----|----
+   ![](./../picture/2.png)|![](./../picture/3.png)
+   当然这个有前提的假设，也就是初值必须是比较好的。
+
+3. 金字塔层数调整:
+   这一点也是基于两帧位姿初值相对准确的情况下来进行的。
+   a.1. 为什么需要进行金字塔层数调整？
+   防止出现之前离得远，下一帧离得近的情况。
+   a.2. 调整方法？
+   根据Affine的面积进行调整，如果面积过大，就往上调一级金字塔
+
+4. 克服自动曝光:
+   添加一个光流的补偿项，两帧之间的亮度进行补偿。
+   修改原本目标误差项为：
+   $$
+    r = \underset{\Delta x}{\sum}I_{cur}(W(x+\Delta x;p))-I_{pre}(W(x+A\Delta x';\Delta p)) -m
+   $$
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
