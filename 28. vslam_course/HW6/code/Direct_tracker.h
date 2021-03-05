@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-03 09:50:42
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-05 08:23:33
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-05 16:41:12
  * @FilePath: /3rd-test-learning/28. vslam_course/HW6/code/Direct_tracker.h
  * @Description: 
  */
@@ -74,6 +74,7 @@ class DirectTracker:public TrackerBase
         instrinc_ptr_ = new CameraInstrinc(config);
     }
     virtual void Impl() override;
+    void SetInput(const cv::Mat & pre_img){pre_img_ = pre_img.clone();}
     void SetLastFramePose(Eigen::Matrix<float,6,1> & init){pre_pose_ = init;} 
     void SetLastFramePoints(const std::vector<Eigen::Vector3f,Eigen::aligned_allocator<Eigen::Vector3f>> & pre_pts)
     {pre_pts_ = pre_pts;}

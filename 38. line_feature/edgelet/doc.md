@@ -1,14 +1,18 @@
 <!--
  * @Author: Liu Weilong
- * @Date: 2021-03-01 13:12:18
+ * @Date: 2021-03-05 16:31:51
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-05 16:59:47
- * @FilePath: /3rd-test-learning/34. svo/edgelet/paper.md
+ * @LastEditTime: 2021-03-05 17:13:10
+ * @FilePath: /3rd-test-learning/38. line_feature/edgelet/doc.md
  * @Description: 
 -->
+### edgelet :
+1. 定义:具有连续且强的灰度梯度的小线段<br>
+2. 长线的缺点:容易被遮挡\慢<br>
+3. 空间表示: 一个?
+4. 提取： Gaussian 滤波， Scharr XY发想梯度， Canny 提边缘
 
-
-### edgelet_related:
+### recommand material
 1.  Edge Landmarks in Monocular SLAM
 2.  Improving the agility of keyframe-based SLAM
 3.  a video-rate object tracker
@@ -18,5 +22,4 @@
 7.  Going out: robust model-based tracking for outdoor augmented reality
 8. https://cecas.clemson.edu/~stb/students/ssundar_thesis.pdf
 
-### Vanishing Point:
-Auto-rectification of user photos
+https://github.com/chsasank/Image-Rectification

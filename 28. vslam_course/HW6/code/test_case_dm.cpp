@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-05 08:00:41
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-05 08:22:13
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-05 16:29:21
  * @Description: 
  */
 #include "Direct_tracker.h"
@@ -35,7 +35,7 @@ int main()
     std::vector<Eigen::Vector3f> p3d_ref;
     p3d_ref.reserve(nPoints);
 
-    //??? 不一定要使用角点？？
+    //
     for(int i =0;i<nPoints;i++)
     {
         int x = rng.uniform(boarder,left_img.cols - boarder);

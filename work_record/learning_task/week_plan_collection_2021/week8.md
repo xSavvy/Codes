@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-21 22:40:51
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-27 22:14:18
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-05 09:11:18
  * @Description: 
 -->
 ### main task
@@ -12,7 +12,7 @@
 1.  |四元数的问题||          1 
 2.  |矩阵指数|完成|
 3.  |SVO Inverse Compostional的理解|完成|
-4.  |深度滤波|简单完成，还有遗留的问题|
+4.  |深度滤波|简单完成，还有遗留的问题<br>最后是靠概率机器人的传感器模型Chapter6.1<br>EM算法解决的|
 5.  |重新理解Error State ||4 
 6.  |VINS-Mono 代码阅读||   2 
 7.  |完善线性系统小手册|完成|
