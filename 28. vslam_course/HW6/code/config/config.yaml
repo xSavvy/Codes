@@ -8,7 +8,11 @@ TrackerBaseOptions.Scale: 0.5
 LKTracker.Inverse: 1
 # 并行的设置在 LK_slef_tracker.h 中进行设置
 
-DirectTracker.Camera.fx: 
-DirectTracker.Camera.fy:
-DirectTracker.Camera.cx:
-DirectTracker.Camera.cy:   
+DirectTracker.Camera.fx: 718.856
+DirectTracker.Camera.fy: 718.856
+DirectTracker.Camera.cx: 607.1928
+DirectTracker.Camera.cy: 185.2157
+DirectTracker.Camera.baseline: 0.573
+
+DirectTracker.nPoints: 2000
+DirectTracker.boarder: 20 
