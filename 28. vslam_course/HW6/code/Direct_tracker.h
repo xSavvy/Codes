@@ -1,10 +1,23 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-03 09:50:42
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-05 16:41:12
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-06 20:30:13
  * @FilePath: /3rd-test-learning/28. vslam_course/HW6/code/Direct_tracker.h
  * @Description: 
+ *  
+ * 
+ * 1. direct method 优化过程中float的精度 的确是有限制的 可能还是需要double
+ *    先改成double吧
+ * 2. 第二个怀疑是把一些边缘外的点加入了优化 发现是有一些这样的问题
+ * 3. 一些bug 是自己写函数写了一部分没有写完就去作别的产生的
+ * 4. 第三个bug 就是深度的问题
+ * 5. 看看 inverse compostional + 并行能有多快
+ * 
+ * 
+ * 
+ * 
+ * 
  */
 #include "tracker_base.h"
 #include "sophus/se3.hpp"
@@ -18,11 +31,12 @@ class CameraInstrinc
     public:
     CameraInstrinc(const std::string & config){LoadInstrinc(config);}
     void LoadInstrinc(const std::string & config);
-    void jaocobian_uv_xyz(const Eigen::Vector3f &p,Eigen::Matrix<float,2,3> & jacobian);
-    Eigen::Vector2f c2p(const Eigen::Vector3f & c);
-    Eigen::Vector3f p2c(const Eigen::Vector2f & p);
-    CameraInstrinc & operator*(float scale);
-    float fx,fy,cx,cy;
+    void jaocobian_uv_xyz(const Eigen::Vector3d &p,Eigen::Matrix<double,2,3> & jacobian)const;
+    Eigen::Vector2d c2p(const Eigen::Vector3d & c) const;
+    Eigen::Vector3d p2c(const Eigen::Vector2d & p) const;
+    
+    CameraInstrinc & operator*(double scale);
+    double fx,fy,cx,cy;
 };
 
 void CameraInstrinc::LoadInstrinc(const std::string & config)
@@ -39,24 +53,24 @@ void CameraInstrinc::LoadInstrinc(const std::string & config)
     cout<<"DirectTracker.Camera.cy: "<<cy<<endl;
 }
 
-void CameraInstrinc::jaocobian_uv_xyz(const Eigen::Vector3f &p, Eigen::Matrix<float,2,3> & jacobian)
+void CameraInstrinc::jaocobian_uv_xyz(const Eigen::Vector3d &p, Eigen::Matrix<double,2,3> & jacobian) const
 {
     jacobian.setZero();
     jacobian<<fx/p.z(),0,-1*fx*p.x()/p.z()/p.z(),
               0,fy/p.z(),-1*fy*p.y()/p.z()/p.z();
 }
 
-Eigen::Vector2f CameraInstrinc::c2p(const Eigen::Vector3f & p)
+Eigen::Vector2d CameraInstrinc::c2p(const Eigen::Vector3d & p) const
 {
-    return Eigen::Vector2f(fx*p.x()/p.z()+cx,fy*p.y()/p.z()+cy);
+    return Eigen::Vector2d(fx*p.x()/p.z()+cx,fy*p.y()/p.z()+cy);
 }
 
-Eigen::Vector3f CameraInstrinc::p2c(const Eigen::Vector2f & p)
+Eigen::Vector3d CameraInstrinc::p2c(const Eigen::Vector2d & p) const
 {
-    
+    return Eigen::Vector3d((p.x()-cx)/fx,(p.y()-cy)/fy,1.0);
 }
 
-CameraInstrinc & CameraInstrinc::operator*(float scale)
+CameraInstrinc & CameraInstrinc::operator*(double scale)
 {
     this->fx *= scale;
     this->fy *= scale;
@@ -72,12 +86,17 @@ class DirectTracker:public TrackerBase
     DirectTracker(std::string & config,bool inverse):TrackerBase(config),inverse_(inverse)
     {
         instrinc_ptr_ = new CameraInstrinc(config);
+        result_.setZero();
     }
     virtual void Impl() override;
     void SetInput(const cv::Mat & pre_img){pre_img_ = pre_img.clone();}
-    void SetLastFramePose(Eigen::Matrix<float,6,1> & init){pre_pose_ = init;} 
-    void SetLastFramePoints(const std::vector<Eigen::Vector3f,Eigen::aligned_allocator<Eigen::Vector3f>> & pre_pts)
-    {pre_pts_ = pre_pts;}
+    void SetPredict(const Eigen::Matrix<double,6,1> & predict){result_ = predict;}
+    void SetLastFramePose(const Eigen::Matrix<double,6,1> & init){pre_pose_ = init;} 
+    void SetLastFramePoints(const std::vector<Eigen::Vector3d,Eigen::aligned_allocator<Eigen::Vector3d>> & pre_pts,
+                            const std::vector<bool> & good_pts);
+    const CameraInstrinc * GetCamera()const {return instrinc_ptr_;} 
+    const std::vector<bool> & GetGoodPts() const {return good_pts_array_;}
+    const Eigen::Matrix<double,6,1> & GetResult()const {return result_;}
     private:
     /**
      *  param:
@@ -86,23 +105,31 @@ class DirectTracker:public TrackerBase
      *  @result_pose 应该是在世界坐标系下
     */
     bool SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_img,
-                         const std::vector<Eigen::Vector3f,Eigen::aligned_allocator<Eigen::Vector3f>> & pts,
-                         const Eigen::Matrix<float,6,1> & pre_pose,
-                         Eigen::Matrix<float,6,1> & result_pose,  bool inverse);
+                         const std::vector<Eigen::Vector3d,Eigen::aligned_allocator<Eigen::Vector3d>> & pts,
+                         const Eigen::Matrix<double,6,1> & pre_pose,
+                         Eigen::Matrix<double,6,1> & result_pose,  bool inverse);
                          
-    Eigen::Matrix<float,6,1> pre_pose_;
-    Eigen::Matrix<float,6,1> result_;
+    Eigen::Matrix<double,6,1> pre_pose_;
+    Eigen::Matrix<double,6,1> result_;
     CameraInstrinc * instrinc_ptr_;
-    std::vector<Eigen::Vector3f,Eigen::aligned_allocator<Eigen::Vector3f>> pre_pts_; 
+    std::vector<Eigen::Vector3d,Eigen::aligned_allocator<Eigen::Vector3d>> pre_pts_; 
+    std::vector<bool> good_pts_array_;
     bool success_;
     bool inverse_;
 };
 
+void DirectTracker::SetLastFramePoints(const std::vector<Eigen::Vector3d,Eigen::aligned_allocator<Eigen::Vector3d>> & pre_pts,
+                                       const std::vector<bool> & good_pts)
+{
+    pre_pts_ = pre_pts;
+    good_pts_array_ = good_pts;
+
+}
 
 void DirectTracker::Impl()
 {
     result_ = pre_pose_;
-    std::vector<float> scale_array;
+    std::vector<double> scale_array;
     scale_array.reserve(options_ptr_->level_);
     scale_array.push_back(1.0);
     
@@ -112,10 +139,11 @@ void DirectTracker::Impl()
     }
 
     instrinc_ptr_->operator*(scale_array.back());
+    
 
-    float larger = 1./options_ptr_->scale_;
+    double larger = 1./options_ptr_->scale_;
     bool succ = false;
-    for(int i=options_ptr_->level_-1;i>=0;i++)
+    for(int i=options_ptr_->level_-1;i>=0;i--)
     {
         succ = SingleLayerCalc(pyr_pre_img_[i],pyr_cur_img_[i],pre_pts_,pre_pose_,result_,false);
         if(succ == false) break;
@@ -126,30 +154,30 @@ void DirectTracker::Impl()
 }
 
 bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_img,
-                                    const std::vector<Eigen::Vector3f,Eigen::aligned_allocator<Eigen::Vector3f>> & pts,
-                                    const Eigen::Matrix<float,6,1> & pre_pose,
-                                    Eigen::Matrix<float,6,1> & result_pose,  bool inverse)
+                                    const std::vector<Eigen::Vector3d,Eigen::aligned_allocator<Eigen::Vector3d>> & pts,
+                                    const Eigen::Matrix<double,6,1> & pre_pose,
+                                    Eigen::Matrix<double,6,1> & result_pose,  bool inverse)
 {
     // 初始化 H b J
     int half_patch_size = options_ptr_->template_/2;
-    int itertations = 10;
+    int itertations = 20;
 
-    Eigen::Matrix<float,6,6> H;
-    Eigen::Matrix<float,6,1> b;
+    Eigen::Matrix<double,6,6> H;
+    Eigen::Matrix<double,6,1> b;
 
-    Eigen::Matrix<float,1,2> J_uv;
-    Eigen::Matrix<float,2,3> J_xyz;
-    Eigen::Matrix<float,3,6> J_xi;
-    Eigen::Matrix<float,1,6> J;
-    Eigen::Matrix<float,3,3> I = Eigen::Matrix<float,3,3>::Identity();
+    Eigen::Matrix<double,1,2> J_uv;
+    Eigen::Matrix<double,2,3> J_xyz;
+    Eigen::Matrix<double,3,6> J_xi;
+    Eigen::Matrix<double,1,6> J;
+    Eigen::Matrix<double,3,3> I = Eigen::Matrix<double,3,3>::Identity();
 
-    Sophus::SE3f se3_pre = Sophus::SE3f::exp(pre_pose);
-    Sophus::SE3f se3_cur = Sophus::SE3f::exp(result_pose);
-    Sophus::SE3f d_se3 = Sophus::SE3f::exp(Eigen::Matrix<float,6,1>::Zero());
+    Sophus::SE3d se3_pre = Sophus::SE3d::exp(pre_pose);
+    Sophus::SE3d se3_cur = Sophus::SE3d::exp(result_pose);
+    Sophus::SE3d d_se3 = Sophus::SE3d::exp(Eigen::Matrix<double,6,1>::Zero());
 
-    Eigen::Vector3f p3d_pre,p3d_cur;
+    Eigen::Vector3d p3d_pre,p3d_cur;
     
-    float cost = 0.,Lastcost=0.,error=0.;
+    double cost = 0.,Lastcost=0.,error=0.;
 
     int i;
     for(i=0;i<itertations;i++){
@@ -160,7 +188,7 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
         
         for(int j=0;j<pts.size();j++)
         {
-            const Eigen::Vector3f & p = pts[j];        
+            const Eigen::Vector3d & p = pts[j];        
             // 没有写迭代
             
             p3d_pre = se3_pre*p;
@@ -168,24 +196,31 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
 
             auto p2d_pre = instrinc_ptr_->c2p(p3d_pre);
             auto p2d_cur = instrinc_ptr_->c2p(p3d_cur);
-                
+
+            if(p2d_cur.x() < 0 || p2d_cur.y()<0 || p2d_cur.x() > cur_img.cols  || p2d_cur.y()> cur_img.rows ||good_pts_array_[j]==false)
+            {
+                good_pts_array_[j] = false;
+                continue;
+            }
+
+            instrinc_ptr_->jaocobian_uv_xyz(p3d_cur,J_xyz);
+            J_xi.block<3,3>(0,0) = I;
+            J_xi.block<3,3>(0,3) = -1*Sophus::SO3d::hat(p3d_cur);
+            
+            Eigen::Matrix<double,2,6> J_uv_xi = J_xyz * J_xi;
                 // 计算 Jacobian error
-            for(int x = -half_patch_size; x < half_patch_size ; x++)
-                for(int y = -half_patch_size; y<half_patch_size ; y++)
+            for(int x = -half_patch_size; x <=half_patch_size ; x++)
+                for(int y = -half_patch_size; y<=half_patch_size ; y++)
                 {
                     error = GetPixelValue(pre_img,p2d_pre.x() + x,p2d_pre.y() + y) - 
                             GetPixelValue(cur_img,p2d_cur.x() + x,p2d_cur.y() + y);
                     // jacobian 需要进一步进行检查
-                    J_uv = -1.0 * Eigen::Vector2d(
-                                0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x + 1, p2d_cur.y() + y) -
+                    J_uv <<     -0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x + 1, p2d_cur.y() + y) -
                                     GetPixelValue(cur_img, p2d_cur.x() + x - 1, p2d_cur.y() + y)),
-                                0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x, p2d_cur.y() + y + 1) -
+                                -0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x, p2d_cur.y() + y + 1) -
                                     GetPixelValue(cur_img, p2d_cur.x() + x, p2d_cur.y() + y - 1))
-                            );
-                    instrinc_ptr_->jaocobian_uv_xyz(p3d_cur,J_xyz);
-                    J_xi.block<3,3>(0,0) = I;
-                    J_xi.block<3,3>(0,3) = -1*Sophus::SO3f::hat(p3d_cur);
-                    J = J_uv*J_xyz*J_xi;
+                            ;
+                    J = J_uv*J_uv_xi;
                     H += J.transpose() * J;
                     b += -1* error * J.transpose();
                     cost += error * error;
@@ -193,14 +228,14 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
         } 
         
         // 更新 \delta \xi 
-        Eigen::Matrix<float,6,1> update = H.ldlt().solve(b);
+        Eigen::Matrix<double,6,1> update = H.ldlt().solve(b);
 
         if(std::isnan(update[0]))
         {
             std::cout<<" not converge !"<<endl;
             return false;
         }
-        if(cost>Lastcost)
+        if(cost>Lastcost&&i!=0)
         {
             break;
         }
@@ -208,14 +243,11 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
         {
             break;
         }
-        d_se3 = Sophus::SE3f::exp(update)*d_se3;
+        d_se3 = Sophus::SE3d::exp(update)*d_se3;
         Lastcost = cost; 
     }
 
-    if(i==itertations)
-    return false;
-
-    result_pose = (d_se3*Sophus::SE3f::exp(result_pose)).log();
+    result_pose = (d_se3*Sophus::SE3d::exp(result_pose)).log();
     return true;
 
 }

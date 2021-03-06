@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 22:49:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-05 08:04:16
+ * @LastEditTime: 2021-03-06 20:45:29
  * @Description: 
  */
 
@@ -28,6 +28,7 @@ class TrackerBaseOptions
     int level_;
     int template_;
     float scale_;
+    int max_iterations_;
 };
 
 TrackerBaseOptions::TrackerBaseOptions(const std::string &config)
@@ -41,6 +42,7 @@ TrackerBaseOptions::TrackerBaseOptions(const std::string &config)
     level_ = (int)fin["TrackerBaseOptions.Level"];
     template_ = (int)fin["TrackerBaseOptions.TemplateSize"];
     scale_ = (double)fin["TrackerBaseOptions.Scale"];
+    max_iterations_ = (int)fin["TrackerBaseOptions.MaxIterations"];
 }
 
 class TrackerBase

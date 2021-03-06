@@ -2,17 +2,16 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-28 17:59:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-03 21:56:02
+ * @LastEditTime: 2021-03-06 20:47:00
  * @Description: 
  * 
  * 进一步加速: 
  * 1. double 换成 float 应该基本能跑到opencv 的速度 为了精度这个不进行改进  并没有快多少 
  * 2. openmp 加速效果不明显  不知道为什么,可以看一下为什么没有加速           
- * 3. 换成 inverse 方法     在噪声的情况下，会出现不够稳定的情况，可以实现一下 4ms -> 2.4ms
- * 4. 换成 opencv 的 parallel_for_ 进行并行加速  可以实现一下             2.4ms ->  0.9ms
- * 
- * 
- * 
+ * 3. 换成 inverse 方法     在噪声的情况下，会出现不够稳定的情况，可以实现一下 40ms -> 24ms
+ * 4. 换成 opencv 的 parallel_for_ 进行并行加速  可以实现一下             24ms ->  6ms
+ * 5. Template 从 21降为 8                                            6ms ->  2ms
+ * 5. 优化算法改一下 应该可以进一步加速                                  预计 2ms -> 1.4ms
  */
 
 
@@ -123,7 +122,7 @@ bool LKtracker::SinglePixelOperation(const cv::Mat & pre_img,const cv::Mat & cur
                                      const Eigen::Vector2f & origin, Eigen::Vector2f & cur_origin)
 {
     int half_path_size = options_ptr_->template_/2;
-    int iterations = 10;
+    int iterations = options_ptr_->max_iterations_;
 
     Eigen::Matrix2f H;
     Eigen::Vector2f b;
@@ -221,7 +220,7 @@ void ParallelPixelOperator::PixelOperation(const cv::Range & range)
 {
     #define GetJ(x,y) J_array[y+half_patch_size_+(x+half_patch_size_)*half_patch_size_*2]
 
-    int iterations = 10;
+    int iterations = 20;
     for(size_t idx=range.start;idx<range.end;idx++)
     {
         Eigen::Matrix2f H;

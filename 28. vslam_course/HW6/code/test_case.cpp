@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:59:23
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-03 09:47:11
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-06 20:36:41
  * @Description: 
  * 
  * opencv tracker 速度大概 1ms 已经不错了
@@ -22,9 +22,10 @@ std::string img1,img2,config;
 
 int main()
 {
-    img1 = "./1.png";
-    img2 = "./2.png";
     config = "./config/config.yaml";
+    cv::FileStorage fin(config.c_str(),CV_STORAGE_READ);
+    fin["LKTracker.Source"]>> img1;
+    fin["LKTracker.Target"]>> img2;
 
     // imread
     cv::Mat pre_img = cv::imread(img1,0);
@@ -46,10 +47,11 @@ int main()
     cv_tracker.SetInput(pre_img,temp_pre_corners);
     cv_tracker.SetTarget(cur_img);
     cv_tracker.Run();
+    
 
 
     bool inverse;
-    cv::FileStorage fin(config.c_str(),CV_STORAGE_READ);
+
     fin["LKTracker.Inverse"]>>inverse;
 
     std::cout<<"Use Inverse: "<<inverse<<std::endl;

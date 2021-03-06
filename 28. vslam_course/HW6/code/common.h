@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-02-27 23:30:44
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-03 09:32:32
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-06 18:29:36
  * @Description: 
  */
 
@@ -60,7 +60,7 @@ void DrawCorners(cv::Mat & img, std::vector<cv::Point2f> & corners,
 }
 
 void DrawForMatchResult(cv::Mat & img, const std::vector<cv::Point2f> & origin,
-                        const std::vector<cv::Point2f> & result,cv::Scalar color =(0,255,0))
+                        const std::vector<cv::Point2f> & result,cv::Scalar color = cv::Scalar(0,255,0))
 {
     const float r = 5;
     for(int i=0;i<origin.size();i++)
