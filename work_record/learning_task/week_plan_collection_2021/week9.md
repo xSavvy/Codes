@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-01 09:20:46
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 09:32:10
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-06 21:43:03
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week9.md
  * @Description: 
 -->
@@ -21,6 +21,6 @@
 9.  |算法week4-week6||3
 10. |EKF SO3 问题就是关于更新方向的问题<br> Discrete extended Kalman filter on lie groups|
 11. |深度学习VO+ORB融合||1
-12. |光流直接法前端||1
+12. |光流直接法前端|完成|1
 13. |SMSCKF 论文+代码||
 

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 16:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-06 20:55:43
+ * @LastEditTime: 2021-03-06 21:15:55
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/interesting_target.md
  * @Description: 
 -->
@@ -22,3 +22,4 @@
 11. |设计SLAM流程||  
 12. |Good Featrue系列||
 13. |光流和直接法追踪edgelet\Vanishing Point\Line 的尝试||
+14. |Parallel Bundle Adjustment ||
