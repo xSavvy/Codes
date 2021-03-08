@@ -2,15 +2,16 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-05 16:31:51
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-05 17:13:10
+ * @LastEditTime: 2021-03-08 15:43:21
  * @FilePath: /3rd-test-learning/38. line_feature/edgelet/doc.md
  * @Description: 
 -->
 ### edgelet :
 1. 定义:具有连续且强的灰度梯度的小线段<br>
 2. 长线的缺点:容易被遮挡\慢<br>
-3. 空间表示: 一个?
-4. 提取： Gaussian 滤波， Scharr XY发想梯度， Canny 提边缘
+3. 缺点: aperture problem
+4. 空间表示: 一个?
+5. 提取： Gaussian 滤波， Scharr XY 出梯度， Canny 提边缘
 
 ### recommand material
 1.  Edge Landmarks in Monocular SLAM
@@ -23,3 +24,11 @@
 8. https://cecas.clemson.edu/~stb/students/ssundar_thesis.pdf
 
 https://github.com/chsasank/Image-Rectification
+
+
+### Paper Reading 
+1. SVO2.0
+   ![](./pic/1.png)
+   感觉Edgelet带来的提升并不大<br>
+   <font color = "Red"> 测试下来PC端大概需要30ms 才能处理完一张752 480的图片</font>
+2. 
