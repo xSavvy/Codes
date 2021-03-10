@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 09:19:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-01 15:38:27
- * @FilePath: /3rd-test-learning/30. supplement_material/plucker_line/doc.md
+ * @LastEditTime: 2021-03-10 15:51:04
+ * @FilePath: /3rd-test-learning/38. line_feature/plucker/doc.md
  * @Description: 
 -->
 ### Plucker线表示
@@ -36,7 +36,8 @@ Plucker 是使用线方向(l)，和这个线到原点的moment(m)来对线进行
 l 确定方向\
 m 包含了距离信息\
 $m = p×l$ \
-p是在l 上的任意点
+p是在l 上的任意点<br>
+m是垂直于直线l和原点组成的平面($\pi$)的直线
 
 ![](./picture/1.png)
 
@@ -66,6 +67,7 @@ c.2. l=0, 值线在无穷远处,并且这个线是在 m 垂直的平面上的。
 4. SLAM上的应用\
 4.a. 可以快速初始化两个相机帧中 共视的线条
 ![](./picture/3.png)
+
 过程：\
 a.1. 线的在相机图像上的两个点$(s_1,e_1)$(归一化平面上在world坐标系下的表示，不是uv)和相机本身的位置$(c_1)$可以构建出一个平面$\pi$
 $$
@@ -104,7 +106,7 @@ $$
         \right] = T^c_wL^w = 
         \left[
                 \begin{matrix}
-        R^c_w & t_c^w×R^c_w\\
+        R^c_w & t_w^c×R^c_w\\
         \pmb{0} & R^c_w
         \end{matrix}
         \right]L^w
@@ -119,6 +121,9 @@ $$
 $$
 $m\in{R^3}$ 来自plucker 的垂直部分\
 $p_s$和$p_e$ 是观测在归一化平面上的表示$\in{R^3}$\
+
+这里的物理意义:
+最小化起始点到 平面的距离
 
 优化过程\
 $L$是一个$(l,m)$ 的plucker表示
@@ -210,6 +215,46 @@ $$
 $$
 只是每次使用需要对l和m进行归一化。但是确在符号上统一，取倒数可以保证超远距离的失效情况
 
+
+### 优化再谈
+1. 梗概:
+   
+   1.a. 优化的物理意义: 线段点到平面的距离
+   1.b. 优化的步骤
+
+2. 优化的步骤
+$$  
+    e_1 =  \frac{p_s^Tm}{\operatorname{norm}(m)}\\
+    e_2 =  \frac{p_e^Tm}{\operatorname{norm}(m)}\\
+$$
+
+以下用$e_1$作为例子，进行公式推导
+$$
+\begin{aligned}
+    e_1 &= p_s^T\cfrac{ m}{\operatorname{norm}(m)}
+    \\
+    &= p_x^T[ \cfrac{ m}{\operatorname{norm}(m)}+\cfrac{\partial \cfrac{m}{\operatorname{norm}(m)}}{\partial \theta,\alpha}]
+    \\
+    & = p_x^T[ \cfrac{ m}{\operatorname{norm}(m)}+\cfrac{\partial \cfrac{m}{\operatorname{norm}(m)}}{\partial m}\cfrac{\partial m}{\partial \theta,\alpha}]
+    \\
+    & = p_x^T[ \cfrac{ m}{\operatorname{norm}(m)}+\cfrac{\partial \cfrac{m}{\operatorname{norm}(m)}}{\partial m}\cfrac{\partial e_2^T [l,m]}{\partial \theta,\alpha}]
+\end{aligned}
+$$
+
+$$
+    m = [m_1,m_2,m_3]^T\\
+    \cfrac{\partial \cfrac{ m}{\operatorname{norm}(m)}}{\partial m}= \cfrac{I\in R^{3×3}}{\operatorname{norm}(m)} + m\operatorname{norm}(m)^{-3}m^T
+    \\
+    \cfrac{\partial e_2^T [l,m]}{\partial \theta,\alpha} = e_2^T\cfrac{\partial exp(\theta)\left[
+        \begin{matrix}
+            \sin(\alpha)&0\\
+            0&\cos(\alpha)\\
+            0&0
+        \end{matrix}\right]}{\partial \theta,\alpha}
+    \\
+    
+$$
+往下就不继续推导了 快吐了
 
 ### remian task
 1. code 里面的plucker计算相反1   问题是由法向量的方向导致的      和定义有关 完成

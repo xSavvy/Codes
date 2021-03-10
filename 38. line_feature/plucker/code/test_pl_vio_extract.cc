@@ -2,15 +2,15 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-08 16:23:01
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-08 18:02:47
+ * @LastEditTime: 2021-03-08 18:15:04
  * @FilePath: /3rd-test-learning/38. line_feature/plucker/code/test_pl_vio_extract.cc
  * @Description: 
  * 
  * 
  * 存在的问题:
- * 1. 旋转匹配，导致的错误匹配
+ * 1. 旋转匹配，导致的错误匹配   最后发现是忘记筛选distance了
  * 2. 存在太多误匹配，怀疑是API使用的问题 最后发现是忘记筛选distance了
- * 3. 存在线飞起来的情况
+ * 3. 存在线飞起来的情况 还没有查清楚
  * 
  */
 #include "common.h"

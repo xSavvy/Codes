@@ -9,6 +9,10 @@ set(libhello_src src/hello.cpp)
 
 # 设置库产生的位置
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+# 设置可执行文件产生的位置
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build)
+
+
 
 # 生成名称相同的动态库和静态库
 add_library(hello SHARED ${libhello_src})
