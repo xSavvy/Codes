@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-07 16:12:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-07 17:42:03
+ * @LastEditTime: 2021-03-07 10:24:33
  * @Description:  
  *               为了给imu 进行性能分析 所以需要把csv 转换成 rosbag 的形式
  *               这里主要是使用 C++ 原声的io  对 csv 文件进行读取
@@ -16,6 +16,7 @@
 #include <vector>
 #include <string>
  
+#include <Eigen/Eigen>
 using namespace std;
 
 bool readCSV(vector<std::string> & header, 
@@ -107,3 +108,29 @@ bool readCSV(vector<std::string> & header,
 //         cout<<endl;
 //     }
 // }
+
+
+void Load3d(std::string path, std::vector<Eigen::Vector3d> & result)
+{
+    std::ifstream fin(path.c_str());
+    if(!fin.is_open())
+    {
+        cerr<<"the path is wrong"<<endl;
+        abort();
+    }
+    string s,info;
+    stringstream ss;
+    std::vector<double> xy;
+    while(getline(fin,s))
+    {
+        ss.str(s);
+        while(getline(ss,info,','))                           // 使用 ‘，’对一行数据进行分割
+        {
+            xy.push_back(atof(info.c_str())) ;         
+        }
+        Eigen::Vector3d p(xy[0],xy[1],xy[2]);
+        result.push_back(p);
+        xy.clear();
+        ss.clear();
+    }
+}

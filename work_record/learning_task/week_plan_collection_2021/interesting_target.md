@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 16:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-06 21:15:55
+ * @LastEditTime: 2021-03-10 07:20:06
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/interesting_target.md
  * @Description: 
 -->
@@ -23,3 +23,4 @@
 12. |Good Featrue系列||
 13. |光流和直接法追踪edgelet\Vanishing Point\Line 的尝试||
 14. |Parallel Bundle Adjustment ||
+15. |根据房间layout 进行室内定位||https://arxiv.org/pdf/1905.12571.pdf
