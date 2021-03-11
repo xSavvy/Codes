@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-10 06:29:27
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-10 08:16:36
+ * @LastEditTime: 2021-03-10 20:46:10
  * @Description: 
  */
 #include <iostream>
@@ -22,7 +22,6 @@ class DataLoader
     DataLoader(const string & config_path);
 
     void LoadImg(int range);
-
     void LoadPose(const string & path);
     void LoadTime(const string & path);
 
@@ -49,7 +48,7 @@ DataLoader::DataLoader(const string & config_path)
     
     LoadPose(pose_path);
     LoadImg(1101);
-    LoadTime(time_path);
+    // LoadTime(time_path);
 }
 
 void DataLoader::LoadPose(const string & path){
@@ -78,7 +77,7 @@ void DataLoader::LoadPose(const string & path){
         ss.clear();
     }
 
-    void TransformPose(origin_pose,pose_array_);
+    TransformPose(origin_pose,pose_array_);
 }
 
 
@@ -99,9 +98,8 @@ void DataLoader::TransformPose(const vector<vector<double>> & origin,
         z_trans = pose[5];
 
         Sophus::SE3d se3;
-        se3.so3 = EulerToRotationMatrix(y,x,z);
-        se3.translation = Eigen::Vector3d(x_trans,y_trans,z_trans);
-
+        se3.so3() = EulerToRotationMatrix(y_angle,x_angle,z_angle);
+        se3.translation() = Eigen::Vector3d(x_trans,y_trans,z_trans);
 
         result.push_back(se3);
     }
@@ -109,7 +107,7 @@ void DataLoader::TransformPose(const vector<vector<double>> & origin,
 
 // 待测试
 
-static Sophus::SO3d DataLoader::EulerToRotationMatrix(double x,double y, double z)
+Sophus::SO3d DataLoader::EulerToRotationMatrix(double x,double y, double z)
 {
     Eigen::AngleAxisd axis_x(x,Eigen::Vector3d(1.,0.,0.));
     Eigen::AngleAxisd axis_y(y,Eigen::Vector3d(0.,1.,0.));
@@ -121,6 +119,7 @@ static Sophus::SO3d DataLoader::EulerToRotationMatrix(double x,double y, double 
 
 void DataLoader::LoadImg(int range)
 {
+    img_array_.clear();
     std::string end = ".png";
     std::string start = "0000000000";
     std::string temp;
@@ -131,6 +130,10 @@ void DataLoader::LoadImg(int range)
         a = to_string(i);
         temp = temp.substr(0,start.length()-a.length()) + a + end;
         img_array_.push_back(temp);
-    }
+    }    
+}
+
+void DataLoader::LoadTime(const std::string & time_path)
+{
     
 }
