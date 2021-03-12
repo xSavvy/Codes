@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-10 10:39:21
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-10 18:15:18
+ * @LastEditTime: 2021-03-11 14:56:54
  * @FilePath: /3rd-test-learning/38. line_feature/sim/ceres_line_cost_function.h
  * @Description: 
  * 
@@ -21,6 +21,8 @@
 #include "Eigen/Eigen"
 #include "sophus/se3.hpp"
 #include "sim_env.h"
+#include "line_geometry.h"
+#include "line_parameterization.h"
 
 // 几何误差
 
@@ -81,11 +83,11 @@ class Dof4LineCostFunction:public ceres::SizedCostFunction<2,6>
     {
         Eigen::Map<const Eigen::Matrix<double,6,1>> L_w(params[0]);
         Eigen::Matrix<double,6,1> L_c = cm->w2cl(L_w);
-        Eigen::Vector3d nc = L_c.head<3>(0);
+        Eigen::Vector3d nc = L_c.block<3,1>(0,0);
 
         Eigen::Map<Eigen::Vector2d> r(residuals);
 
-        double l_norm = nc(0) * nc(0) + nc(1) * nc(1);
+        double l_norm = nc(0) * nc(0) + nc(1) * nc(1) ;
         double l_sqrtnorm = sqrt( l_norm );
         double l_trinorm = l_norm * l_sqrtnorm;
 
@@ -121,7 +123,7 @@ class Dof4LineCostFunction:public ceres::SizedCostFunction<2,6>
 
 class Dof4LineLocalParameterization: public ceres::LocalParameterization
 {
-
+    public:
     Dof4LineLocalParameterization(const Camera * camera):cm(camera){}
     virtual bool Plus(const double* x,
                 const double* delta,
@@ -130,8 +132,8 @@ class Dof4LineLocalParameterization: public ceres::LocalParameterization
         Eigen::Map<const Eigen::Matrix<double,6,1>> L_w(x);
         Eigen::Map<Eigen::Matrix<double,6,1>> update_L_w(x_plus_delta);
 
-        Eigen::Vector3d m = L_w.head<3>(0);
-        Eigen::Vector3d l = L_w.head<3>(3);
+        Eigen::Vector3d m = L_w.block<3,1>(0,0);
+        Eigen::Vector3d l = L_w.block<3,1>(3,0);
 
         double n_m = m.norm();
         double n_l = l.norm();
@@ -168,6 +170,8 @@ class Dof4LineLocalParameterization: public ceres::LocalParameterization
 
         update_L_w.block<3,1>(0,0) = ml_so3.col(0);
         update_L_w.block<3,1>(3,0) = ml_so3.col(1);
+
+        return true;
     }
 
     virtual bool ComputeJacobian(const double* x, double* jacobian) const
@@ -178,14 +182,14 @@ class Dof4LineLocalParameterization: public ceres::LocalParameterization
         Eigen::Vector3d e1(1.0,0.0,0.0);
         Eigen::Vector3d e2(0.0,1.0,0.0);
 
-        Eigen::Vector3d m = L_w.head<3>(0);
-        Eigen::Vector3d l = L_w.head<3>(3);
+        Eigen::Vector3d m = L_w.block<3,1>(0,0);
+        Eigen::Vector3d l = L_w.block<3,1>(3,0);
         
         Eigen::Matrix3d so3;
         so3<<m.normalized(),l.normalized(),m.normalized().cross(l.normalized());
 
-        cout<<" check m "<< m.transpose()<<endl;
-        cout<<" check so3: "<<endl<<so3<<endl;
+        // cout<<" check m "<< m.transpose()<<endl;
+        // cout<<" check so3: "<<endl<<so3<<endl;
         
         double n_m = m.norm();
         double n_l = l.norm();
@@ -212,3 +216,94 @@ class Dof4LineLocalParameterization: public ceres::LocalParameterization
 };
 
 
+class lineProjectionFactor : public ceres::SizedCostFunction<2, 4>
+{
+  public:
+    lineProjectionFactor(const Eigen::Vector4d &_obs_i,const Camera * camera);
+    virtual bool Evaluate(double const *const *parameters, double *residuals, double **jacobians) const;
+    void check(double **parameters);
+
+    Eigen::Vector4d obs_i;
+    Eigen::Matrix<double, 2, 3> tangent_base;
+    const Camera * cm;
+    
+};
+
+lineProjectionFactor::lineProjectionFactor(const Eigen::Vector4d &_obs_i,const Camera * camera) : obs_i(_obs_i),cm(camera)
+{
+};
+
+/*
+  parameters[0]:  Twi
+  parameters[1]:  Tbc
+  parameters[2]:  line_orth
+*/
+bool lineProjectionFactor::Evaluate(double const *const *parameters, double *residuals, double **jacobians) const
+{
+    Eigen::Vector4d line_orth( parameters[0][0],parameters[0][1],parameters[0][2],parameters[0][3]);
+    Vector6d line_w = orth_to_plk(line_orth);
+
+    Vector6d line_c = cm->w2cl(line_w);
+
+    // 直线的投影矩阵K为单位阵
+    Eigen::Vector3d nc = line_c.head(3);
+    double l_norm = nc(0) * nc(0) + nc(1) * nc(1);
+    double l_sqrtnorm = sqrt( l_norm );
+    double l_trinorm = l_norm * l_sqrtnorm;
+
+    double e1 = obs_i(0) * nc(0) + obs_i(1) * nc(1) + nc(2);
+    double e2 = obs_i(2) * nc(0) + obs_i(3) * nc(1) + nc(2);
+    Eigen::Map<Eigen::Vector2d> residual(residuals);
+    residual(0) = e1/l_sqrtnorm;
+    residual(1) = e2/l_sqrtnorm;
+
+
+    //std::cout << residual <<"\n";
+    if (jacobians)
+    {
+
+        Eigen::Matrix<double, 2, 3> jaco_e_l(2, 3);
+        jaco_e_l << (obs_i(0)/l_sqrtnorm - nc(0) * e1 / l_trinorm ), (obs_i(1)/l_sqrtnorm - nc(1) * e1 / l_trinorm ), 1.0/l_sqrtnorm,
+                (obs_i(2)/l_sqrtnorm - nc(0) * e2 / l_trinorm ), (obs_i(3)/l_sqrtnorm - nc(1) * e2 / l_trinorm ), 1.0/l_sqrtnorm;
+
+
+        Eigen::Matrix<double, 3, 6> jaco_l_Lc(3, 6);
+        jaco_l_Lc.setZero();
+        jaco_l_Lc.block(0,0,3,3) = Eigen::Matrix3d::Identity();
+
+        Eigen::Matrix<double, 2, 6> jaco_e_Lc;
+        jaco_e_Lc = jaco_e_l * jaco_l_Lc;
+        if (jacobians[0])
+        {
+            Eigen::Map<Eigen::Matrix<double, 2, 4, Eigen::RowMajor>> jacobian_lineOrth(jacobians[0]);
+            Matrix6d invTwc = cm->J_lc_lw();
+
+            //std::cout<<invTwc<<"\n";
+
+            Vector3d nw = line_w.head(3);
+            Vector3d vw = line_w.tail(3);
+            Vector3d u1 = nw/nw.norm();
+            Vector3d u2 = vw/vw.norm();
+            Vector3d u3 = u1.cross(u2);
+            Vector2d w( nw.norm(), vw.norm() );
+            w = w/w.norm();
+
+            Eigen::Matrix<double, 6, 4> jaco_Lw_orth;
+            jaco_Lw_orth.setZero();
+            jaco_Lw_orth.block(3,0,3,1) = w[1] * u3;
+            jaco_Lw_orth.block(0,1,3,1) = -w[0] * u3;
+            jaco_Lw_orth.block(0,2,3,1) = w(0) * u2;
+            jaco_Lw_orth.block(3,2,3,1) = -w(1) * u1;
+            jaco_Lw_orth.block(0,3,3,1) = -w(1) * u1;
+            jaco_Lw_orth.block(3,3,3,1) = w(0) * u2;
+
+            //std::cout<<jaco_Lw_orth<<"\n";
+
+            jacobian_lineOrth = jaco_e_Lc * invTwc * jaco_Lw_orth;
+        }
+
+    }
+
+
+    return true;
+}

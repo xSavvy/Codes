@@ -8,5 +8,7 @@ include(../../cmake/pangolin.cmake)
 include(../../cmake/eigen3.cmake)
 include(../../cmake/ceres.cmake)
 
-add_executable(test_sim test_sim.cc)
+
+
+add_executable(test_sim test_sim.cc line_parameterization.cpp)
 add_executable(test_angle test_angle.cc)

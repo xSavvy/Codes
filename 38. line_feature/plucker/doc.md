@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 09:19:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-10 15:51:04
+ * @LastEditTime: 2021-03-12 09:40:22
  * @FilePath: /3rd-test-learning/38. line_feature/plucker/doc.md
  * @Description: 
 -->
@@ -221,6 +221,7 @@ $$
    
    1.a. 优化的物理意义: 线段点到平面的距离
    1.b. 优化的步骤
+   1.c. 优化的输入输出：输入 待优化的plucker参数 和 线的端点 输出: 优化后的plucker参数
 
 2. 优化的步骤
 $$  
@@ -265,3 +266,9 @@ $$
 4. L 的初始化问题 2             使用的公式不同导致的      完成
 5. 优化尝试(so3+1/s^2)            
 6. LBD LSD 
+
+
+### 补充
+1. 关于像素平面投影的问题
+   ![](./picture/6.png)
+   ![](./picture/7.png)
