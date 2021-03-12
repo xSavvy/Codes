@@ -15,7 +15,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sunny/workspace_private/3rd-test-learning/38. line_feature/sim/build/test_sim",
+            "program": "/home/lwl/workspace/3rd-test-learning/41. deep_vo/build/test_case",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
