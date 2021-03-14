@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-08 09:37:48
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-12 17:42:15
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-13 18:52:45
  * @FilePath: /3rd-test-learning/work_record/work_task/week10.md
  * @Description: 
 -->
@@ -10,9 +10,9 @@
 
 序号|任务|状态|排序
 ---|---|---|---
-1.  |测试BASALT、SMSCKF、LDSO||3          
-2.  |VINS-Mono 代码阅读||2
-3.  |Edgelet\Vanishing\Vertical||1
+1.  |测试BASALT、SMSCKF、LDSO|中途暂停|3          
+2.  |VINS-Mono 代码阅读|不需要了|2
+3.  |Edgelet\Vanishing\Vertical|完成了一半的内容|1
 4.  |sensor_bridge |完成|1
 
 

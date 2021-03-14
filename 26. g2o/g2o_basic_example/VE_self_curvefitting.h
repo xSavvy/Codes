@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2020-12-24 14:07:52
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2020-12-27 17:35:27
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-13 20:28:02
  * @FilePath: /3rd-test-learning/29. g2o/g2o_basic_example/VE_self_curvefitting.h
  * @Description:  学习如何编写 g2o
  *                这个是给定 cosfunction 的编写
@@ -103,6 +103,8 @@ class CurveFittingEdge : public  g2o::BaseUnaryEdge<1,Eigen::Vector2d,CurveFitti
         const Eigen::Vector3d abc = v->estimate();
         _error(0, 0) = y - std::exp(abc(0, 0) * _x * _x + abc(1, 0) * _x + abc(2, 0));
     }
+
+    
     // _jacobianOplusXi 对应jaocbian 求导
     // 这个变量不属于BaseEdge 
     // 是在BaseUnary 这一层进行定义的

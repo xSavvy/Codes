@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-02-25 13:30:00
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-01 09:19:15
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-13 18:48:35
  * @FilePath: /3rd-test-learning/30. supplement_material/depth_filter/supplementary_material_depth_filter.md
  * @Description: 
 -->
@@ -182,3 +182,16 @@ $$
 2021.3.1添加<br>
 突然发现，只要问题满足了1. 单峰拟合条件，就可以假设$p(\hat{Z},\pi|X_n)$符合Beta×Gaussian。也就在启发性的方面说明了，为什么可以这样进行拟合<br>
 http://george-vogiatzis.org/publications/ivcj2010supp.pdf 推断的部分我没有看懂，存在知识点上的缺少，需要statistic inference chapter10.1的内容
+
+### 2021.3.13添加
+昨天，想到对于Depth Filter 的理解，差点就忘掉记下来了。
+先不谈论，关于极线约束的问题。
+实际上，Depth Filter是从一个类似概率机器人chapter6.1的传感器建模的过程。
+<font color="Green">
+不过概率机器人的Chapter 6.1 是在判断一个传感器观测概率分布是那几个已知的分布按照什么比例组成的。
+Depth Filter 也是在寻找两种概率分布的最佳比例。
+但是这又可以同时抽象成EM 算法。
+但是Depth Filter多了一步使用这个比例来进行这个特征是不是靠谱的判断。(其实这么说，也不是很靠谱，毕竟实际上svo里是不是好点的判断是靠Beta ×Gaussian里面Gaussian 分布的方差来进行判断的)
+</font>
+
+

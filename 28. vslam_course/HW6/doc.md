@@ -2,14 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-27 22:14:40
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-06 21:04:32
+ * @LastEditTime: 2021-03-14 12:07:20
  * @Description: 
 -->
 ### 1. LK光流
 #### 2.1
 1. 按此文的分类，光流法可分为哪几类？
    四类 forward addition forward compositional inverse addition inverse compositional
-2. 在 compositional 中，为什么有时候需要做原始图像的 wrap？该 wrap 有何物理意义？
+2. 在 compositional 中，为什么有时候需要做原始图像的warp？该 warp 有何物理意义？
    (a)因为要作为优化的参数进行patch 上的灰度值进行优化。(b)相当于对patch 做仿射变换 
 3. forward 和 inverse 有何差别？
    在积分的时候对Warp 进行了一次换元处理
