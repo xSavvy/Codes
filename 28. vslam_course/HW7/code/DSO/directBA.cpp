@@ -32,8 +32,8 @@ typedef vector<Sophus::SE3d, Eigen::aligned_allocator<Sophus::SE3d>> VecSE3;
 typedef vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> VecVec3d;
 
 // global variables
-string pose_file = "./poses.txt";
-string points_file = "./points.txt";
+string pose_file = "../poses.txt";
+string points_file = "../points.txt";
 
 // intrinsics
 float fx = 277.34;
@@ -133,7 +133,7 @@ public:
 
         const PointVertex * pv = static_cast<const PointVertex *>(_vertices[1]);
         Eigen::Vector3d pw = pv->estimate();
-        std::cout<<_vertices.size()<<std::endl;
+        // std::cout<<_vertices.size()<<std::endl;
         const VertexSophus * posev = static_cast<const VertexSophus *>(_vertices[0]);
         Eigen::Vector2d uv = posev ->project(pw);
 
@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
 
     // read images
     vector<cv::Mat> images;
-    boost::format fmt("./%d.png");
+    boost::format fmt("../%d.png");
     for (int i = 0; i < 7; i++) {
         images.push_back(cv::imread((fmt % i).str(), 0));
     }
@@ -253,16 +253,16 @@ int main(int argc, char **argv) {
     }
 
     //add edge
-    for(int i =0;i<1;i++)
+    for(int i =0;i<2;i++)
     {
-        for(int j =0;j<1;j++)
+        for(int j =0;j<color.size()/10;j++)
         {
             EdgeDirectProjection * edge = new EdgeDirectProjection(color[j],images[i]);
-            edge->setVertex(0,vertex_pts[j]);
-            edge->setVertex(1,vertex_poses[i]);
+            edge->setVertex(1,vertex_pts[j]);
+            edge->setVertex(0,vertex_poses[i]);
             edge->setInformation(Eigen::Matrix<double,16,16>::Identity());
             edge->setRobustKernel(new g2o::RobustKernelHuber());
-            std::cout<<optimizer.edges().size()<<endl;
+            // std::cout<<optimizer.edges().size()<<endl;
             optimizer.addEdge(edge);
             edges.push_back(edge);
         }
@@ -272,7 +272,7 @@ int main(int argc, char **argv) {
 
     // perform optimization
     optimizer.initializeOptimization(0);
-    optimizer.optimize(4);
+    optimizer.optimize(20);
 
     // TODO fetch data from the optimizer
     // START YOUR CODE HERE

@@ -18,7 +18,7 @@
             "program": "/home/lwl/workspace/3rd-test-learning/28. vslam_course/HW7/code/DSO/build/DSO",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/28. vslam_course/HW7/code/DSO/",
+            "cwd": "${workspaceFolder}/28. vslam_course/HW7/code/DSO/build",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
