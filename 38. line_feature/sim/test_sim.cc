@@ -2,12 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-10 09:28:03
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-11 15:01:31
+ * @LastEditTime: 2021-03-15 11:35:40
  * @FilePath: /3rd-test-learning/38. line_feature/sim/test_sim.cc
  * @Description: 
  * 
  * 1. 纯旋转无法正确的生成plucker参数，必须有平移才能生成plucker
- * 
  * 
  * 
  * 
@@ -65,6 +64,11 @@ void Init()
     l_px4.start_px = cm4.c2p(cm4.w2c(l.start_point));
     l_px4.end_px = cm4.c2p(cm4.w2c(l.end_point));
 
+    l_px1.ld = direction(l_px1.start_px,l_px1.end_px);
+    l_px2.ld = direction(l_px2.start_px,l_px2.end_px);
+    l_px3.ld = direction(l_px3.start_px,l_px3.end_px);
+    l_px4.ld = direction(l_px4.start_px,l_px4.end_px);
+
     img1 = img.clone();
     img2 = img.clone();
     img3 = img.clone();
@@ -113,6 +117,64 @@ void TestTP()
     
 }
 
+
+void TestTPnew()
+{
+    // 
+    Eigen::Matrix<double,6,1> tp;
+    tp.block<3,1>(0,0) = l.start_point;
+    tp.block<3,1>(3,0) = l.end_point;
+    tp += Eigen::Matrix<double,6,1>::Ones()*0.6;
+    
+    cout<<"the tp : "<< tp.transpose()<<endl;
+    cout<<"the l.start: "<<l.start_point.transpose()<<"  the l.end: "<<l.end_point.transpose()<<endl;
+
+    // 开始建立优化
+    ceres::Problem problem;
+    problem.AddParameterBlock(tp.data(),6);
+
+    ceres::CostFunction * t1 = new TPCostFunctionNew(l_px1.ld,&cm1);
+    ceres::CostFunction * t2 = new TPCostFunctionNew(l_px2.ld,&cm2);
+    ceres::CostFunction * t3 = new TPCostFunctionNew(l_px3.ld,&cm3);
+    ceres::CostFunction * t4 = new TPCostFunctionNew(l_px4.ld,&cm4);
+    problem.AddResidualBlock(t1,NULL,tp.data());
+    problem.AddResidualBlock(t2,NULL,tp.data());
+    problem.AddResidualBlock(t3,NULL,tp.data());
+    problem.AddResidualBlock(t4,NULL,tp.data());
+
+    ceres::Solver::Options options;
+    ceres::Solver::Summary summary;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.minimizer_type = ceres::TRUST_REGION;
+    options.trust_region_strategy_type = ceres::LEVENBERG_MARQUARDT;
+
+    options.max_num_iterations = 30;
+    options.function_tolerance = 1e-3;
+
+    // 这个Solve 和那个不能用的solve 看起来还是有区分度的
+    ceres::Solve(options,&problem,&summary);
+
+    cout<<summary.BriefReport()<<endl;
+
+    cout<<"the result is "<< tp.transpose()<<endl;
+
+    // plucker test
+    Vector6d plucker_l;
+    plucker_l.block<3,1>(3,0) = (l.start_point - l.end_point).normalized();
+    Eigen::Vector3d l_w = plucker_l.block<3,1>(3,0);
+    plucker_l.block<3,1>(0,0) = l.start_point.cross(l_w);
+    cout<<"the origin plucker"<<plucker_l.transpose()<<endl;
+
+    Vector6d plucker_est;
+    plucker_est.block<3,1>(3,0) = (tp.block<3,1>(0,0) - tp.block<3,1>(3,0)).normalized();
+    l_w = plucker_est.block<3,1>(3,0);
+    plucker_est.block<3,1>(0,0) = tp.block<3,1>(0,0).cross(l_w);
+
+    cout<<"the estimated plucker is "<< plucker_est.transpose()<<endl;
+
+    
+}
+
 void TestPluckerSlef()
 {
     // 测试Plucker生成
@@ -155,11 +217,11 @@ void TestPluckerSlef()
 
 void TestPluckerPLVIO()
 {
-    
     // 测试Plucker生成
     Vector6d plucker_l;
     plucker_l.block<3,1>(3,0) = (l.start_point - l.end_point).normalized();
     Eigen::Vector3d l_w = plucker_l.block<3,1>(3,0);
+    
     plucker_l.block<3,1>(0,0) = l.start_point.cross(l_w);
 
     Vector4d orth_l = plk_to_orth(plucker_l);
@@ -232,11 +294,18 @@ void TestPluckerGeneration()
 
 }
 
+void LineLinearSolver()
+{
+    
+}
 
 
 int main()
 {
     Init();
+    TestTPnew();
+
+    
 
 
 

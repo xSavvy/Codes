@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-10 09:20:27
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-10 16:11:27
+ * @LastEditTime: 2021-03-15 09:52:20
  * @FilePath: /3rd-test-learning/38. line_feature/sim/sim_env.h
  * @Description: 
  */
@@ -33,6 +33,7 @@ class LinePx
     Eigen::Vector2d end_px;
     cv::Point2f cv_start_px;
     cv::Point2f cv_end_px;
+    Eigen::Vector3d ld;
     void Update();
 };
 
