@@ -1,0 +1,32 @@
+<!--
+ * @Author: Liu Weilong
+ * @Date: 2021-03-15 13:06:24
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-15 17:54:07
+ * @FilePath: /3rd-test-learning/31. orb_slam_related/pl-slam/code_reading/line.md
+ * @Description: 
+-->
+### 内容只有PLSLAM 线的部分
+1. detectStereoLineSegments
+2. matchKF2KFLines
+
+
+-------------
+
+### detectStereoLineSegments
+
+序号|子任务|内容
+----|----|----
+1. |detectLineFeatures|LSD 版本 使用response 进行排序,取高响应<br>FLD 版本 使用长度进行排序，取长的<br> 最后算一下描述子
+2. |matchStereoLines|a. GridMatch 加速匹配方法 暂用match(opencv) 代替<br>b.lineSegmentOverlapStereo overlap的一个check<br>c. filterLineSegmentDisparity 视差的check
+
+
+### matchKF2KFLines
+序号|子任务|内容
+---|---|---
+1. |matchGrid|一个Grid小窗口加速
+2. |match|左右匹配、内部调用matchNNR
+3. |matchNNR|内部调用KnnMatch 取前两个，如果第一个没有比第二个小nnr倍就被抛弃
+
+
+
