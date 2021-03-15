@@ -2,17 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 13:33:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-04 14:24:45
+ * @LastEditTime: 2021-03-15 16:24:43
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/sketch.md
  * @Description: 
 -->
 ### YGZ 对于 ORB 的改善
 1. Cache的机制，加快TrackLocalMap搜索过程
-2. SingleLayerDSO 的提取机制 原因不明
+2. SingleLayerDSO 的提取机制 已经知道了
 3. InverseCompositional 直接法 用于帧间匹配
 4. TrackLocalMapDirect 图块的Affine匹配 和原版本的
 5. 所有的MapPoint确保都是从双目算出来的，不用担心尺度的问题
-6. 特征提取的部分还没有看懂
+6. 特征提取的部分还没有看懂 已经看懂
 
 
 ### 能够加速的原因

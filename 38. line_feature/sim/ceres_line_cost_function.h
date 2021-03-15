@@ -2,12 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-10 10:39:21
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-11 14:56:54
+ * @LastEditTime: 2021-03-15 11:16:26
  * @FilePath: /3rd-test-learning/38. line_feature/sim/ceres_line_cost_function.h
  * @Description: 
  * 
- * TPCostFunction 5 次 收敛
- * 
+ * 1. TPCostFunction 5 次 收敛   这个的编程纯在问题，对于问题理解存在问题
+ * 2. Plucker 8 次 收敛 
+ * 3. PL-SLAM 验证 收敛的结果有问题
  * 
  * 
  */
@@ -26,7 +27,8 @@
 
 // 几何误差
 
-// 两点优化 Two Point CostFunction 线段优化
+//! 两点优化 Two Point CostFunction 线段优化
+//! 这个函数存在问题已经废止
 class TPCostFunction:public ceres::SizedCostFunction<4,6>
 {
     public:
@@ -70,6 +72,65 @@ class TPCostFunction:public ceres::SizedCostFunction<4,6>
     Eigen::Vector2d end_in_regular;
     const Camera * cm;
 };
+
+class TPCostFunctionNew: public ceres::SizedCostFunction<2,6>
+{
+
+    public:
+    TPCostFunctionNew(Eigen::Vector3d line_direction, const Camera * camera):
+        ld(line_direction),cm(camera){}
+
+    virtual bool Evaluate(double const * const * params,
+                          double * residuals,
+                          double **jacobians)const
+    {
+        Eigen::Map<const Eigen::Vector3d> p_start(params[0]);
+        Eigen::Map<const Eigen::Vector3d> p_end(params[0]+3);
+        
+        Eigen::Vector3d start_in_camera = cm->w2c(p_start);
+        Eigen::Vector3d end_in_camera = cm->w2c(p_end);
+        
+        Eigen::Vector2d start = cm->c2p(cm->w2c(p_start));
+        Eigen::Vector2d end = cm->c2p(cm->w2c(p_end));
+    
+        Eigen::Map<Eigen::Vector2d> error(residuals);
+        
+        error.x() = ld.dot((Eigen::Vector3d()<<start,1.0).finished());
+        error.y() = ld.dot((Eigen::Vector3d()<<end,1.0).finished());
+        
+        cout<<"the error : "<<error.transpose()<<endl;
+
+        if (!jacobians) return true;
+        double* jacobian = jacobians[0];
+        if (!jacobian) return true;
+
+        Eigen::Map<Eigen::Matrix<double,2,6,Eigen::RowMajor>> jaco(jacobians[0]);
+        jaco.setZero();
+        Eigen::Matrix3d J_uv_xyz_s,J_uv_xyz_e;
+        J_uv_xyz_s.setZero();
+        J_uv_xyz_e.setZero();
+        J_uv_xyz_s.block<2,3>(0,0) = cm->J_uv_xyz(start_in_camera);
+        J_uv_xyz_e.block<2,3>(0,0) = cm->J_uv_xyz(end_in_camera);
+
+        jaco.block<1,3>(0,0) = ld.transpose()*J_uv_xyz_s*cm->T_w_c.inverse().so3().matrix();
+        jaco.block<1,3>(1,3) = ld.transpose()*J_uv_xyz_e*cm->T_w_c.inverse().so3().matrix();
+
+        return true;
+    }
+    
+    private:
+    const Camera * cm;
+    Eigen::Vector3d ld;
+};
+
+
+
+
+
+
+
+
+
 
 // Dof4Line 无限长度的线
 class Dof4LineCostFunction:public ceres::SizedCostFunction<2,6>
@@ -239,6 +300,7 @@ lineProjectionFactor::lineProjectionFactor(const Eigen::Vector4d &_obs_i,const C
   parameters[2]:  line_orth
 */
 bool lineProjectionFactor::Evaluate(double const *const *parameters, double *residuals, double **jacobians) const
+
 {
     Eigen::Vector4d line_orth( parameters[0][0],parameters[0][1],parameters[0][2],parameters[0][3]);
     Vector6d line_w = orth_to_plk(line_orth);
@@ -307,3 +369,12 @@ bool lineProjectionFactor::Evaluate(double const *const *parameters, double *res
 
     return true;
 }
+
+
+
+
+
+
+
+
+

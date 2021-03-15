@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-11 09:46:25
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-11 14:53:22
+ * @LastEditTime: 2021-03-15 09:55:33
  * @FilePath: /3rd-test-learning/38. line_feature/sim/line_geometry.h
  * @Description: 
  */
@@ -19,6 +19,8 @@ using namespace Eigen;
 typedef Matrix<double,6,1> Vector6d;
 typedef Matrix<double,8,1> Vector8d;
 typedef Matrix<double,6,6> Matrix6d;
+
+// pl-vio
 
 Vector4d pi_from_ppp(Vector3d x1, Vector3d x2, Vector3d x3) {
     Vector4d pi;
@@ -125,4 +127,13 @@ Vector4d to_pl_vio(const Eigen::Vector3d & s, const Eigen::Vector3d & e)
 {
     Eigen::Vector4d obs1 ; obs1<<s.head<2>(),e.head<2>();
     return obs1;
+}
+
+// pl-slam
+Eigen::Vector3d direction(const Eigen::Vector2d & s, const Eigen::Vector2d &e)
+{
+        Vector3d sp_l; sp_l << s.x(), s.y(), 1.0;
+        Vector3d ep_l; ep_l << e.x(), e.y(), 1.0;
+        Vector3d le_l; le_l << sp_l.cross(ep_l); le_l = le_l / std::sqrt( le_l(0)*le_l(0) + le_l(1)*le_l(1) );
+        return le_l;
 }

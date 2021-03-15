@@ -15,10 +15,14 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/lwl/workspace/3rd-test-learning/28. vslam_course/HW7/code/DSO/build/DSO",
+            "program": "/home/sunny/workspace_private/3rd-test-learning/38. line_feature/sim/build/test_sim",
             "args": [],
             "stopAtEntry": false,
+<<<<<<< HEAD
             "cwd": "${workspaceFolder}/28. vslam_course/HW7/code/DSO/build",
+=======
+            "cwd": "${workspaceFolder}",
+>>>>>>> c660cdd60c1fc1e75d4c0f78d08f5e90fbeab755
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
