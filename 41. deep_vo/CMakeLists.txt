@@ -4,7 +4,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_BUILD_TYPE "Debug")
 
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 3.4 REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 link_libraries(${OpenCV_LIBS})
 
