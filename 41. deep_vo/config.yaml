@@ -1,5 +1,6 @@
-%YAML: 1.0
-----
+%YAML:1.0
+---
 
 DataLoader.PosePath: ""
-DataLoader.TimePath: ""
+DataLoader.TimePath: "/home/lwl/workspace/3rd-test-learning/41. deep_vo/timestamps.txt"
+DataLoader.FinalIdx: 1169
