@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-16 09:37:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-16 09:52:18
+ * @LastEditTime: 2021-03-17 13:10:03
  * @FilePath: /3rd-test-learning/35. introduction_to_probability/song_hao/song_hao_chapter1.md
  * @Description: 
 -->
@@ -18,6 +18,8 @@
 2. AB 并
 3. A-B 
 4. 对偶 
+简单描述
+
 
 ### 古典概率
 1. 样本空间是一个可数的空间
@@ -36,6 +38,32 @@
 1. $\omega()$ 表示频率 
 2. $p()$ 表示概率
 3. 概率是内部性质，频率是外部表现。频率和概率直接相关。
+统计
 
 ### 公理化
+之前引入了四种描述(前面的四种)，现在要用一个框架总结前四种描述
 ![](./pic/3.jpeg)
+根据三个公理推出概率框架
+
+待后续完善
+
+
+### 条件分布
+如果一个事件的发生改变了样本空间，那么条件分本导致的结果就会不同
+![](./pic/4.jpeg)
+
+### 乘法公式
+![](./pic/5.jpeg)
+
+### 全概率公式
+![](./pic/6.jpeg)
+
+### 贝叶斯
+![](./pic/7.jpeg)
+
+### 独立和互斥
+![](./pic/8.jpeg)
+![](./pic/9.jpeg)
+独立 AB 事件仍有并集
+互斥 AB 时间没有并集
+

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-13 18:52:51
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 16:17:43
+ * @LastEditTime: 2021-03-18 17:31:21
  * @Description: 
 -->
 ### main task
@@ -30,4 +30,5 @@
 12. |Vertical-测试EDLines|完成 |和fld 一个速度，但是质量不如fld|
 13. |Edgelet-运行测试||
 14. |Vanishing-Pipeline搭建||
-15. |PL-SLAM 搬运-线特征check||
+15. |PL-SLAM RGBD 搬运-线特征check|完成|已经完成搬运，可以进行测试
+16. |PL-SLAM RGBD 搬运-线特征测试demo 完善||a.提取的三个适配参数(左右目提取参数、新旧提取参数、StereoCheck的参数)<br>b. 线特征匹配的check(空间check、ZNCCcheck、优化时候进行check mbgood 测试)<br> c. 优化过程中(添加ErrorEdgeLine-> setLevel、设定mbgood)<br> d. 线特征方差设置(动态评估、固定值)<br>e. 关于线特征的其他考虑(TP优化 导致长度变换问题) 
