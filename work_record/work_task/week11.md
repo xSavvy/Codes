@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-13 18:52:51
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-18 17:31:21
+ * @LastEditTime: 2021-03-19 17:43:31
  * @Description: 
 -->
 ### main task
@@ -10,7 +10,7 @@
 序号|任务|状态|排序
 ---|---|---|---
 1.  |Vanishing Point|完成了一半的内容|1
-2.  |PL-SLAM 搬运||2
+2.  |PL-SLAM 搬运|完成了一大半的内容|2
 3.  |客户端测试||3
 
 
@@ -31,4 +31,7 @@
 13. |Edgelet-运行测试||
 14. |Vanishing-Pipeline搭建||
 15. |PL-SLAM RGBD 搬运-线特征check|完成|已经完成搬运，可以进行测试
-16. |PL-SLAM RGBD 搬运-线特征测试demo 完善||a.提取的三个适配参数(左右目提取参数、新旧提取参数、StereoCheck的参数)<br>b. 线特征匹配的check(空间check、ZNCCcheck、优化时候进行check mbgood 测试)<br> c. 优化过程中(添加ErrorEdgeLine-> setLevel、设定mbgood)<br> d. 线特征方差设置(动态评估、固定值)<br>e. 关于线特征的其他考虑(TP优化 导致长度变换问题) 
+16. |PL-SLAM RGBD 搬运-线特征测试demo 完善|a. 完成|a.提取的三个适配参数(左右目提取参数、新旧提取参数、StereoCheck的参数)
+17. |PL-SLAM RGBD 搬运-线特征测试demo 完善||b. 线特征匹配的check(空间check、StereoCheck(最大最小视差+角度)、ZNCCcheck、优化时候进行check mbgood 测试)
+18. |PL-SLAM RGBD 搬运-线特征测试demo 完善|| c. 优化过程中(添加ErrorEdgeLine-> setLevel、设定mbgood)
+19. |PL-SLAM RGBD 搬运-线特征测试demo 完善|| d. 线特征方差设置(动态评估、固定值)<br>e. 关于线特征的其他考虑(TP优化 导致长度变换问题、打印线edge的量、长度初始初始化、sigma初始化)
