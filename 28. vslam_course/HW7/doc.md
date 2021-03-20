@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-06 21:07:34
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-14 20:28:41
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-20 13:50:25
  * @Description: 
 -->
 ### 2.1 Bundle Adjustment
@@ -10,23 +10,25 @@
    
    因为没有利用稀疏
 2. BA 中有哪些需要注意参数化的地⽅？ Pose 和 Point 各有哪些参数化⽅式？有何优缺点
+  Pose 有四元数+平移 旋转矩阵+平移 SO3+平移 SE3
+  Point 齐次方程 
+  SE3 的稳定性更高 
+  旋转矩阵的优化更加复杂，而且带有其他约束
   
-    Pose 有四元数+平移 旋转矩阵+平移 SO3+平移 SE3<br>
-  Point 齐次方程 <br>
-  SE3 的稳定性更高 <br>
-  旋转矩阵的优化更加复杂，而且带有其他约束<br>
-  
-3. 本⽂写于 2000 年，但是⽂中提到的很多内容在后⾯⼗⼏年的研究中得到了印证。你能看到哪些⽅向在后续⼯作中有所体现？请举例说明
-
+3. 本⽂写于 2000 年，但是⽂中提到的很多内容在后⾯⼗⼏年的研究中得到了印证。你能看到哪些⽅向在后续⼯作中有所体现？请举例说明？
+   
+   图优化的SLAM基本已经替代了之前的滤波的算法，在加入了各种cholmod 和 schur补之后计算速度大幅提升。
 
 
 
 ### 2.2 BAL
 ![](./pic/1.png)
 红色是优化后 绿色是优化前
-
+代码见code/BAL
 
 ### 3.1 Direct BA
+代码见 code/DSO
+
 1. 如何描述任意⼀点投影在任意⼀图像中形成的 error？
    $$
     \underset{W}{\sum}(I(p_i)-I(\pi(KTp)))
