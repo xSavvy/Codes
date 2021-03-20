@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 15:08:16
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-22 14:06:21
+ * @LastEditTime: 2021-03-16 14:32:57
  * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_mapping.md
  * @Description: 
 -->
@@ -49,6 +49,8 @@
 4.b. 对每一个目标关键帧 Fuse mpCurrentKeyFrame的地图点\
 4.c. 得到所有目标关键帧的 地图点\
 4.d. Fuse   mpCurrentKeyFrame 和 4.c. 得到的地图点\
+需要SearchInNerighbors 的原因是CreateNewMapPoints 出现了太多 同一个3D点 对因多个MapPoint的情况
 
-5. KeyFrameCulling 清理多余KeyFrame
+
+1. KeyFrameCulling 清理多余KeyFrame
    

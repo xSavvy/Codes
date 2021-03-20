@@ -19,5 +19,4 @@ lba
     |__ formLocalMap() 找共视
     |__ LBA()
 
-
-感觉和orb差不多
+full_graph 用于维护共视关系

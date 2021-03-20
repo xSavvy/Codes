@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 13:33:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 16:24:43
+ * @LastEditTime: 2021-03-16 11:31:50
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/sketch.md
  * @Description: 
 -->
@@ -22,3 +22,5 @@
    |___ DBoW 计算次数减少 dso 的时候已经单层描述子       有更多的时候基本不计算特征    大项\
    |___ TrackLocalMap 的检索时间减少 大项\
    |___ Inverse Compositional  的方法\
+
+### 关于

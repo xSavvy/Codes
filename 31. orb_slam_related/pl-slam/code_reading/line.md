@@ -2,13 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-15 13:06:24
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 17:54:07
+ * @LastEditTime: 2021-03-16 16:09:17
  * @FilePath: /3rd-test-learning/31. orb_slam_related/pl-slam/code_reading/line.md
  * @Description: 
 -->
 ### 内容只有PLSLAM 线的部分
 1. detectStereoLineSegments
 2. matchKF2KFLines
+3. MapLine 
 
 
 -------------
@@ -29,4 +30,5 @@
 3. |matchNNR|内部调用KnnMatch 取前两个，如果第一个没有比第二个小nnr倍就被抛弃
 
 
-
+### MapLine
+MapLine、MapPoint只在后端进行创建，使用full_graph 进行共视关系的维护
