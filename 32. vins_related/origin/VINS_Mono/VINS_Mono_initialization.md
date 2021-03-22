@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-22 21:57:35
+ * @LastEditTime: 2021-03-22 22:01:55
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -26,7 +26,7 @@
 ### 遗留问题
 1. 为什么没有关于平移bias 的估计呢？
 2. 如果判断重力方向是有效的优化？
-需要VINS on Wheel 的分析来进行了。
+需要VINS on Wheel 的方法来进行分析了。
 
 ### 位姿估计
 2d -2d : 估计 EH 从 E 和 H 之中,进行位姿拆解，但是这里有一个尺度
