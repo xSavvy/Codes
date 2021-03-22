@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-01-20 11:20:25
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-01-20 15:37:55
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-22 19:17:15
  * @FilePath: /3rd-test-learning/2. io/rosbag_convert/rosbag_convert.h
  * @Description: 
  *               转换函数 1. structure_convert 从一个rosbag 里面读取 然后写入另外一个 rosbag
@@ -27,8 +27,6 @@
 
 using namespace std;
 
-namespace LwlSLAM
-{
     void structure_convert(const string & rosbag_input_path, const string & rosbag_output_path)
     {
         rosbag::Bag bag_input,bag_output;
@@ -165,4 +163,4 @@ namespace LwlSLAM
 
         bag_output.close();  
     }
-}
+

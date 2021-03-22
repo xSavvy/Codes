@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-22 19:04:19
+ * @LastEditTime: 2021-03-22 20:59:51
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
@@ -16,8 +16,6 @@ Cholesky分解|对称、正定|一个下三角一个上三角，两个三角相�
 QR分解|m×n的有n个独立列的矩阵|a. 一个m×n 的正交阵+上三角<br>b. 一个m×m的正交方阵+非满秩上三角|$2mn^2-\cfrac{2}{3}n^3$(householder)
 Schur补|||
 SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
-
-
 
 
 1. LU 分解(高斯消元)<br>
@@ -60,7 +58,6 @@ SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
    $A = QR$\
    $Q\in{R^{m×n}} R\in{R^{n×n}}$
 
-   
    作用:<br>
    加速$Ax=b$
    $$
@@ -156,9 +153,7 @@ SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
    过一次schur Complement 之后，进行进一步的加速
    
 5. SVD 求解
-   
    ![](./picture/11.png)
-
    SVD复杂度$O(min(m^2n,n^2m))$
 
 
