@@ -2,11 +2,21 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-04 07:47:34
+ * @LastEditTime: 2021-03-22 20:59:51
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
 reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
+
+### 总结
+名字|条件|分解成果|复杂度
+---|---|---|---
+LU分解|方阵、可逆|一个下三角一个上三角|$\cfrac{2}{3}n^3$
+Cholesky分解|对称、正定|一个下三角一个上三角，两个三角相同|$\cfrac{1}{3}n^3$
+QR分解|m×n的有n个独立列的矩阵|a. 一个m×n 的正交阵+上三角<br>b. 一个m×m的正交方阵+非满秩上三角|$2mn^2-\cfrac{2}{3}n^3$(householder)
+Schur补|||
+SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
+
 
 1. LU 分解(高斯消元)<br>
    条件：<br>
@@ -48,7 +58,6 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
    $A = QR$\
    $Q\in{R^{m×n}} R\in{R^{n×n}}$
 
-   
    作用:<br>
    加速$Ax=b$
    $$
@@ -135,6 +144,8 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
       \end{matrix}
       \right]
    $$
+
+   这里做的第二种，相当于把 Q 从秩为n 的矩阵，补全成了 秩为m的矩阵
    
 
 4. Schur Complement
@@ -142,7 +153,9 @@ reference:https://zhuanlan.zhihu.com/p/54943042 LU分解<br>
    过一次schur Complement 之后，进行进一步的加速
    
 5. SVD 求解
-   待续
+   ![](./picture/11.png)
+   SVD复杂度$O(min(m^2n,n^2m))$
+
 
 
 

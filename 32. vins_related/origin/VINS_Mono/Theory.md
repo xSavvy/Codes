@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-10 20:00:41
+ * @LastEditTime: 2021-03-20 22:45:44
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -142,7 +142,3 @@ $$
     J^{\delta{\alpha}}_{bak+1}=FJ^{\delta{\alpha}}_{bak}
 $$
 我决定还是很对的
-
-但是如果
-
-    J^{\delta{\alpha}}_{bak+1}=FJ^{\delta{\alpha}}_{bak}
