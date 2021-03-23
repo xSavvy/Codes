@@ -10,7 +10,11 @@
 
 int main()
 {
-    LwlSLAM::LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/2021-01-14-15-13-25.bag",
-                                  "/home/sunny/workspace_public/Dataset/self_test");
+    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/2021-03-23-19-46-13.bag",
+                                  "/home/sunny/workspace_public/Dataset/self_test2");
+    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/2021-03-23-19-48-01.bag",
+                                    "/home/sunny/workspace_public/Dataset/self_test3");
+    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/2021-03-23-19-50-13.bag",
+                                    "/home/sunny/workspace_public/Dataset/self_test4");
     return 0;
 }

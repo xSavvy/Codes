@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-15 13:06:24
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-16 16:09:17
+ * @LastEditTime: 2021-03-23 17:55:04
  * @FilePath: /3rd-test-learning/31. orb_slam_related/pl-slam/code_reading/line.md
  * @Description: 
 -->
@@ -10,6 +10,8 @@
 1. detectStereoLineSegments
 2. matchKF2KFLines
 3. MapLine 
+4. OverLap
+5. removeOutliers
 
 
 -------------
@@ -32,3 +34,12 @@
 
 ### MapLine
 MapLine、MapPoint只在后端进行创建，使用full_graph 进行共视关系的维护
+
+### OverLap
+序号|名字|内容
+---|---|----
+1. |lineSegmentOverlapStereo|双目overlap 对左右线段进行v(pixel)上的重叠确认 对于垂直线匹配不适用
+2. |lineSegmentOverlap|
+
+### removeOutliers
+直接使用Outliers 组成的一维高斯分布进行去outliners

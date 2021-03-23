@@ -117,7 +117,7 @@ estimator
             |__ calibExtrinsicIfNeeded()            ?
             |__ initialIfNeeded()
                 |__ initialStructure()
-            |__ NonLiearOpIfNeeded()
+            |__ NonLiearOpIfNeeded()               滑窗优化
     |__ internal
         |__ initialStructure()
             |__ checkVarofGravity()                为什么var<0.25 会说excitation not enough！ 存疑

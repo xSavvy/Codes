@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-23 09:30:56
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-23 13:15:46
+ * @LastEditTime: 2021-03-23 14:13:27
  * @FilePath: /3rd-test-learning/32. vins_related/origin/code_reading/doc_sketch.md
  * @Description: 
 -->
@@ -29,3 +29,7 @@
 2. |Optimizer|      完成
 3. |g2o边缘化实现|
 4. |双目的特征提取 |   完成
+
+### 总结
+1. 为什么说VINS-Mono 太薄了前端?
+   只有 F2F 没有 F2Map
