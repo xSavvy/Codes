@@ -2,10 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-05 08:00:41
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-24 17:27:35
+ * @LastEditTime: 2021-03-24 17:23:22
  * @Description: 
  */
-#include "Direct_tracker.h"
+#include "Direct_tracker_with_zero_mean.h"
 #include "opencv2/opencv.hpp"
 #include "common.h"
 
@@ -89,7 +89,7 @@ int main()
     for(int i=1;i<6;i++)
     {
         target_img = cv::imread(title+to_string(i)+end_str,0);
-
+        dm_tracker.m = 0.;
         dm_tracker.SetLastFramePoints(p3d_ref,good_pts);
         dm_tracker.SetLastFramePose(Eigen::Matrix<double,6,1>::Zero());
         dm_tracker.SetInput(left_img);
@@ -102,6 +102,8 @@ int main()
         good_pts = dm_tracker.GetGoodPts();
 
         cout<<"the translation is "<< Sophus::SE3d::exp(result).translation().transpose()<<endl;
+
+        cout<<"the result m is "<<dm_tracker.m<<endl;
         
         const CameraInstrinc *cm = dm_tracker.GetCamera();
         Sophus::SE3d se3_cur = Sophus::SE3d::exp(result);

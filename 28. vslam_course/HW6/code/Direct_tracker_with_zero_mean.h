@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-03 09:50:42
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-24 17:07:54
- * @FilePath: /3rd-test-learning/28. vslam_course/HW6/code/Direct_tracker.h
+ * @LastEditTime: 2021-03-24 17:17:47
+ * @FilePath: /3rd-test-learning/28. vslam_course/HW6/code/Direct_tracker_with_zero_mean.h
  * @Description: 
  *  
  * 
@@ -97,7 +97,7 @@ class DirectTracker:public TrackerBase
     const CameraInstrinc * GetCamera()const {return instrinc_ptr_;} 
     const std::vector<bool> & GetGoodPts() const {return good_pts_array_;}
     const Eigen::Matrix<double,6,1> & GetResult()const {return result_;}
-    private:
+
     /**
      *  param:
      *  @pts 应该是在世界坐标系下
@@ -163,13 +163,13 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
     int half_patch_size = options_ptr_->template_/2;
     int itertations = 20;
 
-    Eigen::Matrix<double,6,6> H;
-    Eigen::Matrix<double,6,1> b;
+    Eigen::Matrix<double,7,7> H;
+    Eigen::Matrix<double,7,1> b;
 
     Eigen::Matrix<double,1,2> J_uv;
     Eigen::Matrix<double,2,3> J_xyz;
     Eigen::Matrix<double,3,6> J_xi;
-    Eigen::Matrix<double,1,6> J;
+    Eigen::Matrix<double,1,7> J;
     Eigen::Matrix<double,3,3> I = Eigen::Matrix<double,3,3>::Identity();
 
     Sophus::SE3d se3_pre = Sophus::SE3d::exp(pre_pose);
@@ -214,14 +214,15 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
                 for(int y = -half_patch_size; y<=half_patch_size ; y++)
                 {
                     error = GetPixelValue(pre_img,p2d_pre.x() + x,p2d_pre.y() + y) - 
-                            GetPixelValue(cur_img,p2d_cur.x() + x,p2d_cur.y() + y);
+                            GetPixelValue(cur_img,p2d_cur.x() + x,p2d_cur.y() + y) + m;
                     // jacobian 需要进一步进行检查
                     J_uv <<     -0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x + 1, p2d_cur.y() + y) -
                                     GetPixelValue(cur_img, p2d_cur.x() + x - 1, p2d_cur.y() + y)),
                                 -0.5 * (GetPixelValue(cur_img, p2d_cur.x() + x, p2d_cur.y() + y + 1) -
                                     GetPixelValue(cur_img, p2d_cur.x() + x, p2d_cur.y() + y - 1))
                             ;
-                    J = J_uv*J_uv_xi;
+                    J.block<1,6>(0,0) = J_uv*J_uv_xi;
+                    J(0,6) = 1;
                     H += J.transpose() * J;
                     b += -1* error * J.transpose();
                     cost += error * error;
@@ -229,7 +230,10 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
         } 
         
         // 更新 \delta \xi 
-        Eigen::Matrix<double,6,1> update = H.ldlt().solve(b);
+        Eigen::Matrix<double,7,1> update = H.ldlt().solve(b);
+        Eigen::Matrix<double,6,1> update_so3 = update.block<6,1>(0,0);
+        double update_m = update(6,0);
+
 
         if(std::isnan(update[0]))
         {
@@ -244,7 +248,8 @@ bool DirectTracker::SingleLayerCalc(const cv::Mat & pre_img,const cv::Mat & cur_
         {
             break;
         }
-        d_se3 = Sophus::SE3d::exp(update)*d_se3;
+        d_se3 = Sophus::SE3d::exp(update_so3)*d_se3;
+        m += update_m;
         Lastcost = cost; 
     }
 
