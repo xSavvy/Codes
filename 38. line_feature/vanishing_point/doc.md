@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-12 13:31:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-12 17:38:07
+ * @LastEditTime: 2021-03-25 15:14:45
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/doc.md
  * @Description: 
 -->
@@ -47,10 +47,11 @@
      a.4. Opt SO3
    不自己写一下是不会知道结果的
 
-
-
-
-
+6. Vanishing Point RANSAC 方法<br>
+   无信息的Vanishing 提取,使用2—Line in MW的方法<br>
+   principle point:cx cy<br>
+   
+   
 
 
 

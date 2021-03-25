@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-09 10:31:43
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 11:36:47
+ * @LastEditTime: 2021-03-25 14:16:48
  * @FilePath: /3rd-test-learning/38. line_feature/doc.md
  * @Description: 
 -->
@@ -25,5 +25,6 @@
 ---|---|---|---
 1. ||光流端点匹配尝试一下？|
 2. ||LSD+L1|
+3. ||Point Feature存在的问题|1. 在KF和KF之间的匹配中，会出现前后线不一定能够检测到的问题。2. 大量移动会导致线出现巨变。3. 旋转过程中，KF插入的量不足以完成线的跟踪。最终导致线的约束力不足。
 
-2. Geometric-based Line Segment Tracking for HDR Stereo Sequences LSD+L1
+4. Geometric-based Line Segment Tracking for HDR Stereo Sequences LSD+L1
