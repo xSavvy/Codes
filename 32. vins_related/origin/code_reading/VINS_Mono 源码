@@ -164,14 +164,18 @@ feature_manager.h
             |__ feature               存储feature信息
                 list<FeaturePerId>
             |__ last_track_num        新的一帧图像 追踪到点的数目
-        |__ addFeatureCheckParallax()
+        |__ addFeatureCheckParallax()          这里做的就是添加Feature 并且检查帧间的Parallax ，
+                                               如果视差足够大，就边缘化旧的一帧，不然就边缘化新的一帧。
             |__ updateFeatureInfo()            这里的Feature说的就是 list<FeaturePerId> feature
             |__ checkParallex()                计算视差决定是不是关键帧
                                                检查过后发现是比较倒数第二第三帧的特征
                 |__ for feature
-                    compensatedParallax2()
+                    compensatedParallax2()     这
         |__ getCorresponding(int frame_id_1, int frame_id_2)   查找frame_id_1 和 frame_id_2 之间相互关联的点
                                                                这里的id 表示存疑
+        
+
+
 initial_sfm.h
     SFMFeature  没有多少问题不进行解读        
         |__ vector<pair<int,vector2d>> oberservation    存储观察到的frame_id 和归一化信息

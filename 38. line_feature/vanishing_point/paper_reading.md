@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-05 17:00:55
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-25 14:43:06
+ * @LastEditTime: 2021-03-26 17:54:02
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/paper_reading.md
  * @Description: 
 -->
@@ -19,3 +19,25 @@
 1. Visual-Inertial Odometry of Smartphone under Manhattan World 效果惊人
 ![](./pic/3.png)
 ![](./pic/4.png)
+
+
+
+
+
+### Paper Reading
+1. 3-line RANSAC for Orthogonal Vanishing Point Detection
+   笔记:
+   a. 3VPs 不垂直的话，就要进行近似
+   b. Gaussian Sphere 上，线会投影成一个Great Circle，相交于球的两个端点
+      通过叉乘两个Great Circle上面的法向量，就可以得到一个Vanishing Point。
+   ![](./pic/8.png)
+   大概思路:
+   a. 初始化前，使用3-LINE RANSAC 做线的分类，inliner 判断两种。
+   b. 初始化之后，使用3-LINE RANSAC 进行线分类。 只要一个方向固定，其他的都好说。
+   c. inliners def
+   ![](./pic/9.png)
+    
+    因为RANSAC 从线得到的结果，所以不一定完全垂直
+
+2. 
+   
