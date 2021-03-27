@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-25 20:16:30
+ * @LastEditTime: 2021-03-26 14:23:17
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -49,6 +49,8 @@ class Camera
     static double width,height;
 
     Sophus::SE3d T_w_c;
+
+    Eigen::Matrix3d K()const;
     Eigen::Vector2d c2p(Eigen::Vector3d point) const ;
     Eigen::Vector3d p2c(Eigen::Vector2d px,double depth=1.0)const;  
     Eigen::Vector3d c2w(Eigen::Vector3d point) const;
@@ -65,6 +67,12 @@ double Camera::cy = 240.0338623810578;
 double Camera::width = 752;
 double Camera::height = 480;
 
+Eigen::Matrix3d Camera::K()const
+{
+    Eigen::Matrix3d output;
+    output<<fx,0,cx,0,fy,cy,0,0,1;
+    return output;
+}
 
 Eigen::Vector2d Camera::c2p(Eigen::Vector3d point) const
 {
@@ -146,8 +154,21 @@ class ImageLineEigen
 {
     public:
     Eigen::Vector2d start_point,end_point;
+    Eigen::Vector3d getLine()const
+    {
+        Eigen::Vector3d s; s<<start_point,1.0;
+        Eigen::Vector3d e; e<<end_point,1.0;
+
+        Eigen::Vector3d output = s.cross(e);
+        return output;
+    }
 };
 
+Eigen::Vector3d getVPFromeLine(const ImageLineEigen & l1,const ImageLineEigen & l2)
+{
+    Eigen::Vector3d output = l1.getLine().cross(l2.getLine());
+    return output;
+}
 
 class BoxObservation
 {
@@ -172,7 +193,7 @@ class BoxDisplayer
     public:
     vector<BoxObservation> vboxobs;
     cv::Mat showBox()const;
-    cv::Mat showXYZ()const;
+    cv::Mat showXYZ(bool vp=false)const;
 };
 
 cv::Mat BoxDisplayer::showBox()const
@@ -190,7 +211,7 @@ cv::Mat BoxDisplayer::showBox()const
     return img;
 }
 
-cv::Mat BoxDisplayer::showXYZ()const
+cv::Mat BoxDisplayer::showXYZ(bool vp)const
 {
     cv::Mat img = cv::Mat::zeros(480,752,CV_8U);
     cv::cvtColor(img,img,CV_GRAY2RGB);
@@ -198,20 +219,43 @@ cv::Mat BoxDisplayer::showXYZ()const
     cv::Scalar X (255,0,0);
     cv::Scalar Y (0,255,0);
     cv::Scalar Z (0,0,255);
+    cv::Scalar VP(125,125,0);
     
     for(auto & obs:vboxobs)
     {
         for(auto & l:obs.vpixelobs_x)
         {
             cv::line(img,l.start_point,l.end_point,X,2,8);
+            
+            cv::Point2f scale = l.end_point -l.start_point;
+            
+            cv::Point2d vp_s = l.start_point + 200* scale;
+            cv::Point2d vp_e = l.start_point - 200* scale;
+
+            cv::line(img,vp_s,vp_e,VP,1,4);
+
+
+            
         }
         for(auto & l:obs.vpixelobs_y)
         {
             cv::line(img,l.start_point,l.end_point,Y,2,8);
+            cv::Point2f scale = l.end_point -l.start_point;
+            
+            cv::Point2d vp_s = l.start_point + 200* scale;
+            cv::Point2d vp_e = l.start_point - 200* scale;
+
+            cv::line(img,vp_s,vp_e,VP,1,4);
         }
         for(auto & l:obs.vpixelobs_z)
         {
             cv::line(img,l.start_point,l.end_point,Z,2,8);
+            cv::Point2f scale = l.end_point -l.start_point;
+            
+            cv::Point2d vp_s = l.start_point + 200* scale;
+            cv::Point2d vp_e = l.start_point - 200* scale;
+
+            cv::line(img,vp_s,vp_e,VP,1,4);
         }
     }
     return img;

@@ -1,0 +1,5 @@
+run()
+    |__ getVPHypVia2Lines 2-Line MMS 对应的三个VPs 假设
+    |__ getSphereGrids 计算线和线的交点给积分球赋值 n^2 种情况
+    |__ getBestVpsHyp 计算最大得分
+    |__ 得到最终的VPS
