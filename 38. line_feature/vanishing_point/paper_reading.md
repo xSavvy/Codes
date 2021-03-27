@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-05 17:00:55
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-27 21:12:03
+ * @LastEditTime: 2021-03-27 21:24:25
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/paper_reading.md
  * @Description: 
 -->
@@ -91,8 +91,10 @@ in Manhattan World
     内容:
     生成grid：
     a. 生成unit sphere 网格，pixel 坐标转换成 sphere 上的极坐标 这个也就是
+    ![](./pic/10.png)
     b. 对于unit sphere 的分辨率划分为 90度*360读
     c. 遍历每一对线，求其交点，交点的pixel转化成 极坐标后，在unit sphere 上进行记分。
+    ![](./pic/11.png)
     d. 记分规则，线段越长积分越高，两线的夹角越往45度靠，积分越高   ？？？ <font color ="Red"> 存疑 </font>
     e. 做一次3*3的高斯滤波，去噪声。
     假设生成:
@@ -111,6 +113,7 @@ in Manhattan World
    a. 在WM 假设下，Vanishing Line,在空间中是一条直线，有了重力方向之后，可以让知道VL的方向，<font color = "Red">代验证</font>。
    b. 1-line RANSAC 也就说 任何一个和VL相交的线产生一个VP，也就有了一个VP 假设，可以进行RANSAC
    c. 但是最终的结果是只能找到  两种VP，但是好像这篇文章只是想要使用这两个VP 来解决yaw 的问题，是比较适合之后使用一篇文章。mark 一下
+   ![](./pic/12.png)
    
 
 
