@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 07:35:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-25 07:46:45
+ * @LastEditTime: 2021-03-24 19:01:24
  * @Description: 
 -->
 ### 线性系统速记 小手册
@@ -18,7 +18,7 @@
     \\
     e^{At} = I+At+\frac{1}{2}(At)^2+\frac{1}{3!}(At)^3 ...+\frac{1}{n!}(At)^{n}...
    \\
-   \int^{t}_0 e^{A(t-\tau)}Bu(\tau)d\tau = e^{A\Delta t}Bu(0)\Delta t
+   \int^{t}_0 e^{A(t-\tau)}Bu(\tau)d\tau = e^{A(t-t)}Bu(t) \Delta t=Bu(t)\Delta t
 
    $$
    y的部分
@@ -59,6 +59,3 @@
       & = C[e^{At}x(0) + \int^t_0e^{A(t-\tau)}Bu(\tau)d\tau] + Du(t)
       \end{aligned}
    $$
-
-3. 
-   
