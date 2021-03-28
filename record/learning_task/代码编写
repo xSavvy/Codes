@@ -1,0 +1,87 @@
+1. cmake   完成了 install 之前的部分
+   |__ lidar_localization
+   |__ PNPSimulation
+//// 2. openmp 最基础的部分 完成
+////   |__ 使用教程
+4. pcl                 大作业之后
+   |__ feature 
+   |__ correspondence
+5. eigen
+   |__ finished 为什么要用这个    
+   |__ .data() 直接返回内存指针   完成  这回数据指针 这个用的还是很多的
+   |__ .segment()
+6. 库头文件问题
+   |__ .h .hpp 文件path的问题
+   |__ 
+7. global variable multiple defintion
+   BugFreePlam
+8. 多级指针   完成
+
+//// 9. yaml 无法使用的问题   完成
+//// 10. LocalParameterization  完成 并且阅读了一大部分的problem.h problem_impl.h problem.cc
+////    这里ComputeJacobian 什么时候使用还不明确
+////    但是对于Sophus 已经有对于quternion 的表示了
+////    经过查阅还是和 AutoDiff 联合进行使用当中进行使用
+////    所以范帝楷 没有编写ComputeJacobian 因为在AnalyticDiff 当中根本用不上
+11. pcl ndt 的深度阅读       44周、45周 这两个周的大作业
+    |__ ndt omp 深度阅读
+    |__ pcl ndt eigen 实现
+    |__ pcl ndt ceres 实现
+    |__ pcl icp eigen 实现
+    |__ pcl icp ceres 实现
+    |__ eigen-BA
+    |__ ceres-BA
+//// 12. 不使用 inline 的情况下，如何定义Common Function？ 能够防止 multiple define  答案就是分离式定义
+13. google code standard C++ 
+14. 43周 code self-review 
+15. friend 函数和类的声明和使用方式 暂时不进行
+16. C++ 容器wrapper 防止进行错误的访问  暂时不进行
+    算法内部可以通过glog::CHECK 来保证正确性
+    所以就先不进行添加了
+17. stringstream .str() 之后 再次.str() 之前需要使用.clear() 
+18. TBB
+19. 左值右值的深度学习
+20. LIO-SAM 代码阅读             大作业之后
+    |__ FeatureExtraction       完成
+    |__ ImageProjection         完成
+    |__ ImuPreintegration       
+    |__ mapOptimization         完成
+    |__ utility                 完成
+21. STL 上班闲暇时
+22. 44 周 留下周末一天进行代码review
+23. ECPP MECPP
+24. C++ 编译、链接的方式和流程
+25. 根据google 代码学习参数传入负责标准
+26. 突然的感悟： GTSAM 之后，一个时代马上就要落幕了，接下来的重点是 如何设计因子
+                                                           增强鲁棒性的trick 
+                                                           深度学习
+                                                           还有就是误差分析
+                                                           代码加速
+                                                         
+27. 指针和数组  究竟是不是完全可以相互转换   
+    从 
+    template <typename T,int N>
+    void print( T (&) [N]) 下手
+28. 活死知识、看论文增加视野
+29. 知识需要学习和整理到窗口期    这就是可以直接对接应用的程度，而不只是粗略的整理和理解知识
+
+
+30. hw3_3_gyro 测试方法记录： ref_accel处得到真实的 方向然后使用即可
+31. 四阶龙哥哭他 
+32. 框架源代码阅读重点
+    |__ 代码通读 寻找实现的trick
+    |__ 代码通读 学习三方库使用
+    |__ 代码通读 梳理流程
+    |__ 加载数据流 查阅没有看懂的部分
+    |__ 代码分解 不造轮子
+33. 探索LIO-SAM Laser匹配之后的IMU 更新是不是再进行IMU预测
+34. 看一下ORB3_SLAM 对于dbg是如何进行更新(也就是初始化)
+35. 在SO3上测试不同的求导模型得到的结果是否相同
+36. 学习一下深度滤波里面的概率思想
+37. 结合机器人学中的状态估计、LSD-SLAM 一起看一下、找一门概率建模的课程
+    看一下误差分析的思路
+38. VINS 改成Forster
+39. VINS 的点管理进行优化
+40. VINS 的光流进行优化
+41. 看一下SO3上的概率
+42. 看一下 IMU 标定 sensor_fusion/hw3 的内容
