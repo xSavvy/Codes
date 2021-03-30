@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-26 14:23:17
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-03-30 08:20:00
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -19,6 +19,7 @@
 using namespace std;
 
 class BoxObservation;
+class Line;
 class ImageLine;
 class ImageLineEigen;
 
@@ -58,7 +59,6 @@ class Camera
     M23 J_uv_xyz(Eigen::Vector3d point)const;
 
 };
-
 
 double Camera::fx = 307.3070580996126;
 double Camera::fy = 307.3070580996126;
@@ -144,6 +144,8 @@ class Box
 
 
 
+
+
 class ImageLine
 {
     public:
@@ -154,19 +156,28 @@ class ImageLineEigen
 {
     public:
     Eigen::Vector2d start_point,end_point;
-    Eigen::Vector3d getLine()const
-    {
-        Eigen::Vector3d s; s<<start_point,1.0;
-        Eigen::Vector3d e; e<<end_point,1.0;
-
-        Eigen::Vector3d output = s.cross(e);
-        return output;
-    }
+    Eigen::Vector3d getLine()const;
 };
+
+
+Eigen::Vector3d ImageLineEigen::getLine()const
+{
+    Eigen::Vector3d s; s<<start_point,1.0;
+    Eigen::Vector3d e; e<<end_point,1.0;
+    Eigen::Vector3d output = s.cross(e);
+    return output;
+}
 
 Eigen::Vector3d getVPFromeLine(const ImageLineEigen & l1,const ImageLineEigen & l2)
 {
     Eigen::Vector3d output = l1.getLine().cross(l2.getLine());
+    return output;
+}
+
+Eigen::Vector3d getVLFromVP(const Eigen::Vector3d & vp1, const Eigen::Vector3d & vp2)
+{
+    Eigen::Vector3d output;
+    output = vp1.cross(vp2);
     return output;
 }
 
@@ -186,7 +197,19 @@ class BoxObservation
     
     vector<ImageLine>  vpixelobs;
     cv::Scalar color;
+    // sequence = 1 XY  sequence =2 YZ seuqnce 3 ZX
+    Eigen::Vector3d toVL(const vector<ImageLineEigen> & source_1, const vector<ImageLineEigen> & source_2);
 };
+
+Eigen::Vector3d BoxObservation::toVL(const vector<ImageLineEigen> & source_1, const vector<ImageLineEigen> & source_2)
+{
+    auto vp1 = getVPFromeLine(source_1[0],source_1[1]);
+    auto vp2 = getVPFromeLine(source_2[0],source_2[1]);
+    Eigen::Vector3d output;
+    output = getVLFromVP(vp1,vp2);
+    output.normalize();
+    return output;
+}
 
 class BoxDisplayer
 {
@@ -211,6 +234,8 @@ cv::Mat BoxDisplayer::showBox()const
     return img;
 }
 
+
+
 cv::Mat BoxDisplayer::showXYZ(bool vp)const
 {
     cv::Mat img = cv::Mat::zeros(480,752,CV_8U);
@@ -219,7 +244,7 @@ cv::Mat BoxDisplayer::showXYZ(bool vp)const
     cv::Scalar X (255,0,0);
     cv::Scalar Y (0,255,0);
     cv::Scalar Z (0,0,255);
-    cv::Scalar VP(125,125,0);
+    cv::Scalar VP(125,0,125);
     
     for(auto & obs:vboxobs)
     {
