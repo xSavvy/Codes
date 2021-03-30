@@ -1,3 +1,0 @@
-/home/lwl/workspace/3rd-test-learning/38. line_feature/vanishing_point/code/build/CMakeFiles/rebuild_cache.dir
-/home/lwl/workspace/3rd-test-learning/38. line_feature/vanishing_point/code/build/CMakeFiles/edit_cache.dir
-/home/lwl/workspace/3rd-test-learning/38. line_feature/vanishing_point/code/build/CMakeFiles/test_case.dir
