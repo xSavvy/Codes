@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-30 08:20:00
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-30 16:05:16
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -52,6 +52,8 @@ class Camera
     Sophus::SE3d T_w_c;
 
     Eigen::Matrix3d K()const;
+    // Eigen::Matrix3d bigK()const;
+    
     Eigen::Vector2d c2p(Eigen::Vector3d point) const ;
     Eigen::Vector3d p2c(Eigen::Vector2d px,double depth=1.0)const;  
     Eigen::Vector3d c2w(Eigen::Vector3d point) const;

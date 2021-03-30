@@ -79,7 +79,12 @@ void VPDetection::getVPHypVia2Lines( std::vector<std::vector<cv::Point3d> > &vpH
 	}
 
 	// get vp hypothesis for each iteration
-	vpHypo = std::vector<std::vector<cv::Point3d> > ( it * numVp2, 3 );
+	vpHypo.resize(it*numVp2);
+	for(auto & tmp:vpHypo)
+	{
+		tmp.resize(3);
+	}
+
 	int count = 0;
 	srand((unsigned)time(NULL));  
 	for ( int i = 0; i < it; ++ i )
@@ -152,7 +157,13 @@ void VPDetection::getSphereGrids( std::vector<std::vector<double> > &sphereGrid 
 	int gridLA = angleSpanLA / angelAccuracy;
 	int gridLO = angleSpanLO / angelAccuracy;
 
-	sphereGrid = std::vector<std::vector<double> >( gridLA, gridLO );
+	sphereGrid.resize(gridLA);
+	for(auto & tmp:sphereGrid)
+	tmp.resize(gridLO);
+
+
+
+
 	for ( int i=0; i<gridLA; ++i )
 	{
 		for ( int j=0; j<gridLO; ++j )
@@ -169,9 +180,9 @@ void VPDetection::getSphereGrids( std::vector<std::vector<double> > &sphereGrid 
 	double latitude = 0.0, longitude = 0.0;
 	int LA = 0, LO = 0;
 	double angleDev = 0.0;
-	for ( int i=0; i<lines.size()-1; ++i )
+	for ( int i=0; i<lineInfos.size()-1; ++i )
 	{
-		for ( int j=i+1; j<lines.size(); ++j )
+		for ( int j=i+1; j<lineInfos.size(); ++j )
 		{
 			ptIntersect = lineInfos[i].para.cross( lineInfos[j].para );
 
@@ -221,7 +232,13 @@ void VPDetection::getSphereGrids( std::vector<std::vector<double> > &sphereGrid 
 	int neighNum = winSize * winSize;
 
 	// get the weighted line length of each grid
-	std::vector<std::vector<double> > sphereGridNew( gridLA, gridLO );
+	std::vector<std::vector<double> > sphereGridNew;
+
+	sphereGridNew.resize(gridLA);
+	for(auto & tmp:sphereGridNew)
+	tmp.resize(gridLO);
+
+
 	for ( int i=halfSize; i<gridLA-halfSize; ++i )
 	{
 		for ( int j=halfSize; j<gridLO-halfSize; ++j )
@@ -358,4 +375,93 @@ void VPDetection::lines2Vps( double thAngle, std::vector<cv::Point3d> &vps, std:
 			clusters[bestIdx].push_back( i );
 		}
 	}
+}
+
+void VPDetection::runRANSAC1Line(cv::Point3d VP1, std::vector<std::vector<double> > &lines,cv::Point2d pp, double f,
+	std::vector<cv::Point3d> &vps,
+	std::vector<std::vector<int> > &clusters)
+{
+	this->lines = lines;
+	this->pp = pp;
+	this->f = f;
+	this->noiseRatio = 0.5; 
+	std::vector<std::vector<cv::Point3d> >  vpHypo;
+	
+	// 得到RANSAC 1LINE
+	getVPHypVia1Lines(VP1,vpHypo);
+
+	std::vector<std::vector<double> > sphereGrid;
+	getSphereGrids( sphereGrid );
+	
+	cout<<"test vp hypotheses . . ."<<endl;
+	getBestVpsHyp( sphereGrid, vpHypo, vps );
+
+
+	cout<<"get final line clusters . . ."<<endl;
+	double thAngle = 6.0 / 180.0 * CV_PI;
+	lines2Vps( thAngle, vps, clusters );
+	int clusteredNum = 0;
+	for ( int i=0; i<3; ++i )
+	{
+		clusteredNum += clusters[i].size();
+	}
+
+	cout<<"total: " <<lines.size()<<"  clusered: "<<clusteredNum;
+	cout<<"   X: "<<clusters[0].size()<<"   Y: "<<clusters[1].size()<<"   Z: "<<clusters[2].size()<<endl;
+}
+
+void VPDetection::getVPHypVia1Lines(cv::Point3d VP1, std::vector<std::vector<cv::Point3d> >  &vpHypo)
+{		
+	cv::Mat_<double> vp1 = ( cv::Mat_<double>(3, 1) << VP1.x , VP1.y  , VP1.z );
+	if ( vp1(2) == 0 ) { vp1(2) = 0.0011; }
+	double N = sqrt( vp1(0) * vp1(0) + vp1(1) * vp1(1) + vp1(2) * vp1(2) );
+	vp1 *= 1.0 / N;
+
+	int numVp2 = 720;
+	double stepVp2 = 2.0 * CV_PI / numVp2;
+
+	vpHypo.resize(numVp2);
+	for(auto & tmp:vpHypo)
+	{
+		tmp.resize(3);
+	}
+
+	cv::Mat_<double> vp2 = ( cv::Mat_<double>(3, 1) << 0.0, 0.0, 0.0 );
+	cv::Mat_<double> vp3 = ( cv::Mat_<double>(3, 1) << 0.0, 0.0, 0.0 );
+	int count =0;
+	for ( int j = 0; j < numVp2; ++ j )
+	{
+		// vp2
+		double lambda = j * stepVp2;
+
+		double k1 = vp1(0) * sin( lambda ) + vp1(1) * cos( lambda );
+		double k2 = vp1(2);
+		double phi = atan( - k2 / k1 );
+
+		double Z = cos( phi );
+		double X = sin( phi ) * sin( lambda );
+		double Y = sin( phi ) * cos( lambda );
+
+		vp2(0) = X;  vp2(1) = Y;  vp2(2) = Z;
+		if ( vp2(2) == 0.0 ) { vp2(2) = 0.0011; }
+		N = sqrt( vp2(0) * vp2(0) + vp2(1) * vp2(1) + vp2(2) * vp2(2) );
+		vp2 *= 1.0 / N;
+		if ( vp2(2) < 0 ) { vp2 *= -1.0; }		
+
+		// vp3
+		vp3 = vp1.cross( vp2 );
+		if ( vp3(2) == 0.0 ) { vp3(2) = 0.0011; }
+		N = sqrt( vp3(0) * vp3(0) + vp3(1) * vp3(1) + vp3(2) * vp3(2) );
+		vp3 *= 1.0 / N;
+		if ( vp3(2) < 0 ) { vp3 *= -1.0; }		
+
+		//
+		vpHypo[count][0] = cv::Point3d( vp1(0), vp1(1), vp1(2) );
+		vpHypo[count][1] = cv::Point3d( vp2(0), vp2(1), vp2(2) );
+		vpHypo[count][2] = cv::Point3d( vp3(0), vp3(1), vp3(2) );
+
+		count ++;
+	}
+
+	
 }

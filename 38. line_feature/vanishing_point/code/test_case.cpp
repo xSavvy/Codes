@@ -1,16 +1,16 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:53:46
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-30 08:12:49
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-30 16:12:23
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/test_case.cpp
  * @Description: 
  * 
  * 这个test_case 主要是为了测试 使用灭点进行定位的正确性:
  * 主要内容：
  * 1. OpenCVPoseAdjustAndEstimate() 调整bar来调整相机位姿
- * 2. VanishingLineTest()  检测在曼哈顿假设下Vanishing Line 变化和估计差别是不是很大
- * 3. VanishingRansac1Line() 
+ * 2. VanishingLineTest()  检测在曼哈顿假设下Vanishing Line 变化和估计差别是不是很大 失败
+ * 3. VanishingRansac1Line()
  * 
  * 
  * 
@@ -53,7 +53,7 @@ int main()
 
     BoxObservation obs = b1.generateObs(&cm);
     Eigen::Vector3d vl1 = K_inv*obs.toVL(obs.v2dobs_x,obs.v2dobs_y);
-
+    vl1.normalize();
     Camera cm1;
     Eigen::Matrix<double,6,1> se31;
     se31<<1.,1.,1.,1.,1.,0.;
@@ -61,10 +61,9 @@ int main()
     
     BoxObservation obs1 = b1.generateObs(&cm1);
     Eigen::Vector3d vl2 = K_inv*obs.toVL(obs1.v2dobs_x,obs1.v2dobs_y);
-    
+    vl2.normalize();
     cout<<"the real vl :"<<vl1.transpose()<<endl;
-    cout<<"the esti vl :"<<(cm1.T_w_c*vl2).transpose()<<endl;
-
+    cout<<"the real vl :"<<vl2.transpose()<<endl;
 }
 
 

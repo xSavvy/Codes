@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-21 22:30:19
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-22 19:22:39
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-03-29 08:59:38
  * @Description: 
 -->
 ### main task
@@ -13,7 +13,7 @@
 2.  |EAO-SLAM|
 3.  |深蓝学院大作业->视觉VO模块|
 4.  |减肥|
-5.  |修改简历|
+5.  |修改简历|完成||
 
 
 2021.3.21 添加<br>
