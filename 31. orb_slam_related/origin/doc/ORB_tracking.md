@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 11:14:38
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-03 09:52:37
+ * @LastEditTime: 2021-03-31 17:08:23
  * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_tracking.md
  * @Description: 
 -->
@@ -56,6 +56,6 @@ a.2. 对每一个关键<br>
 
 5.a. NeedNewKeyFrame
 a.1. 距离上一次插入关键帧是否已经经过了足够多的帧   c1a
-a.2. 是否LocalMapping 已经空闲                 c2a
-a.3. track weak 也和CurrentFrame的特征深度(thDepth 在这里使用)分布有关 c3a
-a.4. 未完待续
+a.2. 是否LocalMapping 已经空闲                 c1b
+a.3. track weak MapPoint 在当前帧跟踪的MapPoint比例过低 c1c
+a.4. 跟踪量较少，但是仍旧可以进行跟踪             c2  主要是为了判断，是不是应该直接放弃跟踪了，因为如果这个不满足就说明跟踪的点已经<15 跟踪过于薄弱

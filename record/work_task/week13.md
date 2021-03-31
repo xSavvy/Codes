@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-29 08:58:06
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-30 09:28:43
+ * @LastEditTime: 2021-03-31 15:36:51
  * @FilePath: /3rd-test-learning/record/work_task/week13.md
  * @Description: 
 -->
@@ -13,7 +13,8 @@
 2.  |Vertical Line||2 地面情况下的进一步加速
 3.  |VO设备搭建||
 4.  |pl-svo代码阅读、pl-slam代码阅读||1主要问题是方差和去outlier
-5.  |3.29 加班申请编写|
+5.  |3.29 加班申请编写|完成|
+6.  |对VPs 的2_Line Exhaustive Search 沉淀||还有一些地方没有想明白，所以需要再看一下，比如为什么角度越温和越好的问题
 
 ### 简记
 1. 从evo -r rot_part 找到旋转误差是的导致整体误差最大的问题
