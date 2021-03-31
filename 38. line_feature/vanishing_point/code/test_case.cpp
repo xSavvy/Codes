@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:53:46
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-30 22:56:40
+ * @LastEditTime: 2021-03-31 07:25:32
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/test_case.cpp
  * @Description: 
  * 
@@ -14,7 +14,7 @@
  * 4. 2021.3.30 今天添加了重力方面的检测，这个重力方向的测试，也说明了一个问题,就是在 raw pitch 如何变化，raw pitch 是多少 yaw 对应的 VP 就是多少
  *    yaw的变化，不会对yaw 对应的VP 产生影响
  *    这也是为什么IMU 的重力加速度可以很好的用于 VPs 的clustering 因为从IMU 重力加速度中得到的yaw pitch + 一个随便的yaw 就可以正确估计出yaw 对应VP的参数
- * 
+ * 5. 但是好像还有一些别的问题需要解决
  * 
  * tips:
  * 1. vp 的估计存在方向问题 用防止突变的方法解决了这个问题
