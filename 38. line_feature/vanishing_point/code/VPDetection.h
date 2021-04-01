@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-28 10:46:22
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-31 15:00:34
+ * @LastEditTime: 2021-04-01 15:42:49
  * @Description: 
  * 
  * 
@@ -14,8 +14,8 @@
  *    原因是VanishingPoint没有进行精细化处理。
  *    改进有二: 1. 3N*L VP精细化   没有继续做了
  *            2. 竖线ransac        10m 正确率大幅上升但是速度还是不够快 加上 opencv_parallel 应该可以跑到 3ms
- * 
- * 
+ * 4. 需要添加连续运动假设
+ * 5. 需要添加鲁棒性检查：也就是需要把方向check做好，不要出现方向不正常替代的情况
  * 
  * 
  */
