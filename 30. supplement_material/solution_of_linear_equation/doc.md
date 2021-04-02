@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-22 20:59:51
+ * @LastEditTime: 2021-04-01 22:16:32
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
@@ -17,6 +17,7 @@ QR分解|m×n的有n个独立列的矩阵|a. 一个m×n 的正交阵+上三角<b
 Schur补|||
 SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
 
+----
 
 1. LU 分解(高斯消元)<br>
    条件：<br>

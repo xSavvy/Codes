@@ -2,10 +2,23 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-31 15:37:19
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-01 07:27:48
+ * @LastEditTime: 2021-04-01 22:24:25
  * @FilePath: /3rd-test-learning/doc/slam_back_end/paper_reading.md
  * @Description: 
 -->
+
+
+-----
+优化四步
+1. 构建误差项
+2. 进行Schur补
+3. 求姿态
+4. 求点的位置
+-----
+
+
+
+
 1. Nonlinear Graph Sparsification for SLAM:
    相关阅读: 利用 sparse nature 11 15 17 
    当多次，边缘化之后信息矩阵变得dense，需要使用sparse enforce method 16 3 23 13 
@@ -39,6 +52,7 @@
 
 2. Fast Nonlinear Approximation of Pose Graph Node Marginalization
    笔记:
+   
    $$
 
    $$
