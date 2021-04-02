@@ -1,8 +1,13 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-31 15:37:19
+<<<<<<< HEAD
  * @LastEditors: Liu Weilong
  * @LastEditTime: 2021-04-01 22:24:25
+=======
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-01 15:12:08
+>>>>>>> efc12df539b4d27851b65a5b379178443ef01ced
  * @FilePath: /3rd-test-learning/doc/slam_back_end/paper_reading.md
  * @Description: 
 -->
@@ -56,3 +61,6 @@
    $$
 
    $$
+
+3. Monocular Graph SLAM with Complexity Reduction
+   
