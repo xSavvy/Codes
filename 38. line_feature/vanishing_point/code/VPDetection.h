@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-28 10:46:22
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-01 15:42:49
+ * @LastEditTime: 2021-04-06 19:18:34
  * @Description: 
  * 
  * 
@@ -16,6 +16,9 @@
  *            2. 竖线ransac        10m 正确率大幅上升但是速度还是不够快 加上 opencv_parallel 应该可以跑到 3ms
  * 4. 需要添加连续运动假设
  * 5. 需要添加鲁棒性检查：也就是需要把方向check做好，不要出现方向不正常替代的情况
+ * 6. 需要第二帧图像进来做一个外参的矫正
+ * 7. 有一个bug是因为自己组合出的VPs 数列并不能组成一个SO3 导致的，也就是说 vps 形成的旋转矩阵满足 相互垂直但是不满足 R^T = R 
+ *    这个想法是错的
  * 
  * 
  */
@@ -69,7 +72,6 @@ public:
 	void lines2Vps( double thAngle, std::vector<cv::Point3d> &vps, std::vector<std::vector<int> > &clusters );
 	
 	void refineVP(const vector<vector<int>> & cluster,vector<Eigen::Vector3d> & vps);
-
 
 	std::vector<std::vector<double> > lines;
 	std::vector<LineInfo> lineInfos;

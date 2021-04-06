@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-30 16:05:16
+ * @LastEditTime: 2021-04-06 11:03:56
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -201,7 +201,15 @@ class BoxObservation
     cv::Scalar color;
     // sequence = 1 XY  sequence =2 YZ seuqnce 3 ZX
     Eigen::Vector3d toVL(const vector<ImageLineEigen> & source_1, const vector<ImageLineEigen> & source_2);
+    Eigen::MatrixXd toEigenFormLine();
 };
+
+Eigen::MatrixXd BoxObservation::toEigenFormLine()
+{
+    Eigen::MatrixXd result(4,3);
+    
+    
+}
 
 Eigen::Vector3d BoxObservation::toVL(const vector<ImageLineEigen> & source_1, const vector<ImageLineEigen> & source_2)
 {
@@ -217,9 +225,23 @@ class BoxDisplayer
 {
     public:
     vector<BoxObservation> vboxobs;
+    // getLineObs 得到Box Displayer所有Box 的线观测
+    // axis  =  1 -> X轴
+    // axis  =  2 -> Y轴
+    // axis  =  3 -> Z轴
+    Eigen::MatrixXd getLineObsX();
     cv::Mat showBox()const;
     cv::Mat showXYZ(bool vp=false)const;
 };
+
+Eigen::MatrixXd BoxDisplayer::getLineObsX()
+{
+    Eigen::MatrixXd result(vboxobs.size()*4,3);
+    for(auto & box:vboxobs)
+    {
+        box.v2dobs_x
+    }
+}
 
 cv::Mat BoxDisplayer::showBox()const
 {

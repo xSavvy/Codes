@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-22 22:01:55
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-06 20:03:07
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -32,6 +32,11 @@
 2d -2d : 估计 EH 从 E 和 H 之中,进行位姿拆解，但是这里有一个尺度
 3d -2d : PnP
 3d -3d : ICP
+
+### 外参估计公式
+$$
+   R_{imu}^{cam_{j}} = R_{imu}^{cam_{i}}(外参)R_{cam_i}^{cam_j} = R_{imu_{i}}^{imu_j}R_{imu_j}^{cam}（外参）
+$$
 
 
 

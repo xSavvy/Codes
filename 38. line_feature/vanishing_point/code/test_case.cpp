@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:53:46
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-31 07:25:32
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-06 10:33:03
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/test_case.cpp
  * @Description: 
  * 
@@ -15,10 +15,10 @@
  *    yaw的变化，不会对yaw 对应的VP 产生影响
  *    这也是为什么IMU 的重力加速度可以很好的用于 VPs 的clustering 因为从IMU 重力加速度中得到的yaw pitch + 一个随便的yaw 就可以正确估计出yaw 对应VP的参数
  * 5. 但是好像还有一些别的问题需要解决
+ * 6. RefineVP 用于测试SVD求解非零解
  * 
  * tips:
  * 1. vp 的估计存在方向问题 用防止突变的方法解决了这个问题
- * 
  * 
  * 
  */
@@ -39,6 +39,8 @@ Eigen::Vector3d pre_x(1.0,0.,0.),pre_y(0.,1.0,0.),pre_z(0.,0.,1.);
 void Adjust(int, void *);
 void OpenCVPoseAdjustAndEstimate();
 void VPsDetection();
+void RefineVP();
+
 
 int main()
 {
@@ -152,4 +154,9 @@ void Adjust(int, void *)
     cv::imshow("box_test",img_box);
     cv::imshow("xyz_test",img_xyz);
 
+}
+
+void RefineVP()
+{
+    
 }
