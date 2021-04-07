@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-07 08:18:39
+ * @LastEditTime: 2021-04-07 08:21:37
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -66,7 +66,8 @@ $$
 其实这里应该使用比例性的检验，而不是一个单纯的比较阈值。
 
 2. initialStructure
-2.a. 
+2.a. 得出帧间的的旋转给IMU 旋转Bias 当作真值使用
+2.b. solveGyroscopeBias 求解 Gyro 的旋转Bias
 
 
 
