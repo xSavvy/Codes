@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-26 08:58:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-26 15:59:22
+ * @LastEditTime: 2021-04-07 09:32:17
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/vp_basic.md
  * @Description: 
 -->
@@ -93,3 +93,15 @@
    
 ### 3. 算法运行产生的问题
 1. 会存在180度的突变问题，需要添加突变的check
+   需要添加连续运动的假设
+
+### 4. VanishingPoint 和 Camera 之间的标定
+1. 这里是昨天遇到的一个大坑
+   空间中相同旋转，在不同坐标系下的表示不同
+   上面的话，转换为公式就是
+   $$
+      exp(\theta_c) = exp(R_c^w\theta_w)
+      = R_c^wexp(\theta_w)(R_c^w)^T
+   $$
+   也就是说，这里的旋转不单单是左乘对于行的变换，还存在右乘对于列的变换。
+

@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-07 08:21:37
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-07 10:31:30
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -79,7 +79,19 @@ $$
    $$
       Ax = 0\\
       A = USV^T\\
+      A^TA = V\Theta^T\ThetaV^T\\
    $$
+   这里存在一个反向思考的问题
+   $$
+      AX = X\Lambda
+      \\
+      A = X\Lambda X^{-1} 
+   $$
+   所以实际上作用在A上的是X的列 而不是行，也就是为什么SVD 列才是目的,解决的问题的是
+   $$
+      A^TAx =0
+   $$
+   
    V的列对应x的解
    关于求解可靠性，是依靠奇异值正常(不过小)的数量是不是和 正常A矩阵的秩相同来进行判断。
 3. opencv 自身就有cv2eigen 或者eigen2cv 的转化？

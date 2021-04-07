@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-06 11:03:56
+ * @LastEditTime: 2021-04-07 15:08:32
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -229,19 +229,11 @@ class BoxDisplayer
     // axis  =  1 -> X轴
     // axis  =  2 -> Y轴
     // axis  =  3 -> Z轴
-    Eigen::MatrixXd getLineObsX();
+    // Eigen::MatrixXd getLineObsX();
     cv::Mat showBox()const;
     cv::Mat showXYZ(bool vp=false)const;
 };
 
-Eigen::MatrixXd BoxDisplayer::getLineObsX()
-{
-    Eigen::MatrixXd result(vboxobs.size()*4,3);
-    for(auto & box:vboxobs)
-    {
-        box.v2dobs_x
-    }
-}
 
 cv::Mat BoxDisplayer::showBox()const
 {
@@ -468,4 +460,90 @@ BoxObservation Box::generateObs( Camera * cm)
     }
 
     return output;
+}
+
+class Object
+{
+    public:
+    Eigen::Quaterniond Camera;
+    Eigen::Quaterniond Camera_MW;
+    Eigen::Quaterniond Vehicle;
+    std::vector<Eigen::Quaterniond> VehicleMotion;
+    std::vector<Eigen::Quaterniond> CameraMotion;
+    std::vector<Eigen::Quaterniond> MWMotion;
+    Object(int i);
+};
+
+Object::Object(int i)
+{
+    Eigen::AngleAxisd R_vehicle_camera(0.3,Eigen::Vector3d(0,0.1,0.9).normalized());
+    Eigen::AngleAxisd R_vehicle_MW(-0.4,Eigen::Vector3d(0.1,0.3,1.1).normalized());
+    Camera = R_vehicle_camera;
+    Camera_MW = R_vehicle_MW;
+}
+
+class Rotation
+{
+    public:
+    static Rotation create(Eigen::Vector3d axis,double angle,double interval)
+    {
+        Rotation rot;
+        for(double r = 0.0;r<angle;r+=interval)
+        {
+            Eigen::AngleAxisd aa(r,axis);
+            rot.MotionArray.push_back(Eigen::Quaterniond(aa));
+        }
+        return rot;
+    }  
+    
+    std::vector<Eigen::Quaterniond> MotionArray;
+    
+};
+class TrajectoryEngine
+{
+    public:
+    
+    void addRotation(const Rotation & rot) {RotArray.push_back(rot);}
+    // 运动均为右乘
+    void addMotionForObject(Object & obj);
+    std::vector<Rotation> RotArray;
+};
+
+void TrajectoryEngine::addMotionForObject(Object & obj)
+{
+    int size =0;
+    for(auto & r:RotArray) size+= r.MotionArray.size();
+
+    obj.VehicleMotion.clear();
+    obj.VehicleMotion.reserve(size);
+    obj.VehicleMotion.push_back(Eigen::Quaterniond(Eigen::Matrix3d::Identity()));
+
+    // 给vehicle 进行赋值
+    for(auto & r:RotArray)
+    {
+        Eigen::Quaterniond label_rot=obj.VehicleMotion.back();
+        for(auto & mt:r.MotionArray)
+        {
+            obj.VehicleMotion.push_back(label_rot * mt);
+        }
+    }
+
+    obj.CameraMotion.clear();
+    obj.CameraMotion.reserve(size);
+    obj.CameraMotion.push_back(Eigen::Quaterniond(Eigen::Matrix3d::Identity()));
+
+
+    obj.MWMotion.clear();
+    obj.MWMotion.reserve(size);
+    obj.MWMotion.push_back(Eigen::Quaterniond(Eigen::Matrix3d::Identity()));
+
+    for(int i=1;i<size;i++)
+    {
+        Eigen::Quaterniond relative_rot_v1_v2 = obj.VehicleMotion[i-1].inverse()*obj.VehicleMotion[i];
+        Eigen::Quaterniond relative_rot_c1_c2 = obj.Camera.inverse()*relative_rot_v1_v2*obj.Camera;
+        Eigen::Quaterniond relative_rot_mw1_mw2 = obj.Camera_MW.inverse()*relative_rot_v1_v2*obj.Camera_MW;
+
+        obj.CameraMotion.push_back(obj.CameraMotion.back()*relative_rot_c1_c2);
+        obj.MWMotion.push_back(obj.MWMotion.back()* relative_rot_mw1_mw2);
+    }
 }
