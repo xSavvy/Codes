@@ -1,18 +1,18 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-29 08:58:06
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-31 15:36:51
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-06 22:39:27
  * @FilePath: /3rd-test-learning/record/work_task/week13.md
  * @Description: 
 -->
 ### main task
 序号|任务|状态|排序
 ---|---|---|---
-1.  |Vanishing Point||
-2.  |Vertical Line||2 地面情况下的进一步加速
-3.  |VO设备搭建||
-4.  |pl-svo代码阅读、pl-slam代码阅读||1主要问题是方差和去outlier
+1.  |Vanishing Point|半完成|VPTracker 基本编写完毕
+2.  |Vertical Line|半完成|2 地面情况下的进一步加速
+3.  |VO设备搭建|没有进行|
+4.  |pl-svo代码阅读、pl-slam代码阅读|没有进行|1主要问题是方差和去outlier
 5.  |3.29 加班申请编写|完成|
 6.  |对VPs 的2_Line Exhaustive Search 沉淀||还有一些地方没有想明白，所以需要再看一下，比如为什么角度越温和越好的问题
 

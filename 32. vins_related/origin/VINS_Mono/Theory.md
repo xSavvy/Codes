@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-20 22:45:44
+ * @LastEditTime: 2021-04-07 07:35:41
  * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -63,6 +63,7 @@ $$
 解决了之前一直困扰的 为什么 J_b 的更新一直使用 \deltaX 的 F 的问题\
 
 
+
 <br>
 IMU 在更新的时候，存在一个逆向的过程，也就是 F从误差状态当中得到的。但是因为等价的原因，就可以用在之后优化的过程中
 <br>
@@ -75,6 +76,11 @@ IMU 在更新的时候，存在一个逆向的过程，也就是 F从误差状�
 <br>
 在代码的时间编写的时候，是把Bias限制在了一个点上，然后Bias变量进行不断的变化。<br>
 这里的意思是这样的<br>
+
+<font color = "Red">2021.4.1添加</font><br>
+这是一种降精度近似的方法
+
+
 $$
     r_{\theta_{bjbi}}=In[R_j^TR_iexp(\theta_{b_jb_i}+J^{\theta_{b_jb_i}}_{b_{gi}}(b_{gbi}-{b^{linearized}_{gbi}}))]
 $$

@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-06 20:03:07
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-07 08:18:39
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -37,8 +37,48 @@
 $$
    R_{imu}^{cam_{j}} = R_{imu}^{cam_{i}}(外参)R_{cam_i}^{cam_j} = R_{imu_{i}}^{imu_j}R_{imu_j}^{cam}（外参）
 $$
+### 原理性的分析
+主要内容来自
+1. CalibrationExRotation
+2. initialStructure
+
+-----
+1. CalibrationExRotation  主要是学习一下Eigen 求解超定方程的方法
+1.a. 得到两帧之间的对应的特征点，然后对特征点进行旋转求解
+     a.1. 求旋转使用solveRelativeR 内部是求解E(暗示feature 是2d-2d)，然后从E分解R，验证R
+     a.2. CalibrationExRotation 添加数据 10 帧数据之后的结果，确认可信
+          内部使用SVD 求解一个Ax=0 内部存在huber(5.0)的一个huber核
+          这里使用四元数进行表示
+$$
+   R_{imu}^{cam_{j}} = R_{imu}^{cam_{i}}(外参)R_{cam_i}^{cam_j} = R_{imu_{i}}^{imu_j}R_{imu_j}^{cam}（外参）
+   \\
+   \rightarrow  q_{imu}^{cam_{i}}(外参)q_{cam_i}^{cam_j} = q_{imu_{i}}^{imu_j}q_{imu_j}^{cam}
+   \\
+   q_i^{ci}\times q_{ci}^{cj} = q_{ii}^{ij}\times q^c_i
+   \\
+      q_i^{ci}\times q_{ci}^{cj} - q_{ii}^{ij}\times q^c_i =0
+   \\
+   Final:\\
+   huber*[L(q_{ci}^{cj}) - R(q_{ii}^{ij})]q^c_i = 0
+$$
+最终，公式使用SVD 就可以进行求解。
+然后对第三个特征进行检验，查看是不是过小，如果过小也就是说明，A的秩为2 而不是3 求出来的解不靠谱。
+其实这里应该使用比例性的检验，而不是一个单纯的比较阈值。
+
+2. initialStructure
+2.a. 
 
 
 
-
-
+-----
+### 细节分析
+1. E 的分解和验证
+   E 分解之后有四种情况，只有第一种情况可以让大量特征点在相机的前方
+2. SVD的求解
+   $$
+      Ax = 0\\
+      A = USV^T\\
+   $$
+   V的列对应x的解
+   关于求解可靠性，是依靠奇异值正常(不过小)的数量是不是和 正常A矩阵的秩相同来进行判断。
+3. opencv 自身就有cv2eigen 或者eigen2cv 的转化？

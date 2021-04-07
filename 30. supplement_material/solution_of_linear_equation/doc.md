@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-01 22:16:32
+ * @LastEditTime: 2021-04-07 07:55:54
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
@@ -15,7 +15,7 @@ LU分解|方阵、可逆|一个下三角一个上三角|$\cfrac{2}{3}n^3$
 Cholesky分解|对称、正定|一个下三角一个上三角，两个三角相同|$\cfrac{1}{3}n^3$
 QR分解|m×n的有n个独立列的矩阵|a. 一个m×n 的正交阵+上三角<br>b. 一个m×m的正交方阵+非满秩上三角|$2mn^2-\cfrac{2}{3}n^3$(householder)
 Schur补|||
-SVD|任意矩阵|$U\Sigma V^T$|$O(min(m^2n,n^2m))$
+SVD|任意矩阵|$U\Sigma V^T$ <br> U、V 是一个酋矩阵也就是说U^TU=I|$O(min(m^2n,n^2m))$
 
 ----
 
