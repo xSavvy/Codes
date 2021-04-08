@@ -2,16 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-12 13:31:44
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-27 17:28:39
+ * @LastEditTime: 2021-04-08 08:38:30
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/doc.md
  * @Description: 
 -->
 ### 目前留下来的问题：
 1. Vanishing Point 的参数化? ok
-2. Mahanttan World 是什么？ 基本进行了回答
+2. Mahanttan World 是什么？ 基本ok
 3. Mahanttan Frame 是什么？ ok
-4. 目前看来Mahanttan World是和面有关的，那么是如何引入的Vanishing Point的概念的呢？
+4. 目前看来Mahanttan World是和面有关的，那么是如何引入的Vanishing Point的概念的呢？ ok
 5. Vanishing Point Pipeline 是什么？ ok
+6. 
 
 
 ------
