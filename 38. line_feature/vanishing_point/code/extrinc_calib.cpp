@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-07 13:56:01
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-07 15:40:16
+ * @LastEditTime: 2021-04-07 18:15:01
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/extrinc_calib.cpp
  * @Description: 
  * 1. 旋转外参标定的测试，因为在实际测试的情况下出现了外参无法标定的情况，这里需要进一步看一下
@@ -10,13 +10,7 @@
  *         单轴旋转，外参无法进行标定
  *         两个单轴旋转就可以对外参进行标定了。
  *         这说明了，地面水平运动的无法标定 Manhattan 和Camera 之间的外参 是 Manhattan VPTracker 最大的问题。
- *         这个时候能够自由运动的SO3 反而成了Manhanttan最好用的地方，因为外参是可以标定的
- *         这说明，水平运动目前需要的是，SO3转SO2
- *         
- * 
- * 
- * 
- * 
+ *         这个时候能够自由运动的SO3 反而成了Manhanttan最好用的地方，因为外参是可以标定的。
  * 
  */
 
@@ -39,19 +33,16 @@ static Eigen::Matrix<typename Derived::Scalar, 3, 3> skewSymmetric(const Eigen::
 	return ans;
 }
 
-
-
-
 int main()
 {
     Object obj = Object(1);
     
-    Rotation rot = Rotation::create(Eigen::Vector3d(0.,0.,1.),3.3,0.1);
+    Rotation rot = Rotation::create(Eigen::Vector3d(0.,0.,1.),6,0.05);
     // 不添加 rot1 无法标定外参成功
-    Rotation rot1 = Rotation::create(Eigen::Vector3d(1.,1.,1.).normalized(),3.3,0.1);
+    // Rotation rot1 = Rotation::create(Eigen::Vector3d(1.,1.,1.).normalized(),3.3,0.1);
     TrajectoryEngine te;
     te.addRotation(rot);
-    te.addRotation(rot1);
+    // te.addRotation(rot1);
     te.addMotionForObject(obj);
 
     // 进行 Vehicle 和 Camera 的代码测试
@@ -102,10 +93,23 @@ int main()
     Eigen::Quaterniond estimated_R(x);
     //cout << svd.singularValues().transpose() << endl;
 
+
+
     cout<<"the esti extrinc : "<<endl<<estimated_R.coeffs().transpose()<<endl;
     Eigen::Vector3d ric_cov;
     ric_cov = svd.singularValues().tail<3>();
     cout<<"the sigular"<<endl<<svd.singularValues().transpose()<<endl;
 
+    for(int i =1;i<obj.CameraMotion.size();i++)
+    {
+        // 测试外参
+        Eigen::Quaterniond relative_c1_c2 = obj.CameraMotion[i-1].inverse() * obj.CameraMotion[i];
+        Eigen::Quaterniond relative_v1_v2 = obj.VehicleMotion[i-1].inverse() * obj.VehicleMotion[i];
+        cout<<"real relative v1 v2 "<< relative_v1_v2.coeffs().transpose()<<endl;
+        cout<<"esti relative v1 v2 "<<(estimated_R*relative_c1_c2*estimated_R.inverse()).coeffs().transpose()<<endl;
+        double angle = relative_v1_v2.angularDistance(estimated_R*relative_c1_c2*estimated_R.inverse());
+        cout<<angle<<endl;
+    }
 
+    
 }

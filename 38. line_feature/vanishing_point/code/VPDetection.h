@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-28 10:46:22
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-07 09:52:10
+ * @LastEditTime: 2021-04-08 15:37:50
  * @Description: 
  * 
  * 
@@ -21,8 +21,10 @@
  *    这个想法是错的
  * 8. 在MW 和 camera 融合的过程中, 存在一个旋转的外参需要进行标定，但是之前旋转标定的方式存在问题，是对于公式的理解存在问题导致的
  *    这里的标定应该是使用 Camera 和 IMU 的外参标定关系来进行。
- * 
- * 
+ * 9. 最后发现Debug 的发生是因为在 求解 output 的result 的时候，坐标表示顺序写错了，
+ *    正确的 (R^{wm}_c1) * R^{wm}_c2.inverse()
+ *    错误的 (R^{wm}_c1) * R^{wm}_c2
+ *    和外参没有关系
  */
 
 

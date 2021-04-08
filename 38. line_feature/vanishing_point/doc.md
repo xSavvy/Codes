@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-12 13:31:44
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-08 08:38:30
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-08 10:11:20
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/doc.md
  * @Description: 
 -->
@@ -12,7 +12,7 @@
 3. Mahanttan Frame 是什么？ ok
 4. 目前看来Mahanttan World是和面有关的，那么是如何引入的Vanishing Point的概念的呢？ ok
 5. Vanishing Point Pipeline 是什么？ ok
-6. 
+6. Vanishing Point 视觉定位基础(MW假设)
 
 
 ------
@@ -48,15 +48,38 @@
      a.4. Opt SO3
    不自己写一下是不会知道结果的
 
-6. Vanishing Point RANSAC 方法<br>
-   无信息的Vanishing 提取,使用2—Line in MW的方法<br>
-   principle point:cx cy<br>
+6. Vanishing Point 视觉定位基础(MW假设)
+   6.a. MW 在世界中的坐标系
+        MW 在世界中的坐标系，是可以直接使用$I\in R^{3×3}$ 来进行表示的
+        在这个表示下，2类MW 假设线在相机中的都是平行的，另外一类MW假设线相交于 pricipal point (cx,cy)，这是目前最好的情况。
+   6.b. 图像得到的位姿 $R^{mw}_c$和MW 坐标系
+        从vp_basic.md 中，得到的结论
+        $$
+         d \propto \pi(RD)
+        $$
+        在 MW 假设下，公式可以更新为
+        $$
+         d_i \propto \pi(R^{mw}_c I_i)
+         \\
+         R^{mw}_c I_i \propto \pi^{-1}(d_i)
+        $$
+        通过这个方法就可以得到$R^{mw}_c$
+   6.c. 第一张图像的MW坐标初始化
+        $R^{mw}_c$
+   6.d. 之前的思想混乱是什么导致的?
+        相机的旋转是在Y轴进行的，但是MW的旋转确是在X轴上进行的。也就是说$R^{c2}_{c1}$并不相同，这才是让我头疼的地方。
+        所以不知道是不是因为相机和曼哈顿相机存在转轴的问题导致的。
+        推导一下之后，发现并不存在转轴,只是相同的旋转，在不同的坐标系下的表示不同。
+        这个内容进行建模就是，
+        在坐标系W下，存在一个刚体，刚体上有一个坐标系V 和 坐标系C,两个坐标系固定在刚体上，且两个坐标系不重合。
+        $$
+
+
+        $$
+
+
    
    
-
-
-
-
 
 
 
