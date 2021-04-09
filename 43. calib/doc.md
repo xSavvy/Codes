@@ -69,7 +69,7 @@
     \\
     \omega ×(1+\delta \theta ×)+\dot{\delta \theta}× &= (\omega + b + n_{m})×(1+\delta \theta)
     \\
-    \dot{\delta \theta}× &= b+
+    \dot{\delta \theta}× &= b+n_m+
    \end{aligned}
    $$
 
