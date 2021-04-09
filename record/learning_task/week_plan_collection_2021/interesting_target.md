@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 16:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-31 18:29:21
+ * @LastEditTime: 2021-04-08 20:03:41
  * @FilePath: /3rd-test-learning/record/learning_task/week_plan_collection_2021/interesting_target.md
  * @Description: 
 -->
@@ -26,3 +26,4 @@
 15. |后端矩阵求解大测试!!||
 16. |LSD 和 DSO 的传感器误差分析    ||
 17. |概率、信息论、凸优化、线性代数||
+18. |PC、NFR 等手法||

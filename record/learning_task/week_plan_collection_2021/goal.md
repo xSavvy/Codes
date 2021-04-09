@@ -1,20 +1,24 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-25 10:48:44
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 10:10:38
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-09 08:26:23
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/goal.md
  * @Description：
 -->
 
+### 基础内容
 1. 视觉SLAM入门 掌握 ORB VINS DSO SVO SMSCKF BASALT StructVIO 七个框架
 2. 深度学习入门  从深度估计开始进行深入
-3. 二刷线性代数
-4. 二刷概率论
-5. 初始统计
-6. 加深C++的学习
-7. 算法和数据结构
-8. 一些针对SLAM 的基础学习
-9. 数值分析、数值分析
-10. 稠密重建
-11. 多视图几何基础
+3. 概率论、信息论、概率图模型
+4. 加深C++的学习
+5. 算法和数据结构
+6. 数值分析、数值优化
+7. 凸优化
+8. 多视图几何基础
+
+### 带添加简历项目2021(个人)
+1. 深度学习语义slam
+2. GRPC框架下，结合NFR PC 的分布式优化框架
+3. 集合GPU的高速确定性slam测试平台 
+ 

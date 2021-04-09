@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-12 13:31:44
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-08 10:11:20
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-08 20:01:29
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/doc.md
  * @Description: 
 -->
@@ -72,12 +72,13 @@
         推导一下之后，发现并不存在转轴,只是相同的旋转，在不同的坐标系下的表示不同。
         这个内容进行建模就是，
         在坐标系W下，存在一个刚体，刚体上有一个坐标系V 和 坐标系C,两个坐标系固定在刚体上，且两个坐标系不重合。
-        $$
 
-
-        $$
-
-
+   6.e. 最后发现bug 是因为转换的问题导致的。
+        也就是如下的例子：
+        最后发现Debug 的发生是因为在 求解 output 的result 的时候，坐标表示顺序写错了，
+          *    正确的 (R^{wm}_c1) * R^{wm}_c2.inverse()
+          *    错误的 (R^{wm}_c1) * R^{wm}_c2
+          *    和外参没有关系
    
    
 
