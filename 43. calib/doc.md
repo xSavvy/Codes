@@ -2,12 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-08 20:11:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-09 07:56:52
+ * @LastEditTime: 2021-04-11 08:59:44
  * @Description: 
 -->
 ### 梗概
 1. rot 外参标定
 2. imu gyro bias 标定
+3. 机器人学中的状态估计，旋转误差状态分析
 
 ======
 1. rot 外参标定
@@ -33,20 +34,34 @@
     
 
    $$
-   误差状态分析
+   误差状态分析<font color = "Red">见3.</font>
+   主体内容:
+
+3. 机器人学中的状态估计，旋转误差状态分析
+   P227
    $$
    nominal:\\
-    exp(\dot{\theta}) = -\omega× exp(\theta) = exp(\theta)\omega ×
-    \\
+   \dot{C} = \omega \times C\\
    true:\\
-    \begin{aligned}
-    exp(\dot{\theta})exp(\delta{\dot{\theta}}) &= -(\omega + b + n_{m})× exp(\theta)exp(\delta{\theta})
-    \\
-    exp(\dot{\theta})exp(\delta{\dot{\theta}}) &= -(\omega + b + n_{m})× exp(\theta)(1+\delta{\theta} ×)
-    \\
-    exp(\dot{\theta})(1 + \delta{\dot{\theta}}×) & = -(\omega + b + n_m)× exp(\theta) -(\omega + b + n_m)× exp(\theta)\theta×
-    \\
+   \cfrac{d}{dt}(1+\delta \theta\times)C = (\omega + \delta \omega)\times (1+\delta \theta \times)C \\
+   left:\\
    
-    \end{aligned}
-
+   \dot{\delta \theta×}C+(1+\delta \theta \times)\omega \times C \\
+   left+right:\\
+   \dot{\delta \theta×}+(1+\delta \theta \times)\omega \times = (\omega + \delta \omega)\times (1+\delta \theta \times)
+   \\
+   \dot{\delta \theta×} = (\omega + \delta \omega)\times (1+\delta \theta \times) - (1+\delta \theta \times)\omega \times
+   \\
+   formula 1：\\
+   V1 \times V2 \times - V2 \times V1 \times = (V1 \times V2)\times
+   \\
+   continue:\\
+   \begin{aligned}
+      \dot{\delta \theta×} &= (\omega + \delta \omega)\times (1+\delta \theta \times) - (1+\delta \theta \times)\omega \times
+      \\
+      &= \omega \times + \omega \times \delta{\theta}\times + \delta{\omega}\times + \omega \times -\delta{\theta}\times \omega \times
+      \\
+      &=(\omega×\delta{\theta})\times + \delta{\omega}\times      
+   \end{aligned}
    $$
+   这里存在的符号正负号转变。认为只是符号定义的问题
