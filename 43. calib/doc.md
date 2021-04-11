@@ -2,13 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-08 20:11:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-11 08:59:44
+ * @LastEditTime: 2021-04-11 09:24:00
  * @Description: 
 -->
 ### 梗概
 1. rot 外参标定
 2. imu gyro bias 标定
 3. 机器人学中的状态估计，旋转误差状态分析
+4. SO3 imu 预积分模块
 
 ======
 1. rot 外参标定
@@ -35,7 +36,30 @@
 
    $$
    误差状态分析<font color = "Red">见3.</font>
+   
    主体内容:
+
+   imu的gyro预积分部分
+   2.a 公式递推
+   $$
+   X_k+1 = f_k(X_k,b_k); 
+   \\
+   \begin{aligned}
+      J^{X_{k+2}}_{b_k} &=J^{f_{k+1}}_{X_{k+1}}( J^{f_k}_{b_k}(b_k-\hat{b_k}))+ J^{f_{k+1}}_{b_{k+1}}(b_{k}-\hat{b_{k}})\\
+      &=J^{X_{k+2}}_{X_{k+1}}( J^{X_{k+1}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})
+      \\
+      &=( J^{X_{k+2}}_{b_k}(b_k-\hat{b_k}))+ J^{X_{k+2}}_{b_{k+1}}(b_{k}-\hat{b_{k}})      
+   \end{aligned}
+   $$
+   具体推导<font color = "Red">见 32. vins_related/origin/VINS_MONO/Theory.md </font>
+   $$
+      In(\prod exp(\omega_i + b + n_i))
+      = In(\prod exp(\omega_i + \hat{b} + n_i)) + J_{b}(b-\hat{b})
+   $$
+
+   然后，组建最小二乘单次求解即可得到b。(VINS的一种近似求解) 这里使用的是 Cholesky 的求解方式(Ax = b A是正定(方阵，对称+ determiant>0))
+   
+   实际上，应该是进行反复迭代更新 exp 的。
 
 3. 机器人学中的状态估计，旋转误差状态分析
    P227
@@ -65,3 +89,5 @@
    \end{aligned}
    $$
    这里存在的符号正负号转变。认为只是符号定义的问题
+
+4. 预积分模块
