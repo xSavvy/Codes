@@ -10,7 +10,10 @@
 
 int main()
 {
-    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/2021-03-24-08-35-51.bag",
-                                  "/home/sunny/workspace_public/Dataset/self_test5");
+    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/VP/2021-04-14-14-13-57.bag",
+                                  "/home/sunny/workspace_public/Dataset/self_test6");
+    LoadImgAndSaveInFile("/home/sunny/workspace_public/Dataset/VP/2021-04-14-14-18-27.bag",
+                                  "/home/sunny/workspace_public/Dataset/self_test7");
     return 0;
+
 }
