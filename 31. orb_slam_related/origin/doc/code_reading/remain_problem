@@ -4,14 +4,17 @@ ORBSLAM 大改进：
    CreateNewMapPoint 生成MapPoint 的方式 感觉会存在一些重复的情况感觉这样效果并不好？ 存疑
    2020.12.16 添加
    目前，还是感觉这样重复的添加是存在一些问题的，之后我们再来深入研究。
-2. KeyFrame 可以改成 BASALT 的方式
+2. KeyFrame 可以改成 BASALT 的方式 
    对应的就是KeyFrameCulling 的问题
-3. AdaptiveFastTH
+3. AdaptiveFastTH 完成
 4. LocalMapping 的方式相对来说好像并没有对深度信息进行迭代优化，只是在LocalBA的时候一起进行混合的优化。
                 而初始值还是使用了三角化得来的结果
 5. Graph Culling
-6. 线面特征的形式
-7. 高速跟踪存在问题  想办法光流解决一下  1 
+6. 线面特征的形式   完成
+7. 高速跟踪存在问题  想办法光流解决一下  1 完成 
+8. ORB说到底还是一个LocalBA
+
+
 
 ORBSLAM 小改进:
 1. 加一个PoseTree，这样的话能够更好的更新共视关系
