@@ -2,12 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-08 20:11:49
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-09 18:21:47
+ * @LastEditTime: 2021-04-16 09:51:45
  * @Description: 
 -->
-### 梗概
+### 梗概(外参标定会直接和客观性产生关系)
 1. rot 外参标定
 2. imu gyro bias 标定
+
 
 ======
 1. rot 外参标定
