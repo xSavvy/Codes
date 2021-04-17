@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 09:19:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-12 09:40:22
- * @FilePath: /3rd-test-learning/38. line_feature/plucker/doc.md
+ * @LastEditTime: 2021-04-16 17:26:39
+ * @FilePath: /Codes/38. line_feature/plucker/doc.md
  * @Description: 
 -->
 ### Plucker线表示
@@ -114,7 +114,6 @@ $$
 
 4.c. 重投影误差\
 在归一化平面上来进行优化\
-
 $$  
     e_1 =  \frac{p_s^Tm}{\operatorname{norm}(m)}\\
     e_2 =  \frac{p_e^Tm}{\operatorname{norm}(m)}\\

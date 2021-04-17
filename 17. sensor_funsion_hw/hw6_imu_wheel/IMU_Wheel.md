@@ -9,8 +9,22 @@ $v_{imu}$ 代表转化到imu系的速度<br>
 <br>
 
 
-
 ### 状态量递推
+
+<font color = "Red"> 2021.4.12 添加
+基础内容:
+$$
+    \begin{aligned}
+     R\theta \times R^T = (R\theta)×  
+     \\
+     Rexp(\theta)R^T = exp(R\theta)    
+    \end{aligned}
+$$
+这个，之后的求导过程中，会被不断地被使用。
+
+写在这里，是因为自己可能会忘记这些基础的公式。
+</font>
+
 之后，就可以套入预积分的公式
 $$
     \alpha_{b_ib_{k+1}} = \alpha_{b_ib_k} + exp(\theta_{b_ib_{k}})v_{imu}\Delta{t} \\
@@ -20,6 +34,9 @@ $$
 为了方便之后，对于Bias 展开的需求<br>
 这个通过对每一个IMU进行泰勒展开，合并起来，最终得到用于对Bias泰勒展开的$J_{ij}$<br>
 因为$\alpha$ 和 $b_g$ 已经是一个线性的关系，所以只对 $\theta$ 展开即可
+
+
+主体推导:
 
 $$
         \begin{aligned}

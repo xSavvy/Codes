@@ -1,16 +1,22 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-08 20:11:49
+<<<<<<< HEAD
  * @LastEditors: Liu Weilong
  * @LastEditTime: 2021-04-13 21:20:09
+=======
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-16 09:51:45
+>>>>>>> 199a41c04077b4db08ea2e35b13ba684788eccaa
  * @Description: 
 -->
-### 梗概
+### 梗概(外参标定会直接和客观性产生关系)
 1. rot 外参标定
 2. imu gyro bias 标定
 3. 机器人学中的状态估计，旋转误差状态分析
 4. SO3 imu 预积分模块
 5. 图优化因子求导
+
 
 
 ======
