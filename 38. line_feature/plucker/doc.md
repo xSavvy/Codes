@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 09:19:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-16 17:26:39
+ * @LastEditTime: 2021-04-19 10:24:25
  * @FilePath: /Codes/38. line_feature/plucker/doc.md
  * @Description: 
 -->
@@ -250,9 +250,7 @@ $$
             \sin(\alpha)&0\\
             0&\cos(\alpha)\\
             0&0
-        \end{matrix}\right]}{\partial \theta,\alpha}
-    \\
-    
+        \end{matrix}\right]}{\partial \theta,\alpha} 
 $$
 往下就不继续推导了 快吐了
 
@@ -271,3 +269,6 @@ $$
 1. 关于像素平面投影的问题
    ![](./picture/6.png)
    ![](./picture/7.png)
+
+
+### 

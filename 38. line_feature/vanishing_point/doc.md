@@ -1,9 +1,9 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-12 13:31:44
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-08 20:01:29
- * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/doc.md
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-19 13:06:55
+ * @FilePath: /Codes/38. line_feature/vanishing_point/doc.md
  * @Description: 
 -->
 ### 目前留下来的问题：
@@ -79,8 +79,17 @@
           *    正确的 (R^{wm}_c1) * R^{wm}_c2.inverse()
           *    错误的 (R^{wm}_c1) * R^{wm}_c2
           *    和外参没有关系
-   
-   
+
+
+### VP 优、缺
+1. 位姿平滑度不足，受场景影响大。
+2. 全局最优旋转
+3. 可用于改善抖动的问题，这个问题的解决大概率是因为引入了运动先验的原因
+
+### other problem
+1. 运动模糊
+2. 动态环境
+3. 曝光的问题(无HDR，曝光导致的特征跟丢)
 
 
 
