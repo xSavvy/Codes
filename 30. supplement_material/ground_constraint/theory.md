@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:57:00
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-04 10:24:02
- * @FilePath: /3rd-test-learning/30. supplement_material/ground_constraint/theory.md
+ * @LastEditTime: 2021-04-20 10:07:01
+ * @FilePath: /Codes/30. supplement_material/ground_constraint/theory.md
  * @Description: 
 -->
 
@@ -96,6 +96,10 @@ b. 当然可以直接解释为 Yaw X Y 的误差比较小，所以不考虑，�
 2021.2.3 添加<br>
 今天,重新思考之后，发现别人的推导是基于Forster 进行的。<br>
 并且，我之前1.6号，说需要给自身加误差的想法，是有问题的.从误差状态预测上来讲，Yaw X Y 的误差是不应该考虑的<br>
+
+<font color ="Red">2021.4.20 添加<br>
+昨天突然想明白了，Forster 和 VINS的误差分析的问题，其实真正的差别是MLE 和 MAP 是的差别
+</font>
 
 对比，另外两种加法，<br>
 第一种 Quan Meixiang 2018 直接在SE3的roll pitch 和z上 进行约束 比较现实<br>
