@@ -2,14 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-07 13:56:01
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-08 20:18:15
+ * @LastEditTime: 2021-04-17 19:09:52
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/extrinc_calib.cpp
  * @Description: 
  * 
  * 主要内容：
  * 旋转外参，实际上就是求解一个超定的齐次方程 Ax=0,使用SVD进行求解
- *        只有一个rot的情况下 SVD 极小奇异值有两个 说明无法有效进行标定
- *        有两个rot的情况下 ，SVD 极小奇异值只有一个 说明可以进行标定
+ *         只有一个rot的情况下 SVD 极小奇异值有两个 说明无法有效进行标定
+ *         有两个rot的情况下 ，SVD 极小奇异值只有一个 说明可以进行标定
+ * 
+ * 其实，这里也是说明了，四元数可以进行线性运算的优势。速度会非常的快
+ * 
  * 
  * 1. 旋转外参标定的测试，因为在实际测试的情况下出现了外参无法标定的情况，这里需要进一步看一下
  * 2. 结论：
@@ -54,10 +57,8 @@ int main()
     // 进行 Vehicle 和 Camera 的代码测试
     for(int i =1;i<obj.CameraMotion.size();i++)
     {
-        // 测试外参
         Eigen::Quaterniond relative_c1_c2 = obj.CameraMotion[i-1].inverse() * obj.CameraMotion[i];
         Eigen::Quaterniond relative_v1_v2 = obj.VehicleMotion[i-1].inverse() * obj.VehicleMotion[i];
-        
         double angle = relative_v1_v2.angularDistance(obj.Camera*relative_c1_c2*obj.Camera.inverse());
         cout<<angle<<endl;
     }
@@ -65,6 +66,7 @@ int main()
     cout<<"======================"<<endl<<"the real extrinc is "<<endl<<obj.Camera.coeffs().transpose()<<endl;
 
     // 外参推测测试
+    // 具体方法见doc.md
     Eigen::MatrixXd A(4*obj.CameraMotion.size(),4);
     for(int i =0;i<obj.CameraMotion.size();i++)
     {
@@ -106,9 +108,10 @@ int main()
     ric_cov = svd.singularValues().tail<3>();
     cout<<"the sigular"<<endl<<svd.singularValues().transpose()<<endl;
 
+
+    // 外参测试
     for(int i =1;i<obj.CameraMotion.size();i++)
     {
-        // 测试外参
         Eigen::Quaterniond relative_c1_c2 = obj.CameraMotion[i-1].inverse() * obj.CameraMotion[i];
         Eigen::Quaterniond relative_v1_v2 = obj.VehicleMotion[i-1].inverse() * obj.VehicleMotion[i];
         cout<<"real relative v1 v2 "<< relative_v1_v2.coeffs().transpose()<<endl;

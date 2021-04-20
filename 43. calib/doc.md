@@ -1,13 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-08 20:11:49
-<<<<<<< HEAD
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-13 21:20:09
-=======
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-16 09:51:45
->>>>>>> 199a41c04077b4db08ea2e35b13ba684788eccaa
+ * @LastEditTime: 2021-04-17 19:01:47
  * @Description: 
 -->
 ### 梗概(外参标定会直接和客观性产生关系)
@@ -33,6 +28,17 @@
    \end{aligned}
    $$
    标定目标就是$R^{b}_a$
+
+   $$
+    q_{a1}^{b2}=q^{a2}_{a1}q^{b}_a= q^b_aq^{b2}_{b1}
+    \\
+   L(q^{a2}_{a1})q^{b}_a - R(q^{b2}_{b1})q^b_a = 0
+   \\
+   [L(q^{a2}_{a1}) - R(q^{b2}_{b1})]q^b_a = 0
+   $$
+   SVD 求解
+
+   
 
 2. imu gyro bias 标定
    
