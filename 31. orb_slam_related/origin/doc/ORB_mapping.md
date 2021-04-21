@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 15:08:16
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-16 14:32:57
- * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_mapping.md
+ * @LastEditTime: 2021-04-21 14:35:01
+ * @FilePath: /Codes/31. orb_slam_related/origin/doc/ORB_mapping.md
  * @Description: 
 -->
 ### ORB LocalMapping
@@ -50,6 +50,12 @@
 4.c. 得到所有目标关键帧的 地图点\
 4.d. Fuse   mpCurrentKeyFrame 和 4.c. 得到的地图点\
 需要SearchInNerighbors 的原因是CreateNewMapPoints 出现了太多 同一个3D点 对因多个MapPoint的情况
+
+<font color="Red">2021.4.21添加 <br></font>
+在现在有了累计误差是和更古老的帧匹配进行消除这一个概念之后，我们再来看一整套LocalMapping 的算法，就会发现，的确里面充满这方面思想的实现。
+
+
+
 
 
 1. KeyFrameCulling 清理多余KeyFrame
