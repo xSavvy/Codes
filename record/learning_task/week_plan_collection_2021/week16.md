@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-19 20:49:29
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-20 07:53:55
+ * @LastEditTime: 2021-04-20 20:10:29
  * @Description: 
 -->
 ### 现状
@@ -10,7 +10,7 @@
 还是要抓好机会，疯狂成长才可以。
 
 三个周的目标(SLAM基础结束):
-ORB 回环检测、spinning tree 维护
+ORB 回环检测、spinning tree 维护、Fuse
 VINS 初始化实现
 MSCKF S-MSCKF  LARVIO 代码阅读
 DSO BASALT 代码阅读
