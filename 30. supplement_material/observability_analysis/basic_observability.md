@@ -2,14 +2,26 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-21 09:02:07
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-21 14:27:13
- * @FilePath: /Codes/30. supplement_material/observability_analysis/doc.md
+ * @LastEditTime: 2021-04-22 11:01:12
+ * @FilePath: /Codes/30. supplement_material/observability_analysis/basic_observability.md
  * @Description: 
 -->
+### 目的
+说明白
+1. 可观性的定义 见补充
+2. 可观性的意义 见补充
+3. 维护零空间的目的 见 5.
+
+
 ### 梗概
 主要内容来自
 1. Aided Inertial Navigation With Geometric Features: Observability Analysis
 2. Consistency Analysis and Improvement of Vision-aided Inertial Navigation 更加详细一些
+3. 一文看尽系列 https://zhuanlan.zhihu.com/p/341322063
+4. Consistency of EKF-Based Visual-Inertial Odometry limingyang 大佬牛逼
+
+<font color = "Red">tips： 需要找几个例子，对于这个问题进行验证</font>
+
 
 -----
 状态量:
@@ -46,10 +58,13 @@ $$
 $$
 $\Phi$ 为离散状态转移矩阵，$H_k$ 为k时刻的观测矩阵,这里可以提前转换好，也可以根据下列代码进行转化
 
-
 4. 关于各个状态可观性的判断:
     PWCS+SVD的判断方式
 
+5. WHY 零空间维护？
+   因为从上面的结论看过来,零空间的维数直接和状态是否可观有联系，如果出现零空间减少的情况，必然会出现求解有误差的问题
+   FEJ OC DSO 见 supplement_material/observability_analysis/fej.md oc.md dso.md
+   其实，讨论的问题是如何让离散化，尽可能少的引入误差
 
 -----
 ### 补充
