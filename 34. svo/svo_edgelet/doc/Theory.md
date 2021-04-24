@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 14:00:24
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-02 16:23:34
- * @FilePath: /3rd-test-learning/34. svo/svo_edgelet/doc/Theory.md
+ * @LastEditTime: 2021-04-23 09:23:50
+ * @FilePath: /Codes/34. svo/svo_edgelet/doc/Theory.md
  * @Description: 
 -->
 
@@ -15,3 +15,4 @@
 3. |Theory-后端-DepthFilter|svo/depth_filter|完成
 4. |Theory-前端-Edgelet||
 5. |CodeReading-Pipeline||
+6. |Theory-后端-EpiSearch|svo/depth_filter|完成

@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-26 08:58:28
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-07 09:32:17
- * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/vp_basic.md
+ * @LastEditTime: 2021-04-24 11:29:17
+ * @FilePath: /Codes/38. line_feature/vanishing_point/vp_basic.md
  * @Description: 
 -->
 ### 1. 打通VP 和 曼哈顿假设 的关系
@@ -17,7 +17,7 @@
 
 2. 什么是 Vanishing Point?
 
-   空间平行线的交点
+   空间平行线,在像平面上的交点
    ![](./pic/7.png)
 
 3. Vanishing Point 和 曼哈顿假设的关系？
@@ -55,7 +55,13 @@
     \end{aligned}
     \\
     when ,\lambda \rightarrow\infin\\
-    x \propto       \left[
+    x \propto  \left[
+        \begin{matrix}
+          f_x a_x/\lambda + c_x a_z/\lambda + f_xd_x +  c_x d_z \\
+          f_y a_y/\lambda + c_y a_z/\lambda +  f_y d_y +  c_y d_z \\
+          a_z/\lambda +  d_z
+      \end{matrix}
+      \right]\propto      \left[
         \begin{matrix}
             f_x d_x +  c_xd_z \\
             f_y d_y +  c_yd_z \\
@@ -63,6 +69,13 @@
       \end{matrix}
       \right]
    $$
+   结论，在2d像平面上得到的VP 会和 空间当中的平行方向呈现出.
+   这样的处理方式只是除了$\lambda$ 没有除$d_z$, 就相当于跳过了$d_z=0$的限制条件
+   $$
+   K^{-1}x\propto D 
+   $$
+   
+   
    最后，结果就是Vanishing Point 只和三维空间中的方向有关
 
 3. 如何从Image 反向推出 Vanishing Point 的方向？
@@ -82,11 +95,45 @@
     如果我们这里使用一个矩阵来容纳一个图像内，三类平行线所对应的D，那么因为Manhattan 的性质就会出现。
 
     $$
-        R_1 = [d_1^1 d_1^2 d_1^3] \in SO3
+        D_1 = [d_1^1 d_1^2 d_1^3] \in SO3
         \\
-        R_2 = [d_2^1 d_2^2 d_2^3] \in SO3
+        D_2 = [d_2^1 d_2^2 d_2^3] \in SO3
         \\
-        R_1 = R_{12}R_2
+         = R^1_2 [d_1^1 d_1^2 d_1^3]
+        \\
+        D_2 = R^1_2D_1
+    $$
+
+    关于VP的空间旋转分析
+  
+    $$
+      D_1 =  P + \lambda D\\
+      D_2 = T(P + \lambda D)\\
+      x_1    
+      \propto      \left[
+        \begin{matrix}
+            f_x d_x^1 +  c_xd_z^1 \\
+            f_y d_y^1 +  c_yd_z^1 \\
+           d_z^1
+      \end{matrix}
+      \right]\\
+      x_2 \propto K\left[
+        \begin{matrix}
+             d_x^2 \\
+            d_y^2 \\
+           d_z^2
+      \end{matrix}
+      \right] 
+       \propto KR\left[
+        \begin{matrix}
+             d_x^1 \\
+            d_y^1 \\
+           d_z^1
+      \end{matrix}
+      \right] 
+      \\
+      normalized(R^TK^{-1}x_2) = normalized(K^{-1}x_1)\\
+      R^{T}normalized(K^{-1}x_2) = normalized(K^{-1}x_1)
     $$
    
    可以见是存在一个旋转的关系的

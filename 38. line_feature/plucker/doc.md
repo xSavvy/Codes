@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-26 09:19:59
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-19 10:24:25
+ * @LastEditTime: 2021-04-24 13:21:48
  * @FilePath: /Codes/38. line_feature/plucker/doc.md
  * @Description: 
 -->
@@ -266,7 +266,8 @@ $$
 
 
 ### 补充
-1. 关于像素平面投影的问题
+1. 关于像素平面投影的问题,
+   也就是如何把 m 投影到 像平面上的问题
    ![](./picture/6.png)
    ![](./picture/7.png)
 
