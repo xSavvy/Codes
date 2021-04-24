@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-19 20:49:29
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-24 15:40:00
+ * @LastEditTime: 2021-04-24 17:39:05
  * @Description: 
 -->
 ### 现状
@@ -11,7 +11,8 @@
 
 三个周的目标(SLAM基础结束):
 ORB 回环检测、spinning tree 维护
-VINS 初始化实现
+VINS 初始化实现\VINS-MONO 图像residual
+VINS 预积分编写测试
 MSCKF S-MSCKF  LARVIO 代码阅读
 DSO BASALT 代码阅读
 SVO_edglet 极线搜索 代码阅读 完成
