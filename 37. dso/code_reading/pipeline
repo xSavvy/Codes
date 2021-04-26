@@ -6,6 +6,7 @@ FullSystem 是整个主体
             |__ 得到曝光时间，进行金字塔的构建 -> makeImages
         |__ !Init -> Initializer Related
         |__ Init -> Track
+            |__ trackNewCoarse()
 
 
 Initializer Related

@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 09:45:10
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-16 13:49:44
- * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/code_reading/feature_manager.md
+ * @LastEditTime: 2021-04-26 17:51:35
+ * @FilePath: /Codes/31. orb_slam_related/YGZ/doc/code_reading/feature_manager.md
  * @Description: 
 -->
 ### Cache机制
@@ -30,3 +30,26 @@ a.6. TrackLocalMap  对 PureClear 提取 双目ORB 让PureClear  变为Clear 然
 a.7. CreateNewKeyFrame 如果之前是一路 直接法顺下来没有任何 ORB track 的调用 就会使用 左目DSO提取 右目ORB 的提取方式
 
 特征提取机制需要后续进行测试
+
+### 点关系的维护
+1. StereoInit之后，生成第一波MapPoint
+2. 这个时候，MapPoint 数量不足，一直跑ORB的代码。不断进行TrackWithMotionModel 来建立点直接的联系
+3. 跑了一段时间之后，MapPoint 数量充足，SparseImgAlign不建立关系，TrackLocalMapDirect 建立点之间的关系。
+4. 如果TrackLocalMapDirect中 SearchLocalMapDirect 点不足，就使用LocalUpdate 中的UpdateLocalMap 添加点，但是建立关系还是在
+   TrackLocalMapPDirect里面的光流进行
+5. LocalMapping，后端会存在进一步的关系建立
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

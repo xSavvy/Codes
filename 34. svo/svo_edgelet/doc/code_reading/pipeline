@@ -66,10 +66,20 @@ initialization.H
 
 
 ============================
+最后剩下的内容
 DepthFilter
+
     |__ initializeSeeds()
     |__ updateSeeds()                       Seeds 更新，Converge 之后， Seed 删除， 创建Point
                                             由此可以知道，其实所有的Point 都是收敛之后得到的
+    |__ addKeyframe()                       用于初始化
+        |__ initializeSeeds()               代码主体，主要内容就是，对于Feature 提取角点，然后将这些角点初始化为seeds 
+                                            开始进行迭代
+    |__ addFrame()                          用于seeds 进行更新
+        |__ updateSeeds()                   内部进行，Seeds点的更新，Converge 之后， Seed 删除， 创建Point
+
+
+
 ============================
 Reprojector
     |__ reprojectMap()                      函数主体
@@ -85,3 +95,6 @@ Reprojector
 
 
 
+Tips： 
+1. Frame 的 key_pts_ 似乎只是用于判断和KF 的画幅共视关系
+2. 
