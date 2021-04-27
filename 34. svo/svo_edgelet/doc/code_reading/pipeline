@@ -33,11 +33,11 @@ addFirstFrame\ 均来自于KltHomographyInit
 
 KltHomographyInit
     |__ 重要member
-        |__ px_cur_\px_prev_\px_ref_  这个应该是实际pixel存储
-        |__ frame_ref_    用于Track 的Frame
-        |__ f_ref_ f_cur_   这个是keypoint 的归一化坐标
-        |__ disparities_    xy 上的视差都有保存
-        |__ ftr_type_       Vector3f 前xy是梯度值，z表示类型 1 是 edgelet 0 是普通的点
+        |__ px_cur_\px_prev_\px_ref_           这个应该是实际pixel存储
+        |__ frame_ref_                         用于Track 的Frame
+        |__ f_ref_ f_cur_                      这个是keypoint 的归一化坐标
+        |__ disparities_                       xy 上的视差都有保存
+        |__ ftr_type_                          Vector3f 前xy是梯度值，z表示类型 1 是 edgelet 0 是普通的点
     |__ addFirstFrame()
         |__ detectFeatures() 提取针对的金字塔层数存疑？？ 为每一个点建立种子
         |__ CheckFeatureNum\CheckCenterFeatureNum 检查特征数量和图像中间特征的数量 可以结合 ORB Fast 的角度 作为一种预处理 
@@ -66,10 +66,35 @@ initialization.H
 
 
 ============================
+最后剩下的内容
 DepthFilter
+
     |__ initializeSeeds()
+    |__ updateSeeds()                       Seeds 更新，Converge 之后， Seed 删除， 创建Point
+                                            由此可以知道，其实所有的Point 都是收敛之后得到的
+    |__ addKeyframe()                       用于初始化
+        |__ initializeSeeds()               代码主体，主要内容就是，对于Feature 提取角点，然后将这些角点初始化为seeds 
+                                            开始进行迭代
+    |__ addFrame()                          用于seeds 进行更新
+        |__ updateSeeds()                   内部进行，Seeds点的更新，Converge 之后， Seed 删除， 创建Point
 
 
 
+============================
+Reprojector
+    |__ reprojectMap()                      函数主体
+        |__ resetGird()                     重置栅格
+        |__ getCloseKeyframes()             也就是点可以被Frame 看到的KF
+        |__ ReProjectPoints()               这里就是把点反投影到cell 的过程
+                                            并 通过 overlap_kfs 来保存，KF到现在F的投影数量
+        |__ mapCandidatesCheck()            对MapCandidates 中的点继续往 Cell 进行投影
+        |__ for_each cell reprojectCell     对每一个 Cell
+                                               对Cell 内 每一个Point 进行 FindDirectMethod  Align2D
+                                                  只要cell 内有一个点匹配上，就直接跳出
+        |__ 有足够多的cell reproject 成功就跳出
 
 
+
+Tips： 
+1. Frame 的 key_pts_ 似乎只是用于判断和KF 的画幅共视关系
+2. 

@@ -1,13 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-19 20:49:29
-<<<<<<< HEAD
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-20 20:10:29
-=======
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-24 17:39:05
->>>>>>> d5f28583e7701d3ad06cff08788a69162f3705ae
+ * @LastEditTime: 2021-04-27 08:01:35
  * @Description: 
 -->
 ### 现状
@@ -15,14 +10,9 @@
 还是要抓好机会，疯狂成长才可以。
 
 三个周的目标(SLAM基础结束):
-<<<<<<< HEAD
-ORB 回环检测、spinning tree 维护、Fuse
-VINS 初始化实现
-=======
 ORB 回环检测、spinning tree 维护
 VINS 初始化实现\VINS-MONO 图像residual
 VINS 预积分编写测试
->>>>>>> d5f28583e7701d3ad06cff08788a69162f3705ae
 MSCKF S-MSCKF  LARVIO 代码阅读
 DSO BASALT 代码阅读
 SVO_edglet 极线搜索 代码阅读 完成

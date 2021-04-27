@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-28 08:54:24
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-22 13:05:16
- * @FilePath: /3rd-test-learning/31. orb_slam_related/origin/doc/ORB_extract_and_match.md
+ * @LastEditTime: 2021-04-26 17:57:08
+ * @FilePath: /Codes/31. orb_slam_related/origin/doc/ORB_extract_and_match.md
  * @Description: 
 -->
 ### ORB 提取
@@ -81,7 +81,10 @@ a.3. DescriptorAngleConsistency 判断<br>
 
 4.a. Fuse Used in SearchInNeighbors<br>
 a.1. 在CurrentFrame 当中找到了匹配点 <br>
-     未完待续
+a.2. 还是老几样，预测层数，寻找candidate，对Candidates寻找比较好的匹配
+a.3. 根据原Frame MapPoint 的观测次数多少，判断是否进行替换
+a.4. 替换也并不是完全覆盖，而是整合
+
 
 5.a. SearchBySim3 Used in ComputeSim3
 a.1. 
