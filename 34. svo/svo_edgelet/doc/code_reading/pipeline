@@ -23,6 +23,7 @@ vo.addImage(img)
         |__ StructureOptimization()
         |__ getSceneDepth()
         |__ depth_filter->addKeyframe()
+        |__ for each_KF depth_filter->addFrame()  更新seeds
         |__ map_->addKeyframe()
     |__ show()                                    一大段用于显示的代码
     |__ finishFrameProcessingCommon()             一些push_back 没有太多内容

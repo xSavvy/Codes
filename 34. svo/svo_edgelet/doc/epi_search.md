@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-23 09:24:09
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-23 15:51:25
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-27 08:16:52
  * @FilePath: /Codes/34. svo/svo_edgelet/doc/epi_search.md
  * @Description: 
 -->
@@ -10,6 +10,7 @@
 1. updateSeeds
 2. findEpipolarMatchDirect
 3. 仿射详解
+4. addFrame 
 -----
 
 1. updateSeeds
@@ -40,3 +41,6 @@
         \end{matrix}
         \right]
    $$
+
+4. addFrame 
+   while(seeds) 进行极线匹配，然后更新seeds
