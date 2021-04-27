@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-02 17:22:53
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-02-10 01:12:42
+ * @LastEditTime: 2021-04-25 20:34:45
  * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/code_reading/match_extract.md
  * @Description主要
 -->
@@ -17,12 +17,13 @@ GFTT 的response\
 ### SparseImageAlign
 利用五层金字塔图像，进行从粗到细的InverseCompositional 直接法\
 但是这里只是算出 mCurrentFrame 的位置，并没有对CurrentFrame 的Key 和 MapPoint 进行填充。\
+使用的投影点来自LastKeyFrame 的MapPoint
 
 
 ### InverseCompositional 直接法
 用于帧间匹配
 1. precomputeReferencePatches
-2. computeResiduals
+2. computeResidual
 
 ------
 
@@ -65,4 +66,8 @@ a.2. 对于每一个MapPoint
         统计在CurrentFrame 上面的投影平均值
         填充CurrentFrame的 Key 和 MapPoint
 a.3. PoseOptimization
+
+### 关于特征点之间的联系的建立
+因为主要是光流的原因，所以在SparseImageAlign 和 Align2D 的时候，其实并没有特征点关联。
+特征的关联应该主要是在后端，和前端光流clahe不足进行 TrackLocalMap 的时候。
         

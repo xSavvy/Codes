@@ -15,4 +15,4 @@ include_directories(${CERES_INCLUDE_DIRS})
 link_libraries(${CERES_LIBRARIES})
 
 add_executable(test_case test_case.cpp VPDetection.cpp)
-add_executable(extrinc_calib extrinc_calib.cpp)
+# add_executable(extrinc_calib extrinc_calib.cpp)

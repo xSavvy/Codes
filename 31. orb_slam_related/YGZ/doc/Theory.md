@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-04 09:16:13
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-10 11:29:16
- * @FilePath: /3rd-test-learning/31. orb_slam_related/YGZ/doc/Theory.md
+ * @LastEditTime: 2021-04-23 16:42:18
+ * @FilePath: /Codes/31. orb_slam_related/YGZ/doc/Theory.md
  * @Description: 
 -->
 
@@ -144,6 +144,7 @@ Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 �
 1. 大概介绍:<br>
    a.1. 加仿射<br>
     因为这一部分主要是发生在相隔比较大的两帧之间，进行光流匹配的问题。需要考虑的是原本光流的Template对于光流的匹配是不是还是合适的。在SVO里面，是把这里的变换换成了仿射变换。但是为了实时性的考虑，并不是把Warp当作一个仿射变换进行优化。<br>
+    ACR : 是从ref 到cur 的放射变换 $p_c = ACR * p_r$ 
    a.2. 金字塔层数调整<br>
    因为是相隔比较大的两帧之间进行匹配，所以难免涉及到尺度的问题，SVO对此通过面积也进行了一次金字塔层数上的调整。
    a.3. 克服自动曝光<br>
@@ -168,6 +169,10 @@ Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 �
    防止出现之前离得远，下一帧离得近的情况。
    a.2. 调整方法？
    根据Affine的面积进行调整，如果面积过大，就往上调一级金字塔
+   但是这个的缩放没有直接乘在Affine 来调节大小
+   而是在WarpAffine()的时候，通过减小patch 的大小，来间接调节
+   示意图:
+   ![](./../picture/4.png)
 
 4. 克服自动曝光:
    添加一个光流的补偿项，两帧之间的亮度进行补偿。

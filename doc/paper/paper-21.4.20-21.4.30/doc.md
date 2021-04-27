@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-21 18:04:50
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-21 18:24:50
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-04-22 20:38:13
  * @FilePath: /Codes/doc/paper/paper-21.4.20-21.4.30/doc.md
  * @Description: 
 -->
@@ -15,10 +15,17 @@ a. 光度标定 f photometric reponse 函数的逆函数 $In f^{-1}$
 b. 进行光照控制 通过之前定义的四种代价项，对$\Delta t$求导
 得到最佳$\Delta t$
 c. 光照补偿
+
 直接法
+
 ![](./pic/1.png)
 ![](./pic/2.png)
+
 光流
+
 ![](./pic/3.png)
 ![](./pic/4.png)
+
+距离再好一点的光流，还差一个patch 的仿射
+
 d. 其余参数调节，见论文 Implement Detail

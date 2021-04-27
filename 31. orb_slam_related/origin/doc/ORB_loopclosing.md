@@ -1,9 +1,9 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-29 14:01:39
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-01 07:25:55
- * @FilePath: /3rd-test-learning/31. orb_slam_related/doc/ORB_loppclosing.md
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-24 16:59:49
+ * @FilePath: /Codes/31. orb_slam_related/origin/doc/ORB_loopclosing.md
  * @Description: 
 -->
 
@@ -42,13 +42,19 @@ a.3. 连续性检测 代码实现的有点懵
             连续计数置1
 
 2.a. ComputeSim3 进行几何校验 和 scale 恢复\
-a.1. SearchSearchByBoW<br>
-     对每一个CanidiateKF
-     与 Current KF Sim3Solver 几何校验，找Inliner<br>
-     OptimizeSim3 进行优化，Inliner 足够跳出<br>
-a.2. 对于最佳匹配 Candidate KF 的共视帧
-     整和所有的地图点
-     对关键帧再做一次 SearchByProjection
+a.1. 对每一个满足条件的KF
+      和mCurrentKF 进行SearchByBows，如果inliners 数量达标，为其创造Sim3Solver
+      并保存这个Sim3Solver 每一个Sim3Solver 都保存了 mCurrentKF* 和 candidate KF*
+a.2. 对保存的每一个Sim3Solver
+      进行 Sim3 计算，
+      得到s,R,t 之后，SearchBySim3 进一步匹配，
+      匹配之后，进行OpptimizeSim3 的优化
+      如果匹配的比较好就可以跳出了,匹配的不好就继续计算下一个Sim3Solver
+a.3. 统计匹配的比较好的KF 的共视关键帧
+      得到这些关键帧所有的MapPoints
+a.4. SearchByProjection，进一步进行匹配
+
+3.a. CorrectLoop
 
             
 

@@ -8,6 +8,7 @@ vo.addImage(img)
         |__ KltHomographyInit->addFirstFrame()    提取特征
         |__ setKeyFrame()                         对Frame的key_pts_进行设置，SVO的关键特征点一个Frame 只有 5个 
                                                   中间一个然后划分四个块，一个块一个最优，让特征尽可能在视野中央。
+                                                  这里以(cu,cv)为界进行划分
         |__ map_->addKeyFrame()                   一个简单的push_back
     |__ 是整个系统第二个图像 processSecondFrame()
         |__ KltHomographyInit->addSecondFrame()   进行了一次klt追踪,HE inliner extract 添加匹配的fts_到cur_frame_
