@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-23 09:24:09
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-27 08:16:52
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-27 10:36:20
  * @FilePath: /Codes/34. svo/svo_edgelet/doc/epi_search.md
  * @Description: 
 -->
@@ -43,4 +43,4 @@
    $$
 
 4. addFrame 
-   while(seeds) 进行极线匹配，然后更新seeds
+   while(seeds) 进行极线匹配，然后更新seeds (tips:进行仿射搜索)

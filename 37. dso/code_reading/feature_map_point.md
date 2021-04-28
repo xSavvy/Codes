@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-26 16:09:25
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-26 16:13:43
+ * @LastEditTime: 2021-04-27 11:02:42
  * @FilePath: /Codes/37. dso/code_reading/feature_map_point.md
  * @Description:
 -->
@@ -28,5 +28,11 @@
 
 2. Frame--EFFrame   wrapper for frame hessian, contains the priors 内部内容使用存疑
 3. Frame--FrameHessian
-   |__ 
+   |__ member var
+       |__ dIp                 存储多层金字塔信息  灰度、dx、dy 对应Vector3f 0 1 2
+       |__ absSquaredGrad      存储多层进行塔 像素梯度abs 
+   |__ makeImages()            根据原图像创建金字塔
+       |__ 1. 为多层金字塔的存储创造空间
+              dIp、absSquaredGard 
+           1. dIp、absSquaredGrad 进行信息填充
    
