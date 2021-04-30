@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-25 21:00:16
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-28 20:10:15
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-30 10:40:43
  * @Description: 
 -->
 ### 现状
@@ -28,7 +28,7 @@ Super Front 计划一下看看怎么写
 序号|任务|状态|排序
 ---|---|---|---
 1.  |VINS 初始化部分 跟着课程一起重新读一下,写一下 -> 实现自己的前端||1
-2.  |VINS 观测模型  -> 实现自己的前端||
+2.  |VINS 观测模型  -> 实现自己的前端|完成|
 3.  |SVO 代码阅读  -> 实现自己的前端|完成|1
 4.  |DSO 代码阅读  -> 实现自己的前端||2
 5.  |用VINS + ORB做一个单线程测试平台 -> 实现自己的前端||3
