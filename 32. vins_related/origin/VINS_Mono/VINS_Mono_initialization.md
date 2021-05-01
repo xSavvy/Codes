@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-07 10:31:30
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-01 20:46:10
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
@@ -79,7 +79,7 @@ $$
    $$
       Ax = 0\\
       A = USV^T\\
-      A^TA = V\Theta^T\ThetaV^T\\
+      A^TA = VS S^TV^T\\
    $$
    这里存在一个反向思考的问题
    $$
