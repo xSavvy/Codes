@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-25 21:00:16
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-01 20:45:58
+ * @LastEditTime: 2021-05-02 15:19:18
  * @Description: 
 -->
 ### 现状
@@ -38,6 +38,7 @@ Super Front 计划一下看看怎么写
 9.  |g2o ceres 核心代码阅读  -> 实现自己的优化器||
 10. |Liu Haomin 视频  -> 实现自己的优化器||
 11. |S-MSCKF 代码阅读||
+12. |tangzp svo_edgelet 修改|完成|
 
 2021.4.25<br>
 还是太浮躁了，踏实一点吧
@@ -58,6 +59,9 @@ Super Front 计划一下看看怎么写
 但是自己还需要一些可以秀肌肉的项目。
 
 MVSNet 准备入门
+
+
+<font color = "Red">当然，自己其他的问题也出现了，也就是做事更多的是根据好恶，而不是逻辑需求，我认为这会是之后必须解决的问题<br></font>
 
 
 
