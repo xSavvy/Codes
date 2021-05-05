@@ -1,9 +1,9 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-07 07:35:41
- * @FilePath: /3rd-test-learning/doc/SLAM-related/VINS_Mono/Theory.md
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-04-30 10:09:49
+ * @FilePath: /Codes/32. vins_related/origin/VINS_Mono/Theory.md
  * @Description: 
 -->
 ## VINS关于预积分的Ba Bg 变化的情况
@@ -148,3 +148,29 @@ $$
     J^{\delta{\alpha}}_{bak+1}=FJ^{\delta{\alpha}}_{bak}
 $$
 我决定还是很对的
+
+
+### 单位球面 视觉residual
+为了适应多种，相机模型使用球形模型
+![](./UnitSphereResidual1.png)
+![](./UnitSphereResidual2.png)
+误差项：
+$$
+    residual = \left[
+                \begin{matrix}                 
+                r_1\\
+                r_2
+                \end{matrix}
+                \right]
+            = \left[
+                \begin{matrix}                 
+                b_1^T(p_i.norm()-p_j.norm())\\
+                b_2^T(p_i.norm()-p_j.norm())
+                \end{matrix}
+                \right]
+$$
+求导:
+
+
+
+
