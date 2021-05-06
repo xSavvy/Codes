@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-04 09:24:25
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-05 22:43:56
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-05-06 19:12:59
  * @Description: 
 -->
 
@@ -19,15 +19,23 @@
 输入: keypoint 的观测
 输出: CF KF 
 
-信息流打不通    不知道为什么
+信息流打通拉!! 哈哈哈哈
 
+ixsSort   
 
 
 1. create_iba_frame
    
-2. create_iba_frame -> PushCurrentFrame() 把初始的CurrentFrame数据 ， convert to InputLocalFrame m_ILF
+2. PushCurrentFrame -> PushCurrentFrame() 把初始的CurrentFrame数据 ， convert to InputLocalFrame m_ILF
     |__ ConvertCamera  转换相机坐标
     |__ ConvertDepth   转换深度 和 尺度
     |__ ConvertFeatureMeasurements 转换测量特征
-        |__ 
-    |__ 保存imu数据
+        |__ 第一帧数据没有放任何东西进 m_zsSortTmp
+    |__ 保存imu数据   保存在 m_ILF.m_us 内部  并且进行了去掉bias的操作
+3. PushCurrentFrame -> PushKeyFrame()  把外部KF 数据转换成 内部使用的KF 数据  
+    |__ 转换相机位姿和状态(位姿、速度、两个bias)
+    |__ ConvertDepth   转换深度和尺度
+    |__ ConvertFeatureMeasurements 转换测量特征
+    |__ 保存 KF 位姿到 m_CsKF
+
+
