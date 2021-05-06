@@ -1,3 +1,0 @@
-/home/lwl/workspace/3rd-test-learning/6. yaml/buid/CMakeFiles/rebuild_cache.dir
-/home/lwl/workspace/3rd-test-learning/6. yaml/buid/CMakeFiles/edit_cache.dir
-/home/lwl/workspace/3rd-test-learning/6. yaml/buid/CMakeFiles/yaml-test.dir
