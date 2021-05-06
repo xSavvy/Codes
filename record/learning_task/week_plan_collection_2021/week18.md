@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-02 15:19:31
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-05 20:24:19
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-05-06 10:24:32
  * @Description: 
 -->
 ### main task
@@ -17,7 +17,7 @@
 6.  |GF 系列分析 ||
 7.  |实现自己的优化器->g2o ceres 核心代码阅读||
 8.  |实现自己的优化器->Liu Haomin 视频 ||
-9.  |实现自己的优化器->ICE-BA 代码阅读||
+9.  |实现自己的优化器->ICE-BA 代码阅读||数据流打通， 准备串数据流
 10. |S-MSCKF 代码阅读-> 实现自己的前端||
 11. |四元数 四阶隆格库塔||
 

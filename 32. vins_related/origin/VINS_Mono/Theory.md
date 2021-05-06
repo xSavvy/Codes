@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-30 10:09:49
+ * @LastEditTime: 2021-05-06 10:46:32
  * @FilePath: /Codes/32. vins_related/origin/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -169,8 +169,7 @@ $$
                 \end{matrix}
                 \right]
 $$
-求导:
-
+求导:基本一致 没有什么难的了
 
 
 
