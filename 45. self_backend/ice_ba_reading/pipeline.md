@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-04 09:24:25
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-06 19:12:59
+ * @LastEditTime: 2021-05-07 11:00:35
  * @Description: 
 -->
 
@@ -37,5 +37,9 @@ ixsSort
     |__ ConvertDepth   转换深度和尺度
     |__ ConvertFeatureMeasurements 转换测量特征
     |__ 保存 KF 位姿到 m_CsKF
+4. PushCurrentFrame -> m_LM ->IBA_PushLocalFrame  把m_ILF 保存到 m_LM->m_CsLF
+5. PushCurrentFrame -> m_LM ->IBA_PushKeyFrame 
+    |__ 把m_IKF  保存到 m_LM->m_CsKF
+    |__ 
 
 
