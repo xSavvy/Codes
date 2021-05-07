@@ -169,3 +169,17 @@ c. 不去要求传统方法(用公式可表达的可建模的方法)的泛化，
 d. 深度学习<br>
 e. 因子的设置<br>
 f. 累计误差的消除，是和更古老的帧发生约束来进行的(ORB)<br>
+
+
+### 图像质量
+1. 模糊
+   Reading_List
+        Image Deblurring using Smartphone Inertial Sensors
+        Inertial-aided Motion Deblurring with Deep Networks
+        图像去模糊之初探--Single Image Motion Deblurring
+2. 光照 
+   Reading_List
+      Active Exposure Control for Robust Visual Odometry in HDR Environments
+   微软的技术积累有点吓人嗷
+
+

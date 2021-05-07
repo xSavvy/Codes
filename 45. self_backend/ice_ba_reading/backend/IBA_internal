@@ -37,6 +37,9 @@ LocalMap   这个东西相当于 LocalBA 的信息存储结构
 
 LocalBundleAdjustor
     |__ member var
+        |__ list<InputLocalFrame>         m_ILFs1        LBA 用于保存普通帧
+        |__ list<InputType>               m_ITs1         对应标签显示是Local_Frame 还是Key_Frame
+        |__ list<GlobalMap::InputKeyFrame> m_IKFs1       LBA 用于保存关键帧
         |__ 
     |__ member func
         |__ Run()            类的功能主体
