@@ -37,10 +37,33 @@ LocalMap   这个东西相当于 LocalBA 的信息存储结构
 
 LocalBundleAdjustor
     |__ member var
-        |__ list<InputLocalFrame>         m_ILFs1        LBA 用于保存普通帧
-        |__ list<InputType>               m_ITs1         对应标签显示是Local_Frame 还是Key_Frame
-        |__ list<GlobalMap::InputKeyFrame> m_IKFs1       LBA 用于保存关键帧
-        |__ 
+        |__ list<InputLocalFrame>          m_ILFs1             LBA 用于保存普通帧
+        |__ list<InputType>                m_ITs1              对应标签显示是Local_Frame 还是Key_Frame
+                                                               这里的Tag和KF 已经LF 的存储对应关系，
+                                                               目前存疑，需要后续check!!!
+        |__ list<GlobalMap::InputKeyFrame> m_IKFs1             LBA 用于保存关键帧
+        |__ std::list<int>                 m_IDKFs1, m_IDKFs2  删除关键帧？存疑
+        |__ AlignedVector<Rigid3D>         m_CsKFBkp           关键帧位姿备份 备份m_CsKF
+        |__ AlignedVector<Camera>          m_CsLFBkp           普通帧位姿备份 备份m_CsLF
+    |__ class InputLocalFrame
+        |__ Camera                         m_Cam_state         存储相机状态 pvq bias
+        |__ m_imu_measures                 m_imu_measures      原始imu测量
+    |__ class CameraLF
+        |__ Camera                         m_C                 相机状态
+        |__ Tag                            m_T                 Tag
+    |__ class MeasurementMatchLF
+        |__ class index
+            |__ int                        m_ik                存疑
+            |__ int                        m_IKF               KF 序号                       
+        |__ vector<Index>                  m_Is                每一个value代表了一组共视,
+                                                               比如[0]的index就记录了这帧和另一帧观测到了哪一个关键帧，
+                                                               同时m_ik是另一帧在m_iLFsMatch里的索引
+        |__ vector<int>                    m_iI2zm             存疑
+                                                               存的是每组共视在m_izms索引的位置
+        |__ vector<ubyte>                  m_ms                存疑
+                                                               舒尔补时是否要更新的状态
+        |__ AlignedVector<float>           m_SmddsST           存疑
+                                                               LF,_LF这两帧所有共视的的子轨迹的∑ST_Huu^-1
     |__ member func
         |__ Run()            类的功能主体
             |__ SynchronizeData() 
@@ -58,7 +81,10 @@ LocalBundleAdjustor
                 |__ BufferDataEmpty()
             |__ UpdateData()
         |__ SynchronizeData()
-            |__ 
+            |__ 信息备份()      保存m_ILF1 到m_ILF2 依次类推
+            |__ IMU积分帧间信息、如果ILF位姿不靠谱，将积分出的结果赋值到ILF上
+            |__ 关键帧处理()
+                |__ 更新 KF 的MapPoint 的m_d    这里只使用了双目
 
 
 
