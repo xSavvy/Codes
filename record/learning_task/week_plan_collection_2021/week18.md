@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-02 15:19:31
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-06 10:24:32
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-09 09:38:30
  * @Description: 
 -->
 ### main task
@@ -20,6 +20,11 @@
 9.  |实现自己的优化器->ICE-BA 代码阅读||数据流打通， 准备串数据流
 10. |S-MSCKF 代码阅读-> 实现自己的前端||
 11. |四元数 四阶隆格库塔||
+12. |+ self_confusion ||写完之后SLAM结束
+准备上深度学习了
+
+
+
 
 2021.5.3<br>
 似乎想明白了，基本上所有的纠结和迷茫都是因为信息量不足或者自己想得太过超前导致的。
