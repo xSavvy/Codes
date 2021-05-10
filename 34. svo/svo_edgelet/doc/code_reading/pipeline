@@ -43,9 +43,9 @@ KltHomographyInit
         |__ detectFeatures() 提取针对的金字塔层数存疑？？ 为每一个点建立种子
         |__ CheckFeatureNum\CheckCenterFeatureNum 检查特征数量和图像中间特征的数量 可以结合 ORB Fast 的角度 作为一种预处理 
     |__ addSecondFrame()
-        |__ trackKlt()
+        |__ trackKlt()                        这里因为还没有对点的深度开始进行估计所以跟踪使用的是 opencv 的klt 进行跟踪
         |__ CheckDisparity()
-        |__ 通过Disparity 选择 H E 的选择 小视差用H 大视差用E，进行RANSAC inliner 选择
+        |__ 通过Disparity 的方差大小选择 H E 的选择 小视差用H 大视差用E，进行RANSAC inliner 选择
     
 ============================
 SparseAlign
