@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-27 13:12:44
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-06 10:46:32
+ * @LastEditTime: 2021-05-08 16:29:10
  * @FilePath: /Codes/32. vins_related/origin/VINS_Mono/Theory.md
  * @Description: 
 -->
@@ -170,6 +170,12 @@ $$
                 \right]
 $$
 求导:基本一致 没有什么难的了
+
+### VINS 当中的yaw
+1. 初始化的时候是将第一帧的yaw 置0 ，然后把剩下的pvbias 对齐到第一帧的新坐标系下
+2. pose_graph 的yaw 是把Rotation Matrix 转成roll pitch yaw，然后使用ceres 自动求导对yaw 进行求解。
+   并且，为了保证yaw 的范围还添加了一个LocalParameter 来限制yaw 更新之后的范围
+
 
 
 

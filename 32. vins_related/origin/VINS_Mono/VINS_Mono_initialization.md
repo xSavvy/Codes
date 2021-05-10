@@ -1,16 +1,17 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-03-22 19:54:22
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-01 20:46:10
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-05-08 16:31:23
  * @Description: 
 -->
 ### VINS IMU 初始化 Understand Why？
 1. 找到IMU 和 Camera 外参 
    为什么外参只有旋转没有位移？
    在旋转一致的情况下，刚体相对位移保持一致，无法进行估计。
+   E矩阵求解旋转
 2. 寻找稳定的跟踪点  基础:没有跟踪谈什么IMU和Camera初始化
-3. PnP出位姿 没有位姿怎么和IMU融合 (相机的Rotation是IMU 的真值)
+3. PnP求解旋转 没有位姿怎么和IMU融合 (相机的Rotation是IMU 的真值)
 4. Rotation 用于 IMU 旋转的bias 标定 因为在单目的情况下PnP得出的旋转是准的(位移不准)，所以可以使用Rotation对IMU进行标定
 5. 使用IMU的加速度信息进行速度、重力大小、尺度上的优化
    为什么没有优化相机位移？ 因为只差了一个尺度大小，所以优化尺度就相当于优化了相机位移。
@@ -95,3 +96,21 @@ $$
    V的列对应x的解
    关于求解可靠性，是依靠奇异值正常(不过小)的数量是不是和 正常A矩阵的秩相同来进行判断。
 3. opencv 自身就有cv2eigen 或者eigen2cv 的转化？
+
+### 代码分析
+1. 外参标定
+2. IMU+Camera初始化
+
+---
+1. 外参标定
+   |__ f_manager.getCorresponding     得到两帧关联的像素点
+   |__ CalibrationExRotation()        
+       |__ 1. 从关联像素求解和保存相机旋转、保存IMU旋转、保存从IMU旋转推得的Camera旋转
+              这里的Camera旋转求解只是使用了E ，没有使用H ，所以有时候旋转外参不准也是有可能的
+       |__ 2. 凑够10个旋转，就开始认为求解的旋转靠谱
+       |__ 3. 如果SVD求得的特征值，只有一个非常小，一般认为外参靠谱(也就是有两个绕不同轴的旋转，就可以进行一个完整的旋转外参初始化)
+2. IMU+Camera 初始化 initialStructure()
+   |__ 1. 通过重力方向的方差(sum_g tmp_g) 来判断IMU 的旋转量是否是已经达到要求,和SVD的特征值来看目的基本类似
+   |__ 2. 
+
+   不再进行赘述，过程和最开始的笔记基本一致
