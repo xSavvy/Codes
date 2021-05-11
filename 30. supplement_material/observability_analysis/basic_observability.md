@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-21 09:02:07
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-22 11:01:12
+ * @LastEditTime: 2021-05-11 17:51:41
  * @FilePath: /Codes/30. supplement_material/observability_analysis/basic_observability.md
  * @Description: 
 -->
@@ -19,7 +19,7 @@
 2. Consistency Analysis and Improvement of Vision-aided Inertial Navigation 更加详细一些
 3. 一文看尽系列 https://zhuanlan.zhihu.com/p/341322063
 4. Consistency of EKF-Based Visual-Inertial Odometry limingyang 大佬牛逼
-
+5. Unobservable Directions of VINS Under Special Motions
 <font color = "Red">tips： 需要找几个例子，对于这个问题进行验证</font>
 
 
@@ -84,5 +84,19 @@ $\Phi$ 为离散状态转移矩阵，$H_k$ 为k时刻的观测矩阵,这里可�
 
    但是，如果想要确实进行分析，就还是需要PWCS+SVD的方法
    
+<font color = "Red"> 2021.5.11补充
+关于可观性和优化的问题
+1. 为什么在双目VINS 中不可观还要进行四个自由度的上的优化？
+   答: 整体上讲，可以说是为了SLAM 建图的一致性。
+   细节上讲， 因为四个自由度的不可观，
 
 
+
+
+
+
+
+
+
+
+</font>
