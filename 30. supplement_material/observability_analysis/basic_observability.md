@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-21 09:02:07
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-22 11:01:12
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-11 22:10:07
  * @FilePath: /Codes/30. supplement_material/observability_analysis/basic_observability.md
  * @Description: 
 -->
@@ -19,7 +19,7 @@
 2. Consistency Analysis and Improvement of Vision-aided Inertial Navigation 更加详细一些
 3. 一文看尽系列 https://zhuanlan.zhihu.com/p/341322063
 4. Consistency of EKF-Based Visual-Inertial Odometry limingyang 大佬牛逼
-
+5. Unobservable Directions of VINS Under Special Motions
 <font color = "Red">tips： 需要找几个例子，对于这个问题进行验证</font>
 
 
@@ -84,5 +84,52 @@ $\Phi$ 为离散状态转移矩阵，$H_k$ 为k时刻的观测矩阵,这里可�
 
    但是，如果想要确实进行分析，就还是需要PWCS+SVD的方法
    
+<font color = "Red"> 2021.5.11补充</font>
+
+
+关于可观性和优化的问题
+1. 为什么在双目VINS 中不可观还要进行四个自由度的上的优化？
+   答: 整体上讲，可以说是为了SLAM 建图的一致性。
+   细节上讲， 因为四个自由度的不可观(位置和yaw)，所以导致camera 的位置和landmark的位置，实际上是可以在空间中到处乱跑的。
+   而且是可以沿着yaw 角进行旋转的。
+   那么，为什么还可以估计呢？
+   因为虽然单个位置是不可以估计的，但是这次camera 和landmark 彼此之间是存在相对关系的。这就是这种相对关系，建立起了一个地图。
+   
+   也就是说landmark 和 各个观察帧 之间的相对位姿是确认的。
+   但是这些landmark 和 各个观察帧 在world 坐标系下的位置是不确定的。
+
+   用偏理论的方法去解释的话说，就是
+
+   当状态是
+
+   ![](./pic/12.png)
+
+   进行可观性分析之后，发现
+   ![](./pic/13.png)
+
+   从补充1. 就可以知道
+
+   $$
+   \left[
+      \begin{matrix}
+         q_G(0)\\
+         b_g(0)\\
+         v_I(0)\\
+         b_a(0)\\
+         p_I(0)\\
+         f_i(0)
+      \end{matrix}
+      \right]
+   + c_1N_{t,1} + c_2N_{r,1} = X(0)
+   $$
+   
+   这些 X(0) 都符合可观性矩阵的要求。
+   所以 X(0) 是在空间当中漂移的(绝对位置不可观)，是旋转的(yaw角不可观)。
+
+
+   
+
+
+
 
 
