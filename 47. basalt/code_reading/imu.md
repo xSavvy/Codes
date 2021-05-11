@@ -2,8 +2,8 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-10 08:56:51
  * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-11 09:58:32
- * @FilePath: /Codes/47. basalt/code/imu.md
+ * @LastEditTime: 2021-05-11 16:07:01
+ * @FilePath: /Codes/47. basalt/code_reading/imu.md
  * @Description: 
 -->
 ### BASALT_IMU 代码过程
@@ -220,7 +220,7 @@ $$
 ### 遗留问题
 1. Bias 的求导,Bias的方差没有进行迭代啊
 2. 位姿图优化的问题 位姿图优化测试
-3. 误差参数是不是随处可放，也就是随意左乘右乘都可以
+3. 误差参数是不是随处可放，也就是随意左乘右乘都可以   整个似乎只要不是变量的问题，其他都可以
 4. D-EKF的问题
 
 ----------
@@ -242,29 +242,41 @@ $$
 
     当存在多层迭代的时候， 这里我们假设只有
     
-$$
-    \Delta S_{t+2} + \delta \Delta S_{t+2} = f(\Delta S_{t+1}+ \delta 
+    $$
+        \Delta S_{t+2} + \delta \Delta S_{t+2} = f(\Delta S_{t+1}+ \delta 
+        \Delta S_{t+1},\omega + \delta \omega- b_{gt+1} ,a + \delta a- b_{at+1})
+        \\
+        \delta \Delta S_{t+2} = \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \Delta S_{t+1}}\delta \Delta S_{t+1} + \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \omega}\delta \omega +
+        \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial a}\delta a\\
+        +\cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \omega}\cfrac{\partial \omega + \delta \omega- b_{gt+1}}{\partial b_{gt+1}}b_{gt+1}+ \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial a} \cfrac{\partial a + \delta a- b_{at+1}}{\partial b_{at+1}}b_{at+1}
+    $$
+
+
+    $\delta \Delta S_{t+1}$ 可以再次展开。然后又因为在一段时间我们假设存在$b_{a/gt+1} = b_{a/gt}$ 所以最后 $\delta \Delta S_{t+n}$ 可以重新写为了 和 $\delta \Delta S_t , b_{gt},b_{at}$ 有关的公式，这样就可以进行优化调整了。
+
+    对应:
+    ![](./../pic/4.png)
+
+    并且因为$\Delta S_t$ 不含有b_gt 所以 $\cfrac{\partial \delta \Delta S_t}{b_gt}=0$，这也是为什么初始化是这样。
+
+    以上所有的过程，其实只是为了说明白一个过程，也就是本质上进行优化实际上是在对$\delta \Delta S_t , b_{gt},b_{at}$ 的均值进行优化调整。然后$\delta \Delta S_t , b_{gt},b_{at}$ 又会被并入原始的state 继续进行优化。
+
+    这在本质上，打通了为什么 bias 要对 error_state 而不是 state 进行求导的错误理解。
+
+    这个过程本质上，是和ESKF的更新之后进行原状态量合并是一样的，在进行BA 优化的时候，完全可以按照这个思想进行理解,并且很多问题都讲得通了。
+
+    还有一个问题就是 既然$\delta \Delta S_t$ 使用 $b_{gt},b_{at}$的关系进行调整，那么为什么别的？？？？ 也就是优化的时候，为什么只使用了  $b_{gt},b_{at}$ 的 Jacobian??
     
-    \Delta S_{t+1},\omega + \delta \omega- b_{gt+1} ,a + \delta a- b_{at+1})
-    \\
-    \delta \Delta S_{t+2} = \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \Delta S_{t+1}}\delta \Delta S_{t+1} + \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \omega}\delta \omega +
-    \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial a}\delta a\\
-    +\cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial \omega}\cfrac{\partial \omega + \delta \omega- b_{gt+1}}{\partial b_{gt+1}}b_{gt+1}+ \cfrac{\partial f(\Delta S_{t+1},\omega,a)}{\partial a} \cfrac{\partial a + \delta a- b_{at+1}}{\partial b_{at+1}}b_{at+1}
-$$
+    因为说的到底，这是一个预积分的形式，所以和 初始状态没有关系。在实际看代码的时候，也可以发现这一点也就是，所有内$\Delta S$ 就是从0 开始迭代和任一时刻的位姿都没有关系(预积分的含义) 所以真正本质上需要进行估计的就是 imu 的固有状态 bias
 
-$\delta \Delta S_{t+1}$ 可以再次展开。然后又因为在一段时间我们假设存在$b_{a/gt+1} = b_{a/gt}$ 所以最后 $\delta \Delta S_{t+n}$ 可以重新写为了 和 $\delta \Delta S_t , b_{gt},b_{at}$ 有关的公式，这样就可以进行优化调整了。
-
-以上所有的过程，其实只是为了说明白一个过程，也就是本质上进行优化实际上是在对$\delta \Delta S_t , b_{gt},b_{at}$ 的均值进行优化调整。然后$\delta \Delta S_t , b_{gt},b_{at}$ 又会被并入原始的state 继续进行优化。
-
-这在本质上，打通了为什么 bias 要对 error_state 而不是 state 进行求导的错误理解。
-
-这个过程本质上，是和ESKF的更新之后进行原状态量合并是一样的，在进行BA 优化的时候，完全可以按照这个思想进行理解
-
-<font color ="Red">让我重新理解了误差状态分析的意义。</font>
+    加速度的去除需要看一下
+    
+    <font color ="Red">让我重新理解了误差状态分析的意义。</font>
 
 2. 位姿图优化测试
    
    这里主要是为了测试一个奇怪的位姿图优化。
+   如果真的可以这样，那样在做位姿i图优化的时候，很多内容就都可以省略了。
 
     发现了一个很不同的地方
     ![](./../pic/1.png)
