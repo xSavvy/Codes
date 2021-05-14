@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-04-21 09:02:07
- * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-11 22:10:07
+ * @LastEditors: Liu Weilong 
+ * @LastEditTime: 2021-05-13 13:35:58
  * @FilePath: /Codes/30. supplement_material/observability_analysis/basic_observability.md
  * @Description: 
 -->
@@ -120,7 +120,17 @@ $\Phi$ 为离散状态转移矩阵，$H_k$ 为k时刻的观测矩阵,这里可�
          f_i(0)
       \end{matrix}
       \right]
-   + c_1N_{t,1} + c_2N_{r,1} = X(0)
+   + C_1N_{t,1} + C_2N_{r,1} = X(0)
+   \\
+   C_1 = \left[
+      \begin{matrix}
+         c_1&0&0\\
+         0&c_2&0\\
+         0&0&c_3
+      \end{matrix}
+   \right]
+   \\
+   c_1,c_2,c_3 \in R
    $$
    
    这些 X(0) 都符合可观性矩阵的要求。
