@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-28 10:46:22
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-12 16:33:13
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-19 22:51:00
  * @Description: 
  * 
  * 
@@ -22,7 +22,7 @@
  * 8. 在MW 和 camera 融合的过程中, 存在一个旋转的外参需要进行标定，但是之前旋转标定的方式存在问题，是对于公式的理解存在问题导致的
  *    这里的标定应该是使用 Camera 和 IMU 的外参标定关系来进行。
  * 9. Debug1:
- *    最后发现Debug 的发生是因为在 求解 output 的result 的时候，坐标表示顺序写错了，
+ *    最后发现Debug 的发生是因为在 求解 output 的result 的时候，坐标表示顺序写错了，导致出现了旋转矩阵乘法顺序错误的问题
  *    正确的 (R^{wm}_c1) * R^{wm}_c2.inverse()
  *    错误的 (R^{wm}_c1) * R^{wm}_c2
  *    和外参没有关系
@@ -40,6 +40,14 @@
  *     VP 的精度受制于图像中结构线特征的多少，但是在帧追踪时，
  *     无法给予一个稳定的SparseAlignedment(估计的旋转不是很平滑的， 可以添加一阶低通滤波？)
  *     ，所以对于这些情况，更好的方式，可能还是将VP放在后端，进轨迹方面的调整
+ * 17. 对于从算法当中得到 clustering 分类，还是需要进行vanishingPoint 的refine。
+ *     为什么？
+ *     因为算法当中存在一些参数 必须角度参数 (开源版本中添加了一个0.x )，对于 VP 组的记分会出现影响，导致 vanishingpoint 的误差出现。
+ *     所以在大概的分类之后，必须添加一步 组建 Ax=0  的 VanishingPoint refine。
+ *     并且为了防止出现 数值误差的问题，还需要添加鲁棒核函数
+ * 
+ * 
+ * 
  */
 
 

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-09 22:00:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-19 20:57:54
+ * @LastEditTime: 2021-05-19 21:27:30
  * @Description: 
 -->
 
@@ -22,17 +22,25 @@
 9.  |S-MSCKF 代码阅读-> 实现自己的前端||
 10. |四元数 四阶隆格库塔||
 11. |+ self_confusion ||写完之后SLAM结束
-12. |收拾屋子||
-13. |cs231n||
-14. |杂项-> VINS 预积分的问题 || 重新阅读了VINS的预积分，之前的问题解决了，之前自己编写的预积分方差出现问题的分析，已经得到了。但是还没有进行测试
-15. |杂项-> VINS 四自由度和零空间的问题|完成| 基本想明白了，似乎还会有rotation averaging translation averagin 有关
-16. |杂项-> D-LG-EKF 原理解析 -- 论文||
-17. |杂项-> D-LG-EKF 原理解析 -- A micro theory in lie group||
-18. |杂项-> EKF 三种优化的验证||
-19. |杂项-> PoseGraph 奇怪的优化测试|| 需要pose_graph 数据集 slambook/pose_graph
-20. |杂项-> ESKF 正确性验证||
-21. |杂项-> BASALT OC 零空间限制||
-22. |杂项-> ORB Spinning tree 维护 笔记更新||
+12. |cs231n||
+13. |杂项-> VINS 预积分的问题 || 重新阅读了VINS的预积分，之前的问题解决了，之前自己编写的预积分方差出现问题的分析，已经得到了。但是还没有进行测试
+14. |杂项-> VINS 四自由度和零空间的问题|完成| 基本想明白了，似乎还会有rotation averaging translation averagin 有关
+15. |杂项-> D-LG-EKF 原理解析 -- 论文||1
+16. |杂项-> D-LG-EKF 原理解析 -- A micro theory in lie group||1
+17. |杂项-> EKF 三种优化的验证||
+18. |杂项-> PoseGraph 奇怪的优化测试|| 需要pose_graph 数据集 slambook/pose_graph
+19. |杂项-> ESKF 正确性验证||
+20. |杂项-> BASALT OC 零空间限制||
+21. |杂项-> ORB Spinning tree 维护 笔记更新||
+
+2021.5.19<br>
+
+晚上的时间，越来越少。
+
+需要挤压时间去学习了。
+
+
+
 
 
 
