@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-07 13:56:01
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-17 19:09:52
+ * @LastEditTime: 2021-05-20 19:43:02
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/extrinc_calib.cpp
  * @Description: 
  * 
@@ -20,7 +20,8 @@
  *         两个单轴旋转就可以对外参进行标定了。
  *         这说明了，地面水平运动的无法标定 Manhattan 和Camera 之间的外参 是 Manhattan VPTracker 最大的问题。
  *         这个时候能够自由运动的SO3 反而成了Manhanttan最好用的地方，因为外参是可以标定的。
- * 
+ * 3. 结论:
+ *         单个旋转 roll pitch yaw 啥也标不出来，哪个轴也标不出来
  */
 
 #include <vector>
@@ -46,9 +47,9 @@ int main()
 {
     Object obj = Object(1);
     
-    Rotation rot = Rotation::create(Eigen::Vector3d(0.,0.,1.),6,0.05);
+    Rotation rot = Rotation::create(Eigen::Vector3d(3.,2.,1.),6,0.05);
     // 不添加 rot1 无法标定外参成功
-    // Rotation rot1 = Rotation::create(Eigen::Vector3d(1.,1.,1.).normalized(),3.3,0.1);
+    Rotation rot1 = Rotation::create(Eigen::Vector3d(1.,1.,1.).normalized(),3.3,0.1);
     TrajectoryEngine te;
     te.addRotation(rot);
     // te.addRotation(rot1);
@@ -108,17 +109,27 @@ int main()
     ric_cov = svd.singularValues().tail<3>();
     cout<<"the sigular"<<endl<<svd.singularValues().transpose()<<endl;
 
+    Eigen::Quaterniond q_1(Eigen::Vector4d(svd.matrixV().col(2)));
+    Eigen::Quaterniond q_2(Eigen::Vector4d(svd.matrixV().col(3)));
+
+    // 输出实际上的 roll pitch yaw
+
+    cout<<"the real rpy :"<< obj.Camera.toRotationMatrix().eulerAngles(0,1,2)<<endl;
+
+    cout<<"the estimation 1 :" <<q_1.toRotationMatrix().eulerAngles(0,1,2)<<endl;
+    cout<<"the estimation 2 :" <<q_2.toRotationMatrix().eulerAngles(0,1,2)<<endl;
+
 
     // 外参测试
-    for(int i =1;i<obj.CameraMotion.size();i++)
-    {
-        Eigen::Quaterniond relative_c1_c2 = obj.CameraMotion[i-1].inverse() * obj.CameraMotion[i];
-        Eigen::Quaterniond relative_v1_v2 = obj.VehicleMotion[i-1].inverse() * obj.VehicleMotion[i];
-        cout<<"real relative v1 v2 "<< relative_v1_v2.coeffs().transpose()<<endl;
-        cout<<"esti relative v1 v2 "<<(estimated_R*relative_c1_c2*estimated_R.inverse()).coeffs().transpose()<<endl;
-        double angle = relative_v1_v2.angularDistance(estimated_R*relative_c1_c2*estimated_R.inverse());
-        cout<<angle<<endl;
-    }
+    // for(int i =1;i<obj.CameraMotion.size();i++)
+    // {
+    //     Eigen::Quaterniond relative_c1_c2 = obj.CameraMotion[i-1].inverse() * obj.CameraMotion[i];
+    //     Eigen::Quaterniond relative_v1_v2 = obj.VehicleMotion[i-1].inverse() * obj.VehicleMotion[i];
+    //     cout<<"real relative v1 v2 "<< relative_v1_v2.coeffs().transpose()<<endl;
+    //     cout<<"esti relative v1 v2 "<<(estimated_R*relative_c1_c2*estimated_R.inverse()).coeffs().transpose()<<endl;
+    //     double angle = relative_v1_v2.angularDistance(estimated_R*relative_c1_c2*estimated_R.inverse());
+    //     cout<<angle<<endl;
+    // }
 
     
 }

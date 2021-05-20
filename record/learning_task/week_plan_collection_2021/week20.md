@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-09 22:00:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-20 11:28:38
+ * @LastEditTime: 2021-05-20 17:33:57
  * @Description: 
 -->
 
@@ -33,6 +33,7 @@
 21. |杂项-> ESKF 正确性验证||
 22. |杂项-> BASALT OC 零空间限制||
 23. |杂项-> ORB Spinning tree 维护 笔记更新||
+24. |杂项-> Partial Filter原理||
 
 2021.5.19<br>
 

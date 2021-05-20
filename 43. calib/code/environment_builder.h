@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:13:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-19 21:03:14
+ * @LastEditTime: 2021-05-20 19:22:05
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/environment_builder.h
  * @Description: 
  */
@@ -15,6 +15,8 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+
+using namespace std;
 
 
 class Object

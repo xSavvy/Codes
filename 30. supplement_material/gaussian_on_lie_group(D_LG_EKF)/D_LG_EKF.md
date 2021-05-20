@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 11:32:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-20 14:09:35
+ * @LastEditTime: 2021-05-20 22:16:09
  * @FilePath: /Codes/30. supplement_material/gaussian_on_lie_group(D_LG_EKF)/D_LG_EKF.md
  * @Description: 
 -->
@@ -107,12 +107,56 @@
     \\
     \uparrow     \mu_{k|k-1} &= \mu_{k-1|k-1}exp_G([\hat{\Omega}_{k-1}]^\wedge) 
     \\
-        exp_G(\epsilon_{k|k-1}) &= exp_G([\hat{\Omega}_{k-1}]^\wedge) exp_G([\epsilon_{k-1|k-1}]^\wedge)exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+        exp_G(\epsilon_{k|k-1}) &= exp_G([-\hat{\Omega}_{k-1}]^\wedge) exp_G([\epsilon_{k-1|k-1}]^\wedge)exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
    \end{aligned}
    $$
 
-   从 G 到 $R^p$ 上的方差扩展
+   从 G 到 $R^p$ 上的方差扩展 ，这一步存在问题，的确是存在问题的。
+   
+   那么这里之后的推导就使用我自己的推导了。
 
+   $$
+    \begin{aligned}
+    exp_G(\epsilon_{k|k-1}) &= exp_G([-\hat{\Omega}_{k-1}]^\wedge) exp_G([\epsilon_{k-1|k-1}]^\wedge)exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+    \\
+    &\ \ \ \ \uparrow linearize X_{k_1}  
+    \\ 
+    exp_G(\epsilon_{k|k-1}) &= exp_G([-\hat{\Omega}_{k-1}]^\wedge) exp_G([\epsilon_{k-1|k-1}]^\wedge)
+    \\
+    &\ \ \ \ \ \ exp_G([\Omega(\mu_{k-1|k-1},u_{k-1})+\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]^\wedge)
+    \\
+       exp_G(\epsilon_{k|k-1}) &=  exp_G([[Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}]^\wedge)exp_G([-\hat{\Omega}_{k-1}]^\wedge)
+    \\
+    &\ \ \ \ \ \ exp_G([\Omega(\mu_{k-1|k-1},u_{k-1})+\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]^\wedge)
+    \\
+    &\ \ \ \ \uparrow \hat{\Omega}_{k-1} = \Omega(\mu_{k-1},u_{k-1})
+    \\
+    exp_G(\epsilon_{k|k-1}) &=  exp_G([[Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}]^\wedge)exp_G([-\hat{\Omega}_{k-1}]^\wedge)
+    \\
+    &\ \ \ \ \ \ exp_G([\hat{\Omega}_{k-1}+\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]^\wedge)
+    \\ 
+    &\ \ \ \ \ \uparrow 这里开始完全按照自己的写法来写
+    \\
+     exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}]^\wedge)
+    \\
+    &\ \ \ \ \ \ exp_G([J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
+    \\ 
+    &\uparrow Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1} \approx _r^{-1}(\hat{\Omega}_{k-1})\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k \approx 0
+    \\
+   exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
+   \\
+    \epsilon_{k|k-1}  &= Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r^{-1}(\hat{\Omega}_{k-1})[\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]
+    \end{aligned}
+   $$
+
+   得到线性方程，就可以继续使用 EKF框架了。
+
+
+
+   2.3 观测模型
+   
+
+   
    
     
 
