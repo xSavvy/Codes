@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 11:32:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-19 21:44:51
+ * @LastEditTime: 2021-05-20 14:09:35
  * @FilePath: /Codes/30. supplement_material/gaussian_on_lie_group(D_LG_EKF)/D_LG_EKF.md
  * @Description: 
 -->
@@ -35,15 +35,85 @@
 
    $g$ 和 $G$由
    $$
-    exp: g\rightarrow G
+    exp_G: g\rightarrow G
     \\
-    In: G\rightarrow g
+    log_G: G\rightarrow g
    $$
     进行联系
 
     1.1.2 明确dimension之间的关系
 
+    $e_i ,i = 1,...,p, e_i \in R^p$ 对应 $g$ 中的 $E_i , i =1,...,p, E_i \in g$
+
+    所以可以说明g 和 $R^p$ 同构
+
+    1.2 g 空间上的部分基础补充
+
+    存在
+    $X = \sum^{p}_{i=0} a_i E_i = \sum^{p}_{i=0} a_i [e_i]^\wedge$
+
+    1.3 一些伴随的公式和BCH
+    ![](./pic/1.png)
+
+    1.4 Lie Group 上的概率
     
+    1.4.1 Concentrated Gaussian Distribution on Lie Groups
+
+    <font color ="Red"> ? </font><br>
+    这个 Concentrated Gaussian Distribution 和 一般的有什么区别或者优势吗?
+
+    答: 应该是会把这个 误差项 和 流形上的状态独立出来。让误差项的实际作用不受到当前流形位置的影响
+
+    ![](./pic/2.png)
+
+2. D_LG_EKF 正文
+
+   2.1 系统模型
+
+   运动模型:
+    ![](./pic/3.png)
+    这里的 
+    $$
+    X_k = X_{k-1}exp_G(\Omega(X_{k-1},u_{k-1})+n_k) 
+    $$
+    并不是泰勒展开，而是实际的公式，没有任何拟合的手法
+
+   观测模型:
+    ![](./pic/4.png)
+
+   2.2 Propagation
+
+   均值:
+   
+   $$
+    \mu_{k|k-1} = \mu_{k-1|k-1}exp_G([\hat{\Omega}_{k-1}]^\wedge) 
+    \\
+    \hat{\Omega}_{k-1} = \Omega(\mu_{k-1},u_{k-1})
+   $$
+
+   方差:从误差进行刻画
+
+   $$
+   \begin{aligned}
+    exp_G(\epsilon_{k|k-1}) &= \mu_{k|k-1}^{-1} X_{k}
+    \\
+    \uparrow X_k &= X_{k-1}exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+    \\
+    exp_G(\epsilon_{k|k-1}) &= \mu_{k|k-1}^{-1}X_{k-1}exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+    \\
+    \uparrow X_k &= \mu_k exp_G([\epsilon_k]^\wedge)
+    \\
+    exp_G(\epsilon_{k|k-1}) &= \mu_{k|k-1}^{-1}\mu_{k-1} exp_G([\epsilon_{k-1}]^\wedge)exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+    \\
+    \uparrow     \mu_{k|k-1} &= \mu_{k-1|k-1}exp_G([\hat{\Omega}_{k-1}]^\wedge) 
+    \\
+        exp_G(\epsilon_{k|k-1}) &= exp_G([\hat{\Omega}_{k-1}]^\wedge) exp_G([\epsilon_{k-1|k-1}]^\wedge)exp_G(\Omega(X_{k-1},u_{k-1})+n_k)
+   \end{aligned}
+   $$
+
+   从 G 到 $R^p$ 上的方差扩展
+
+   
     
 
    
