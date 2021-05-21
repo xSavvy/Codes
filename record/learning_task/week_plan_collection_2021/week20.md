@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-09 22:00:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-21 11:09:14
+ * @LastEditTime: 2021-05-21 12:31:03
  * @Description: 
 -->
 
@@ -28,7 +28,7 @@
 16. |杂项-> VINS 四自由度和零空间的问题|完成| 基本想明白了，似乎还会有rotation averaging translation averagin 有关
 17. |杂项-> D-LG-EKF 原理解析 -- 论文|完成|笔记基本整理完，又一次更新了自己对于EKF 的理解，下一步就是进行算法验证
 18. |杂项-> D-LG-EKF 原理解析 -- A micro theory in lie group|暂停|暂时不需要
-19. |杂项-> EKF 三种优化的验证||1
+19. |杂项-> EKF 三种优化的验证|暂停| 大概知道有三种方法，有什么样的好处就可以了
 20. |杂项-> PoseGraph 奇怪的优化测试|完成| 需要pose_graph 数据集 slambook/pose_graph<br> 结果基本一致，但是原因未知，优化方向的确是相同的
 21. |杂项-> ESKF 正确性验证||1 之前不正确的原因，除了错误的更新之外，应该还存在一个 错误使用BCH的原因
 22. |杂项-> BASALT OC 零空间限制||1

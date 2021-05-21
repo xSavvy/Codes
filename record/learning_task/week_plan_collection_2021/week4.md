@@ -2,15 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-18 09:03:45
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-23 22:46:20
+ * @LastEditTime: 2021-05-21 17:05:10
  * @FilePath: /3rd-test-learning/work_record/learning_task/week_plan_collection_2021/week4.md
  * @Description: 
 -->
 
 
 ### week4
-a. 不看porn<br>
-b. 记录时间使用<br>
 
 11:
    a. front_end_self(Camera) 的建立 可以持续两个周

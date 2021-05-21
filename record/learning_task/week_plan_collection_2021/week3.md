@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-10 21:25:03
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-01-20 07:52:16
+ * @LastEditTime: 2021-05-21 17:04:43
  * @Description: 
 -->
 
@@ -81,7 +81,6 @@ d. 不要自满,自己一段时间内能学会的,别人也可以
 2021.1.13<br>
 今天着实是认识到了数学的重要性，需要好好补一下了
 
-<<<<<<< HEAD
 
 2021.1.16<br>
 顾步自封，还是看得太少了。还有太多优秀的slam框架可以去学习了<br>
@@ -93,10 +92,5 @@ b. Process.md 记录如何跑通<br>
 c. Theory.md 记录框架的疑惑<br>
 d. Read file 记录代码阅读<br>
 e. Trick.md 记录代码实现的trick<br>
-=======
 总结：<br>
 有了一个类似总结的内容之后，的确日子过得认真多了。<br>
-不顾后来发现真正让消耗时间的是porn 而不是bilibili<br>
-因此，bilibili 解禁！<br>
-下个周的主要目标是统计学习时间和不看porn
->>>>>>> 96e839dc1432c23b21200ab7d9ccff3ce78ca4c8
