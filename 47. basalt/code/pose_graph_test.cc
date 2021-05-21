@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-11 10:12:58
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-21 10:44:30
+ * @LastEditTime: 2021-05-21 10:56:44
  * @FilePath: /Codes/47. basalt/code/pose_graph_test.cc
  * @Description: 
  * 
@@ -156,7 +156,7 @@ public:
         // _jacobianOplusXi = - J* v2.inverse().Adj();
         // _jacobianOplusXj = J*v2.inverse().Adj();
 
-        // weird pose method
+        // ! new add weird pose method
         _jacobianOplusXi = - R_m_R_1_T.Adj();
         _jacobianOplusXj = R_m_R_1_T.Adj();       
     }

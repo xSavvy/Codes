@@ -2,13 +2,15 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 09:44:12
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-21 09:53:50
+ * @LastEditTime: 2021-05-21 11:08:14
  * @Description: 
 -->
 ### 奇怪的pose graph 优化
 下面是奇怪的写法,统一左乘更新
 
 emmm T 写成R了 勉强看一下吧
+
+
 
 $$
 \begin{aligned}
@@ -29,3 +31,6 @@ $$
 \end{aligned}
     
 $$
+
+
+
