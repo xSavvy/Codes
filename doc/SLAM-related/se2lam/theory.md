@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:57:00
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-02-03 17:19:18
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-21 08:44:24
  * @FilePath: /3rd-test-learning/doc/SLAM-related/se2lam/theory.md
  * @Description: 
 -->
@@ -96,6 +96,13 @@ b. 当然可以直接解释为 Yaw X Y 的误差比较小，所以不考虑，�
 2021.2.3 添加<br>
 今天,重新思考之后，发现别人的推导是基于Forster 进行的。<br>
 并且，我之前1.6号，说需要给自身加误差的想法，是有问题的从误差状态预测上来讲，Yaw X Y 的误差也不应该考虑的<br>
+
+<font color="Red"> 2021.5.21</font><br>
+重新思考之后，得到我认为真正正确的结果，ORB框架下 属于MLE 的优化范畴，所有没有先验的引入所以没有考虑。 Yaw XY 的误差。
+
+但是一旦之后，使用MAP的框架，Yaw XY 的先验误差就必须考虑了
+
+
 
 对比，另外两种加法，<br>
 第一种 Quan Meixiang 2018 直接在SE3的roll pitch 和z上 进行约束 比较现实<br>
