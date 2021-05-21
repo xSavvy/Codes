@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-09 22:00:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-20 17:33:57
+ * @LastEditTime: 2021-05-21 08:06:26
  * @Description: 
 -->
 
@@ -26,14 +26,16 @@
 14. |cs231n||
 15. |杂项-> VINS 预积分的问题 || 重新阅读了VINS的预积分，之前的问题解决了，之前自己编写的预积分方差出现问题的分析，已经得到了。但是还没有进行测试
 16. |杂项-> VINS 四自由度和零空间的问题|完成| 基本想明白了，似乎还会有rotation averaging translation averagin 有关
-17. |杂项-> D-LG-EKF 原理解析 -- 论文||1
-18. |杂项-> D-LG-EKF 原理解析 -- A micro theory in lie group||1
-19. |杂项-> EKF 三种优化的验证||
+17. |杂项-> D-LG-EKF 原理解析 -- 论文|完成|笔记基本整理完，又一次更新了自己对于EKF 的理解，下一步就是进行算法验证
+18. |杂项-> D-LG-EKF 原理解析 -- A micro theory in lie group|暂停|暂时不需要
+19. |杂项-> EKF 三种优化的验证||1
 20. |杂项-> PoseGraph 奇怪的优化测试|| 需要pose_graph 数据集 slambook/pose_graph
-21. |杂项-> ESKF 正确性验证||
-22. |杂项-> BASALT OC 零空间限制||
+21. |杂项-> ESKF 正确性验证||1
+22. |杂项-> BASALT OC 零空间限制||1
 23. |杂项-> ORB Spinning tree 维护 笔记更新||
 24. |杂项-> Partial Filter原理||
+25. |杂项-> 四元数 代码测试||1 
+
 
 2021.5.19<br>
 
