@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 13:48:31
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-22 21:15:21
+ * @LastEditTime: 2021-05-22 21:23:28
  * @Description: 
  * 
  * 
@@ -94,15 +94,23 @@ class DataLoader
         LoadInfo();
     }
 
-    ElementInfo GetInfo()const
+    bool GetInfo(ElementInfo & output)const
     {
-        
+        if(output_count_>= ref_acc_info_.common_info.size())
+        return false;
+
+
+        output.ref_acc = ref_acc_info_.eigen_info[output_count_];
+        output.ref_gyro = ref_gyro_info_.eigen_info[output_count_];
+        output.meas_acc = meas_acc_info_.eigen_info[output_count_];
+        output.meas_gyro = meas_gyro_info_.eigen_info[output_count_];
+        output.posi = posi_info_.eigen_info[output_count_];
+        output.atti = posi_info_.eigen_info[output_count_];
+
+        output_count_++;
+        return true;
     }
 
-    
-
-
-    
     private:
 
     bool LoadInfo()
@@ -139,7 +147,7 @@ class DataLoader
         atti_info_.TransformIntoEigenForm();
 
         if(ref_acc_info_.common_info.size() == ref_gyro_info_.common_info.size() ==
-           meas_acc_info_.common_info.size() == meas_gyro_info_.common_info..size() ==
+           meas_acc_info_.common_info.size() == meas_gyro_info_.common_info.size() ==
            posi_info_.common_info.size() == atti_info_.common_info.size())
         return true;
     }
@@ -222,6 +230,6 @@ class DataLoader
     Info<4> atti_info_;
 
     int input_num_;
-    int output_count_;
+    mutable int output_count_;
 };
 
