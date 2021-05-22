@@ -12,4 +12,6 @@ MeasGyroPath: gyro-0.csv
 PosiPath: ref_pos.csv
 AttiPath: ref_att_quat.csv
 
+TimestampPath: time.csv
+
 InputNum: -1

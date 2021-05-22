@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 13:48:31
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-22 21:23:28
+ * @LastEditTime: 2021-05-22 22:13:15
  * @Description: 
  * 
  * 
@@ -60,7 +60,8 @@ class DataLoader
         Eigen::Vector3d meas_acc;
         Eigen::Vector3d meas_gyro;
         Eigen::Vector3d posi;
-        Eigen::Vector3d atti;
+        Eigen::Vector4d atti;
+        double timestamp;
     };
 
     DataLoader(const string & paths_config):paths_config_(paths_config)
@@ -80,6 +81,8 @@ class DataLoader
         paths_config_node["PosiPath"]>>posi_path_;
         paths_config_node["AttiPath"]>>atti_path_;
 
+        paths_config_node["TimestampPath"]>>timestamp_path_;
+
         input_num_ = (int)paths_config_node["InputNum"];
 
         // 显示各个路径的内容
@@ -90,6 +93,7 @@ class DataLoader
         cout<<"[LOG]Dataloader:MeasGyroPath: "<< meas_gyro_path_<<endl;
         cout<<"[LOG]Dataloader:PosiPath: "<< posi_path_<<endl;
         cout<<"[LOG]Dataloader:AttiPath: "<<atti_path_<<endl;
+        cout<<"[LOG]Dataloader:TimestampPath"<< timestamp_path_<<endl;
         output_count_ = 0;
         LoadInfo();
     }
@@ -99,14 +103,13 @@ class DataLoader
         if(output_count_>= ref_acc_info_.common_info.size())
         return false;
 
-
         output.ref_acc = ref_acc_info_.eigen_info[output_count_];
         output.ref_gyro = ref_gyro_info_.eigen_info[output_count_];
         output.meas_acc = meas_acc_info_.eigen_info[output_count_];
         output.meas_gyro = meas_gyro_info_.eigen_info[output_count_];
         output.posi = posi_info_.eigen_info[output_count_];
-        output.atti = posi_info_.eigen_info[output_count_];
-
+        output.atti = atti_info_.eigen_info[output_count_];
+        output.timestamp = timestamp_info_.common_info[output_count_].front();
         output_count_++;
         return true;
     }
@@ -146,9 +149,14 @@ class DataLoader
         LoadCSV(syn_path,atti_info_);
         atti_info_.TransformIntoEigenForm();
 
+        // load timestamp
+        syn_path = whole_path_ + timestamp_path_;
+        LoadCSV(syn_path,timestamp_info_);
+
         if(ref_acc_info_.common_info.size() == ref_gyro_info_.common_info.size() ==
            meas_acc_info_.common_info.size() == meas_gyro_info_.common_info.size() ==
-           posi_info_.common_info.size() == atti_info_.common_info.size())
+           posi_info_.common_info.size() == atti_info_.common_info.size() ==
+           timestamp_info_.common_info.size())
         return true;
     }
     
@@ -220,6 +228,8 @@ class DataLoader
     string posi_path_;
     string atti_path_;
 
+    string timestamp_path_;
+
     Info<3> ref_acc_info_;
     Info<3> ref_gyro_info_;
     
@@ -228,6 +238,8 @@ class DataLoader
 
     Info<3> posi_info_;
     Info<4> atti_info_;
+
+    Info<1> timestamp_info_;
 
     int input_num_;
     mutable int output_count_;
