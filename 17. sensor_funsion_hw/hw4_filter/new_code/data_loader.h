@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 13:48:31
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-23 19:42:11
+ * @LastEditTime: 2021-05-23 22:56:35
  * @Description: 
  * 
  * 
@@ -57,6 +57,7 @@ class DataLoader
     class ElementInfo
     {
         public:
+        Eigen::Vector3d ref_vel;
         Eigen::Vector3d ref_acc;
         Eigen::Vector3d ref_gyro;
         Eigen::Vector3d meas_acc;
@@ -74,6 +75,7 @@ class DataLoader
         
         paths_config_node["WholePath"]>>whole_path_;
 
+        paths_config_node["RefVelPath"]>>ref_vel_path_;
         paths_config_node["RefAccPath"]>>ref_acc_path_;
         paths_config_node["RefGyroPath"]>>ref_gyro_path_;
 
@@ -89,6 +91,7 @@ class DataLoader
 
         // 显示各个路径的内容
         cout<<"[LOG]Dataloader:WholePath: "<<whole_path_<<endl;
+        cout<<"[LOG]Dataloader:RefVelPath: " << ref_vel_path_<<endl;
         cout<<"[LOG]Dataloader:RefAccPath: " << ref_acc_path_<<endl;
         cout<<"[LOG]Dataloader:RefGyroPath: "<<ref_gyro_path_<<endl;
         cout<<"[LOG]Dataloader:MeasAccPath: "<<meas_acc_path_<<endl;
@@ -105,12 +108,14 @@ class DataLoader
         if(output_count_>= ref_acc_info_.common_info.size())
         return false;
 
+        output.ref_vel = ref_vel_info_.eigen_info[output_count_];
         output.ref_acc = ref_acc_info_.eigen_info[output_count_];
         output.ref_gyro = ref_gyro_info_.eigen_info[output_count_]/180.0*M_PI;
         output.meas_acc = meas_acc_info_.eigen_info[output_count_];
         output.meas_gyro = meas_gyro_info_.eigen_info[output_count_]/180.0*M_PI;
         output.posi = posi_info_.eigen_info[output_count_];
         output.atti = atti_info_.eigen_info[output_count_];
+        
         output.timestamp = timestamp_info_.common_info[output_count_].front();
         output_count_++;
         return true;
@@ -127,7 +132,12 @@ class DataLoader
         syn_path = whole_path_ + ref_acc_path_;
         LoadCSV(syn_path,ref_acc_info_);
         ref_acc_info_.TransformIntoEigenForm();
-        
+
+        // load ref_vel
+        syn_path = whole_path_ + ref_vel_path_;
+        LoadCSV(syn_path,ref_vel_info_);
+        ref_vel_info_.TransformIntoEigenForm();
+
         // load ref_gyro
         syn_path = whole_path_ + ref_gyro_path_;
         LoadCSV(syn_path,ref_gyro_info_);
@@ -223,6 +233,7 @@ class DataLoader
     
     string whole_path_;
 
+    string ref_vel_path_;
     string ref_acc_path_;
     string ref_gyro_path_;
     
@@ -234,6 +245,7 @@ class DataLoader
 
     string timestamp_path_;
 
+    Info<3> ref_vel_info_;
     Info<3> ref_acc_info_;
     Info<3> ref_gyro_info_;
     
