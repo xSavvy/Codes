@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-10 09:28:03
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-15 11:35:40
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-22 22:50:01
  * @FilePath: /3rd-test-learning/38. line_feature/sim/test_sim.cc
  * @Description: 
  * 
@@ -31,7 +31,6 @@ Vector4d CameraPixel2Pi(const Camera & cm,const LinePx & lx)
     Eigen::Vector3d p2e = cm.c2w(cm.p2c(lx.end_px));
     return pi_from_ppp(o2,p2s,p2e);
 }
-
 
 void Init()
 {
@@ -116,7 +115,6 @@ void TestTP()
     cout<<"the result is "<< tp.transpose()<<endl;
     
 }
-
 
 void TestTPnew()
 {
@@ -264,7 +262,6 @@ void TestPluckerPLVIO()
     cout<<"the result is "<< orth_esi.transpose()<<endl;
 }
 
-
 void TestPluckerGeneration()
 {
     // 测试Plucker生成
@@ -294,42 +291,10 @@ void TestPluckerGeneration()
 
 }
 
-void LineLinearSolver()
-{
-    
-}
-
-
 int main()
 {
     Init();
     TestTPnew();
 
-    
-
-
-
-
-
-
-
-
-    // 测试生成的线是不是对应的
-    // 发现旋转的线是对的，但是含有的平移的线存在问题 最后发现是c2w初始化的问题
-
-    // cout<<"origin start: "<<cm.p2c(l_px.start_px).transpose()<<endl;
-    // cout<<"back expolated start :" << cm1.c2w(cm1.p2c(l_px1.start_px)).transpose()<<endl;
-    // cout<<"the interval point :  " <<cm2.p2c(l_px2.start_px).transpose()<<endl;
-    // cout<<"back expolated start :" << cm2.c2w(cm2.p2c(l_px2.start_px)).transpose()<<endl;
-    // cout<<"back expolated start :" << cm3.c2w(cm4.p2c(l_px3.start_px)).transpose()<<endl;
-    // cout<<"back expolated start :" << cm4.c2w(cm4.p2c(l_px4.start_px)).transpose()<<endl;
-
-    // cv::line(img,l_px4.cv_start_px,l_px4.cv_end_px,0,2,8);
-    // cv::line(img,l_px3.cv_start_px,l_px3.cv_end_px,0,2,8);
-    // cv::line(img,l_px2.cv_start_px,l_px2.cv_end_px,0,2,8);
-    // cv::line(img,l_px1.cv_start_px,l_px1.cv_end_px,0,2,8);
-    // cv::line(img,l_px.cv_start_px,l_px.cv_end_px,0,2,8);
-    // cv::imshow("check",img);
-    // cv::waitKey(0);
 
 }

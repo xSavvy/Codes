@@ -90,7 +90,6 @@ HDR Environments<br>
       需要考虑亮度变化  进行亮度补偿 a×I +m or -m 
       考虑到放射变化  进行Affine 补偿 template(patch)的仿射 
       考虑到边界畸变  进行mask判断，边缘的点不进行光流 或者 跟踪之后的优化部分对这种边框上的点不进行考虑
-   7. 
 
 
 ### 综合类

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-09 22:00:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-22 18:01:00
+ * @LastEditTime: 2021-05-23 17:06:05
  * @Description: 
 -->
 
@@ -50,7 +50,9 @@
 
 周末计划：
 
-
+2021.5.23<br>
+需要思考一下，之后的方向的问题了，快速得进行学习才能一直拥有竞争力。
+今年还是踏踏实实打好基础吧
 
 
 

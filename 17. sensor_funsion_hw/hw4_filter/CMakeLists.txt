@@ -8,7 +8,6 @@ include(../../cmake/sophus.cmake)
 include(../../cmake/ceres.cmake)
 include(../../cmake/g2o.cmake)
 include(../../cmake/omp.cmake)
-include(../../cmake/yaml.cmake)
 
 include_directories(module)
 include_directories(ekf)

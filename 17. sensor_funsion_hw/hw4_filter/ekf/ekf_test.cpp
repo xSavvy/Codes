@@ -2,13 +2,13 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-22 10:47:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-27 10:57:22
+ * @LastEditTime: 2021-05-23 21:42:44
  * @Description: EKF 测试代码 从gnss-ins-sim 之中提取真值加上噪声之后，
  *                           对激光得到数值进行模拟
  */
 
 #include "kalman_filter.h"
-#include "yaml-cpp/yaml.h"
+#include "opencv2/opencv.hpp"
 #include "read_csv.h"
 #include "omp.h"
 #include "common.h"
@@ -37,15 +37,15 @@ using namespace std;
 
 void LoadParam(IMUNoise & in,LaserNoise & ln)
 {
-    YAML::Node config = YAML::LoadFile("/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/config/eskf.yaml");
+    cv::FileStorage config("/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/config/eskf.yaml",cv::FileStorage::READ);
     auto ImuConfig = config["IMUNoise"];
     auto laserConfig = config["LaserNoise"];
-    in.mNg = ImuConfig["Ng"].as<double>();
-    in.mNa = ImuConfig["Na"].as<double>();
-    in.mNgwalk = ImuConfig["Ngwalk"].as<double>();
-    in.mNawalk = ImuConfig["Nawalk"].as<double>();
-    ln.mRotN = laserConfig["NRot"].as<double>();
-    ln.mTraN = laserConfig["NTra"].as<double>();
+    in.mNg = 5e-2;
+    in.mNa = 5e-2;
+    in.mNgwalk = 1e-4;
+    in.mNawalk = 1e-4;
+    ln.mRotN = 1e-4;
+    ln.mTraN = 1e-4;
     in.UpdateCov();
     ln.UpdateCov();
 }
@@ -56,12 +56,12 @@ int main()
 {
     
     // ====================================   数据提取 ====================================================
-    std::string gyro_real_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/ref_gyro.csv";
-    std::string gyro_measurement_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/gyro-0.csv";
-    std::string accel_real_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/ref_accel.csv";
-    std::string accel_measurement_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/accel-0.csv";
-    std::string real_position_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/ref_pos.csv";
-    std::string real_rotation_p = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw2/ref_att_quat.csv";
+    std::string gyro_real_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/ref_gyro.csv";
+    std::string gyro_measurement_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/gyro-0.csv";
+    std::string accel_real_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/ref_accel.csv";
+    std::string accel_measurement_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/accel-0.csv";
+    std::string real_position_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/ref_pos.csv";
+    std::string real_rotation_p = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-23-21-27-44/ref_att_quat.csv";
     
     std::vector<std::string> gyro_real_headers;
     std::vector<std::vector<double>> gyro_real;
@@ -85,9 +85,10 @@ int main()
  
     omp_set_num_threads(6);
 
-    YAML::Node config = YAML::LoadFile("/home/lwl/workspace/3rd-test-learning/19. sensor_funsion_hw/hw4_filter/config/eskf.yaml");
+    cv::FileStorage config("/home/lwl/workspace/3rd-test-learning/17. sensor_funsion_hw/hw4_filter/config/eskf.yaml",cv::FileStorage::READ);
 
-    int line_count = config["line_count"].as<int>();
+    int line_count = (int)config["line_count"];
+    
     #pragma omp parallel sections
     {   
         #pragma omp section
@@ -221,7 +222,7 @@ int main()
     
     // 往EKF里面放数据
 
-    int interval = config["interval"].as<int>();
+    int interval = (double)config["interval"];
     int count = 0;
     double hz = 100.0;
     assert(pos_obs_in_vector.size() == rot_obs_in_vector.size());
@@ -244,42 +245,9 @@ int main()
         imuMeas.mAccel = accel_in_vector.at(i);
         imuMeas.mGyro = gyro_in_vector.at(i);
 
-        if(count == interval)
-        {
-            count = 0;
-            Sophus::SO3d R_w_i_SO3 = Sophus::SO3d::exp(-1*rot_obs_in_vector.at(pre_laser_index));
-            Sophus::SO3d R_j_w_SO3 = Sophus::SO3d::exp(rot_obs_in_vector.at(i));
-            // Sophus::SO3d R_j_i_SO3 = R_w_i_SO3 * R_j_w_SO3;
-            // Eigen::Vector3d delta_translation_w = pos_real_in_vector[i] - pos_real_in_vector[pre_laser_index];
-            // Eigen::Vector3d delta_translation_i = R_w_i_SO3 * delta_translation_w;
-
-            // cout<<"the gps measure translation is "<<endl<<
-            // delta_translation_i.transpose()<<endl;
-            // cout<<"the gps measure rotation is"<<endl<<
-            // R_j_i_SO3.log().transpose()<<endl;
-
-            Laser laserMeas;
-            laserMeas.mDRot = R_j_w_SO3.log();
-            laserMeas.mDTra = pos_real_in_vector[i]-pos_real_in_vector.front();
-            
-            cout<<"the gps measure translation is "<<endl<<
-            laserMeas.mDTra.transpose()<<endl;
-            cout<<"the gps measure rotation is"<<endl<<
-            laserMeas.mDRot.transpose()<<endl;
-
-            ekf.Correct(laserMeas);
-            // cout<<"this is "<<correct_count <<"times correction!"<<endl;
-            // cout<<"the current covar is "<< endl << ekf.GetCovar().transpose()<<endl;
-            cout<<"the current state is "<< endl << ekf.GetCurState().transpose()<<endl;
-            pre_laser_index = i;
-            correct_count ++;
-            continue;
-        }
-
         ekf.Predict(imuMeas);
         count++;
     }
-    ekf.GetOM();
     
     
     return 0;

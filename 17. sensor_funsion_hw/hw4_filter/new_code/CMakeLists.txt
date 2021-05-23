@@ -10,3 +10,4 @@ include(../../../cmake/sophus.cmake)
 include(../../../cmake/opencv.cmake)
 
 add_executable(data_loader_test data_loader_test.cc)
+add_executable(new_eskf_test new_eskf_test.cc)

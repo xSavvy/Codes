@@ -8,7 +8,8 @@ include(../../cmake/pangolin.cmake)
 include(../../cmake/eigen3.cmake)
 include(../../cmake/ceres.cmake)
 
-
+include_directories("/home/lwl/workspace/3rd-test-learning/38. line_feature/vanishing_point/code")
 
 add_executable(test_sim test_sim.cc line_parameterization.cpp)
 add_executable(test_angle test_angle.cc)
+add_executable(test_case test_case.cc)

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 13:48:31
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-22 22:13:15
+ * @LastEditTime: 2021-05-23 19:42:11
  * @Description: 
  * 
  * 
@@ -11,6 +11,8 @@
  * 注意 这里的格式处理只是应对 imu-gnss-sim 这个项目
  * 
  * */
+
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -104,15 +106,17 @@ class DataLoader
         return false;
 
         output.ref_acc = ref_acc_info_.eigen_info[output_count_];
-        output.ref_gyro = ref_gyro_info_.eigen_info[output_count_];
+        output.ref_gyro = ref_gyro_info_.eigen_info[output_count_]/180.0*M_PI;
         output.meas_acc = meas_acc_info_.eigen_info[output_count_];
-        output.meas_gyro = meas_gyro_info_.eigen_info[output_count_];
+        output.meas_gyro = meas_gyro_info_.eigen_info[output_count_]/180.0*M_PI;
         output.posi = posi_info_.eigen_info[output_count_];
         output.atti = atti_info_.eigen_info[output_count_];
         output.timestamp = timestamp_info_.common_info[output_count_].front();
         output_count_++;
         return true;
     }
+
+    void Reset()const {output_count_ = 0;};
 
     private:
 

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-12-05 09:48:17
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-12-27 10:25:03
+ * @LastEditTime: 2021-05-23 21:10:22
  * @Description:  ESKF 内部函数实现
  */
 
@@ -57,7 +57,7 @@ void ESKF::UpdateState(const IMU & ubIMU)
 
     mState.block<3,1>(POS_IDX,0) += mState.block<3,1>(VEL_IDX,0)*delta_t +
                                     0.5*(so3_k_n*AccNB+gravity_vector_w)*delta_t*delta_t;
-
+                                    
     mState.block<3,1>(VEL_IDX,0) += (so3_k_n*AccNB+gravity_vector_w)*delta_t;
 }
 

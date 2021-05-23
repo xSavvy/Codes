@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2020-11-12 10:40:57
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2020-11-14 22:05:45
+ * @LastEditTime: 2021-05-23 19:25:36
  * @FilePath: /3rd-test-learning/19. sensor_funsion_hw/hw3_calibra/SO3_RK4_test.cpp
  * @Description: 用于验证SO3 RK4 的正确性
  *               IntegrationUsedInSemiCalib 积分太过暴力 结果很不好
@@ -115,8 +115,8 @@ void IntegrationUsedInSemiCalib(const vector<Vector3d> & gyro_measurements,
 
 int main()
 {
-    std::string gyro_real_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/gyro-0.csv";
-    std::string gravity_measurement = "/home/lwl/workspace/HW/gnss-ins-sim/demo_motion_def_files/imu_simulation_hw/ref_accel.csv";
+    std::string gyro_real_measurement = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-22-20-31-54/ref_gyro.csv";
+    std::string gravity_measurement = "/home/lwl/workspace/gnss-ins-sim/demo_saved_data/2021-05-22-20-31-54/ref_accel.csv";
     std::vector<std::string> headers;
     std::vector<std::vector<double>> data;
     std::vector<Vector3d> data_in_vector;
@@ -160,17 +160,17 @@ int main()
 
     // show the final result
     Eigen::Matrix3d rotation_matrix1;
-    rotation_matrix1 = Eigen::AngleAxisd(55.0/180.0*M_PI, Eigen::Vector3d::UnitZ()) *
-                Eigen::AngleAxisd(72.0/180.0*M_PI, Eigen::Vector3d::UnitY()) *
-                Eigen::AngleAxisd(31.0/180.0*M_PI, Eigen::Vector3d::UnitX());
+    rotation_matrix1 = Eigen::AngleAxisd(-2.758876806/180.0*M_PI, Eigen::Vector3d::UnitZ()) *
+                Eigen::AngleAxisd(-12.07555/180.0*M_PI, Eigen::Vector3d::UnitY()) *
+                Eigen::AngleAxisd(-5.24321/180.0*M_PI, Eigen::Vector3d::UnitX());
     cout<<"the result should be "<<endl
-        << rotation_matrix1<<endl;
+        << Sophus::SO3d(rotation_matrix1).log().transpose()<<endl;
     cout<<"the IntegrationEuler result is "<<endl
-        << result_1.back()<<endl;
+        << Sophus::SO3d(result_1.back()).log().transpose()<<endl;
     cout<<"the IntegrationEulerWithNumeric1stApproximate result is "<<endl
-        << result_2.back()<<endl;
+        << Sophus::SO3d(Eigen::AngleAxisd(result_2.back()).matrix()).log().transpose()<<endl;
     cout<<"the IntegrationMidValue result is "<<endl
-        << result_3.back()<<endl;
+        << Sophus::SO3d(Eigen::AngleAxisd(result_3.back()).matrix()).log()<<endl;
     cout<<"the IntegrationUsedInSemiCalib result is "<<endl
         << result_4.back()<<endl;
     // cout<<"the IntegrationRK4 result is "<<endl
