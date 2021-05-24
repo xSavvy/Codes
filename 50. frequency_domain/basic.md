@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-24 19:30:14
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-24 19:56:01
+ * @LastEditTime: 2021-05-24 21:54:02
  * @Description: 
 -->
 Some Basic Conception in Frequency Analysis
@@ -43,12 +43,55 @@ Some Basic Conception in Frequency Analysis
         & = \sum [A_isin(2\pi f_ix)+ B_icos(2\pi f_ix)] 
     \end{aligned}
    $$
-   现在，我们引入一个新的结论，让函数拟合从space domain 转向 frequency domain
+   这里为了让函数的上下幅度加入常数补偿
+
    $$
-    
+   f(x) = a_0 + \sum [A_isin(2\pi f_ix)+ B_icos(2\pi f_ix)] 
    $$
+
+3. Fourier 的正交基:
+
+   下面，开始引入Fourier的正交基的概念，并进一步推导公式成
+   $$
+   \begin{aligned}
+      f(x) &= a_0 + \sum [A_isin(2\pi f_ix)+ B_icos(2\pi f_ix)]
+      \\
+       & = a_0 + \sum^N_{n=1} [A_isin(2\pi fnx)+ B_icos(2\pi fnx)]
+   \end{aligned}
+   $$
+
+   也就是进一步把 $\sum a_isin(\theta_i + 2\pi f_ix)$ 规范化为  $\sum^N_{n=1} b_i sin(\theta_i + 2\pi fnx)$ 的表示
+
+   3.1. 周期函数的基
+
+   为了规范化，就需要先对比向量空间的基。
    
+   组成向量空间的基的向量之间存在一个关系。
+   
+   $$
+   a_i ^T a_j = 0
+   $$
 
+   那么，定义函数之间的是否正交，就是把函数看作一个区间内无限多维的向量。
+   
+   那么函数正交就可以定义为
+   $$
+   \int^{a}_{b} f_1(x)f_2(x)dx = 0
+   $$
 
+   这个时候
+   $$
+   \int^{\pi}_{-\pi} cos(x)sin(x)
+   = 0
+   $$
+   严格正交
+
+   进一步引出的正交关系有
+   ![](./pic/1.png)
+
+   由此,我们可以得出一个结论。
+   
+   如果我们想要去拟合一个周期为T函数，那么我们只需要找到$\cfrac{nT}{2\pi}$
+   
 
 
