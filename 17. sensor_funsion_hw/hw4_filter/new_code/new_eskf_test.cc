@@ -2,10 +2,11 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 22:34:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-23 23:00:29
+ * @LastEditTime: 2021-05-24 19:17:25
  * @Description:
  * 1. 角度递推基本没有问题
- * 2. 位置递推有问题
+ * 2. 位置递推有问题 (递推存在问题? 或者是因为数据集的原因？) 目前的结论: 递推绝对有问题
+ * 3. Error State 递推和方差递推 TODO
  */
 #include "new_eskf.h"
 
@@ -21,7 +22,7 @@ int main()
     ESKF eskf;
 
     int count = 0;
-    int count_th = 99999999;
+    int count_th = 6000;
 
     while(dl.GetInfo(info))
     {
