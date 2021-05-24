@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-24 19:30:14
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-24 19:44:02
+ * @LastEditTime: 2021-05-24 19:56:01
  * @Description: 
 -->
 Some Basic Conception in Frequency Analysis
@@ -34,6 +34,19 @@ Some Basic Conception in Frequency Analysis
     sin(\theta_1+\theta_2) = sin(\theta_1)cos(\theta_2)+cos(\theta_1)sin(\theta_2)
    $$
    之后，那个可以拟合的函数就可以写成
+   $$
+    \begin{aligned}
+        f(x) &= \sum a_isin(2\pi f_ix+\theta_i)
+        \\
+        & =\sum [\underbrace{a_i cos(\theta_i)}_{= A_i}sin(2\pi f_ix)+ \underbrace{a_i sin(\theta_i)}_{=B_i}cos(2\pi f_ix)] 
+        \\
+        & = \sum [A_isin(2\pi f_ix)+ B_icos(2\pi f_ix)] 
+    \end{aligned}
+   $$
+   现在，我们引入一个新的结论，让函数拟合从space domain 转向 frequency domain
+   $$
+    
+   $$
    
 
 
