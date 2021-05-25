@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 21:24:56
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-24 12:44:38
+ * @LastEditTime: 2021-05-24 23:16:01
  * @Description: 
  * 验证算法思想
  * 
@@ -54,6 +54,7 @@ class ESKF
         // 进行中值处理
         if(last_timestamp_ == 0.)
             last_input_ = input;
+        
         Input mid_value_input;
         mid_value_input = MidValue(last_input_,input);
 
@@ -74,7 +75,7 @@ class ESKF
     void PropagateRef(const Input & input)
     {
         // propagate ref value
-        double delta_tiemstamp = input.timestamp - last_timestamp_;
+        double delta_tiemstamp = 0.002;
         
         Sophus::SO3d rotation_SO3 = Sophus::SO3d::exp(ref_state_.theta).matrix();
         Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.ref_gyro * delta_tiemstamp)).matrix();
