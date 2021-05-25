@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 11:32:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-21 07:57:35
+ * @LastEditTime: 2021-05-25 10:26:42
  * @FilePath: /Codes/30. supplement_material/gaussian_on_lie_group(D_LG_EKF)/D_LG_EKF.md
  * @Description: 
 -->
@@ -144,7 +144,7 @@
     \\
     &\ \ \ \ \ \ exp_G([J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
     \\ 
-    &\uparrow Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1} \approx _r^{-1}(\hat{\Omega}_{k-1})\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k \approx 0
+    &\uparrow Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1} \approx (\hat{\Omega}_{k-1})\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k \approx 0
     \\
    exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
    \\
