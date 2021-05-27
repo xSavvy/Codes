@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-24 19:30:14
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-25 13:04:42
+ * @LastEditTime: 2021-05-27 08:19:36
  * @Description: 
 -->
 Some Basic Conception in Frequency Analysis
@@ -18,10 +18,6 @@ Some Basic Conception in Frequency Analysis
 8. 再进一步 Fourier 变换
 9. Fourier 逆变换
 10. Fourier 变换的相位、幅值关系
-11. 2维Fourier 变换
-12. 图像分析
-13. Z 变换和 Discrete Fourier 变换之间的关系
-14. 细节补充
 
 -----
 
@@ -275,6 +271,10 @@ Some Basic Conception in Frequency Analysis
     c(\omega)= \cfrac{1}{2 \pi}\int^{\infin}_{-\infin} f(x)e^{-i\omega x}dx
    $$
 
+
+   补充用例：
+   ![](./pic/6.png)
+
 9. Fourier 逆变换
    
    问题是，知道了 $c_n$或者 $c(\omega)$ 和 $fn$ 或者 $\omega$ 如何复现出原本的函数
@@ -288,9 +288,28 @@ Some Basic Conception in Frequency Analysis
    f(x) = \int^{\infin}_{-\infin} c(\omega) e^{i\omega x} d\omega
    $$
 
-10. Fourier 变换的相位关系
+10. Fourier 变换的相位、幅值关系
+   
+    这一部分的探索,需要从之前的参数进行。
+    $$   
+    c(w) = \int ^{\infin}_{-\infin} f(x)e^{-i\omega x}dx \\
+      c_w = |c_w| e^{i\phi}
+    $$
+    幅值:
+    $$
+      A=|c_w|
+    $$
+    相位角:
+    $$
+      \phi 
+    $$
 
+   
+    
 
+    
+    
+   
 
 
 
