@@ -2,10 +2,10 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 22:34:25
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-24 19:17:25
+ * @LastEditTime: 2021-05-28 06:54:18
  * @Description:
  * 1. 角度递推基本没有问题
- * 2. 位置递推有问题 (递推存在问题? 或者是因为数据集的原因？) 目前的结论: 递推绝对有问题
+ * 2. 位置递推有问题 (递推存在问题? 或者是因为数据集的原因？) 目前的结论: 递推绝对有问题 递推正确了？？我的天？？怎么就对了？最后发现是频率的问题
  * 3. Error State 递推和方差递推 TODO
  */
 #include "new_eskf.h"

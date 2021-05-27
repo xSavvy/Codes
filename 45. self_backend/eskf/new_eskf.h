@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 21:24:56
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-24 23:16:01
+ * @LastEditTime: 2021-05-28 07:01:11
  * @Description: 
  * 验证算法思想
  * 
@@ -24,10 +24,17 @@ class ESKF
 {
     public:
 
+    class IMUNoiseModel
+    {
+        public:
+        Eigen::Vector3d noise_acc;
+        Eigen::Vector3d noise_gyro;
+        Eigen::Vector3d walk_noise_acc;
+        Eigen::Vector3d walk_noise_gyro;
+    };
     class State
     {
         public:
-        
         State(){
             posi.setZero();
             vel.setZero();
@@ -43,11 +50,13 @@ class ESKF
 
         Vector3d bias_acc;
         Vector3d bias_gyro;
+
+        IMUNoiseModel imu_noise;
     };
 
     ESKF():ref_state_(),state_(),error_state_(){ref_vel_explorate_posi_.setZero();}
 
-    // void Init(const State & init_state);
+    void Init(const State & init_state) {ref_state_ = init_state; state_ = init_state;}
 
     void PushIMUInfo(const Input & input)
     {
@@ -60,6 +69,11 @@ class ESKF
 
         PropagateRef(mid_value_input);
         PropagateMean(mid_value_input);
+
+        // 方差的传递
+        PropagateRefCov(mid_value_input);
+        PropagateCov(mid_value_input);
+        
         last_timestamp_ =  input.timestamp;
         last_input_ = input;
     }
@@ -75,8 +89,7 @@ class ESKF
     void PropagateRef(const Input & input)
     {
         // propagate ref value
-        double delta_tiemstamp = 0.002;
-        
+        double delta_tiemstamp = input.timestamp - last_timestamp_;
         Sophus::SO3d rotation_SO3 = Sophus::SO3d::exp(ref_state_.theta).matrix();
         Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.ref_gyro * delta_tiemstamp)).matrix();
         // Eigen::Matrix3d rotation = (rotation_SO3).matrix();
@@ -108,6 +121,9 @@ class ESKF
         state_.theta = (Sophus::SO3d::exp(state_.theta) * Sophus::SO3d::exp(input.meas_gyro * delta_tiemstamp)).log();        
     }
     
+    void PropagateRefCov(const Input & input);
+
+    void PropagateCov(const Input & input);
     // void PropagateErrorState(const Input & input);
     
     // void UpdateObservation();
