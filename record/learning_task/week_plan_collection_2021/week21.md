@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-24 08:05:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-27 21:32:52
+ * @LastEditTime: 2021-05-29 11:28:53
  * @Description: 
 -->
 
@@ -35,10 +35,15 @@
 23. |杂项-> ORB Spinning tree 维护 笔记更新||
 24. |杂项-> Partial Filter原理||
 25. |杂项-> 四元数 代码测试||1 
-26. |tzp-> DT 三角化||
+26. |tzp-> DT 三角化|放弃|目前感觉不需要了
 27. |杂项-> 2dLidar 2 imu 标定||大概知道怎么做了 简单验证一下就可以了
 28. |进一步整理 傅立叶变化的笔记|完成|已经大概知道应该看什么 查什么，有机会再根据handouts.pdf 具体学习一下
+29. |杂项-> git使用精细化 bash 文件编写||
 
+### 周末计划
+1. |深度学习 -> python 入门||
+2. |深度学习 -> 深蓝的课程||
+3. |BASALT -> 代码阅读||
 -----
 
 2021.5.25<br>

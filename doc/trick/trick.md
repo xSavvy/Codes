@@ -90,7 +90,8 @@ HDR Environments<br>
       需要考虑亮度变化  进行亮度补偿 a×I +m or -m 
       考虑到放射变化  进行Affine 补偿 template(patch)的仿射 
       考虑到边界畸变  进行mask判断，边缘的点不进行光流 或者 跟踪之后的优化部分对这种边框上的点不进行考虑
-
+   7. (BASALT) SE2单个像素 帧间光流相对于SVO 的SE3 帧间直接光流，对于旋转都有克服的作用，但是BASALT的SE2 单个像素帧间光流有助于后续的动态场景处理。
+   8. 光流的template 如何设置
 
 ### 综合类
    1. Point Manage<br>
