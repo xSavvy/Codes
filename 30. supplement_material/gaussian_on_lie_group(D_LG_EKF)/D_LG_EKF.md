@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 11:32:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-25 10:26:42
+ * @LastEditTime: 2021-05-30 22:13:09
  * @FilePath: /Codes/30. supplement_material/gaussian_on_lie_group(D_LG_EKF)/D_LG_EKF.md
  * @Description: 
 -->
@@ -142,13 +142,13 @@
     \\
      exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}]^\wedge)
     \\
-    &\ \ \ \ \ \ exp_G([J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
+    &\ \ \ \ \ \ exp_G([J_r(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
     \\ 
     &\uparrow Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1} \approx (\hat{\Omega}_{k-1})\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k \approx 0
     \\
-   exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r^{-1}(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
+   exp_G(\epsilon_{k|k-1}) &=  exp_G([Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r(\hat{\Omega}_{k-1})(\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k)]^\wedge)
    \\
-    \epsilon_{k|k-1}  &= Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r^{-1}(\hat{\Omega}_{k-1})[\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]
+    \epsilon_{k|k-1}  &= Ad_G(-\hat{\Omega}_{k-1})\epsilon_{k-1|k-1}+J_r(\hat{\Omega}_{k-1})[\cfrac{\partial }{\partial \epsilon}(\Omega(\mu_{k-1|k-1},u_{k-1})) \epsilon_{k-1|k-1} +n_k]
     \end{aligned}
    $$
 
@@ -157,9 +157,18 @@
    2.3 观测模型
    
    $$
-    z_k = h(X_k)exp_G([w_k]^\wedge)
-    
-    \\
+    z_k = h(X_k)exp_G([w_k]^\wedge) = h(u_{k|k-1})\hat{z_k}
+   $$
+
+   $$
+   z_k = h(u_{k|k-1})\hat{z_k}
+   $$
+   是为了求出 error state 的观测， 
+   $$
+   h(u_{k|k-1})\hat{z_k} = h(X_k)exp_G([w_k]^\wedge) 
+   $$
+   这里的公式是为了建模 状态和观测之间的关系
+    $$
     \begin{aligned}
     \widehat{z}_k &= [log_G(h(\mu_{k|k-1})^{-1}z_k)]^\vee
     \\   
@@ -172,6 +181,7 @@
     & = \cfrac{\partial }{\partial \epsilon_{k|k-1}}([log_G(h(\mu_{k|k-1})^{-1}h(\mu_{k|k-1}exp(\epsilon_{k|k-1})))]^\vee)|_{\epsilon_{k|k-1}=0}\epsilon_{k|k-1}+w_k  
     \end{aligned}
    $$
+   
 
     $$
      H_k = 

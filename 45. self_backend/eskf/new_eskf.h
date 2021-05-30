@@ -2,11 +2,14 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 21:24:56
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-28 07:01:11
+ * @LastEditTime: 2021-05-30 22:24:01
  * @Description: 
  * 验证算法思想
  * 
  * ESKF 仅为IMU + GPS 版本
+ * 
+ * 
+ * 2021.5.30  现在仅仅测试 SO3 上的更新
  * 
  */
 #pragma once
@@ -15,9 +18,11 @@
 
 #include "data_loader.h"
 #include "sophus/so3.hpp"
+#include "utils/sophus_utils.h"
 
 using namespace Eigen;
 using Input = DataLoader::ElementInfo;
+
 
 
 class ESKF
@@ -27,10 +32,28 @@ class ESKF
     class IMUNoiseModel
     {
         public:
-        Eigen::Vector3d noise_acc;
-        Eigen::Vector3d noise_gyro;
-        Eigen::Vector3d walk_noise_acc;
-        Eigen::Vector3d walk_noise_gyro;
+
+        const bool IsInit()const {
+            if(init) return true;
+            return false;
+        }
+
+        bool CopyFrom(const IMUNoiseModel & imu_model)
+        {
+            if(!imu_model.IsInit())return false;
+            this -> noise_acc = imu_model.noise_acc;
+            this -> noise_gyro = imu_model.noise_gyro;
+            this -> walk_noise_acc = imu_model.walk_noise_acc;
+            this -> walk_noise_gyro = imu_model.walk_noise_gyro;
+            this -> init = true;
+            return true;
+        }
+
+        bool init = false;
+        Eigen::Matrix3d noise_acc;
+        Eigen::Matrix3d noise_gyro;
+        Eigen::Matrix3d walk_noise_acc;
+        Eigen::Matrix3d walk_noise_gyro;
     };
     class State
     {
@@ -50,13 +73,38 @@ class ESKF
 
         Vector3d bias_acc;
         Vector3d bias_gyro;
-
-        IMUNoiseModel imu_noise;
     };
+    class StateCovariance
+    {
+        public:
+        StateCovariance()
+        {
+            theta_cov.setZero();
+        }
+        Matrix3d theta_cov;
+    };
+    class Observation
+    {
+        public:
+        Vector3d obs_posi;
+        Vector3d obs_vel;
+        Vector3d obs_theta;
 
+        Matrix3d obs_cov_posi;
+        Matrix3d obs_cov_vel;
+        Matrix3d obs_cov_theta;
+
+    };
     ESKF():ref_state_(),state_(),error_state_(){ref_vel_explorate_posi_.setZero();}
 
-    void Init(const State & init_state) {ref_state_ = init_state; state_ = init_state;}
+    bool Init(const State & init_state, const IMUNoiseModel & imu_model)
+    {
+        ref_state_ = init_state;
+        state_ = init_state;
+        if(imu_noise_model_.CopyFrom(imu_model))
+        return true;
+        return false;
+    }
 
     void PushIMUInfo(const Input & input)
     {
@@ -69,16 +117,22 @@ class ESKF
 
         PropagateRef(mid_value_input);
         PropagateMean(mid_value_input);
+        last_timestamp_ =  input.timestamp;
+        last_input_ = input;
 
         // 方差的传递
         PropagateRefCov(mid_value_input);
         PropagateCov(mid_value_input);
-        
-        last_timestamp_ =  input.timestamp;
-        last_input_ = input;
+
+        last_ref_state_ = ref_state_;
+        last_state_ = state_;
     }
 
-    // void PushObservation();
+    void PushObservation(const Observation & obs)
+    {
+        UpdateObservation(obs);
+        RefreshState();
+    }
 
     const State & GetRefState()const{return ref_state_;}
     const State & GetState()const{return state_;}
@@ -89,45 +143,89 @@ class ESKF
     void PropagateRef(const Input & input)
     {
         // propagate ref value
-        double delta_tiemstamp = input.timestamp - last_timestamp_;
+        double delta_timestamp = input.timestamp - last_timestamp_;
         Sophus::SO3d rotation_SO3 = Sophus::SO3d::exp(ref_state_.theta).matrix();
-        Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.ref_gyro * delta_tiemstamp)).matrix();
+        Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.ref_gyro * delta_timestamp)).matrix();
         // Eigen::Matrix3d rotation = (rotation_SO3).matrix();
         
 
-        ref_vel_explorate_posi_ += input.ref_vel*delta_tiemstamp;
+        ref_vel_explorate_posi_ += input.ref_vel*delta_timestamp;
 
-        ref_state_.posi += delta_tiemstamp * ref_state_.vel 
-                        +0.5*delta_tiemstamp* delta_tiemstamp *(rotation * input.ref_acc+g);
+        ref_state_.posi += delta_timestamp * ref_state_.vel 
+                        +0.5*delta_timestamp* delta_timestamp *(rotation * input.ref_acc+g);
 
-        ref_state_.vel += delta_tiemstamp *(rotation * input.ref_acc + g);
+        ref_state_.vel += delta_timestamp *(rotation * input.ref_acc + g);
 
-        ref_state_.theta = (rotation_SO3 * Sophus::SO3d::exp(input.ref_gyro * delta_tiemstamp)).log();
+        ref_state_.theta = (rotation_SO3 * Sophus::SO3d::exp(input.ref_gyro * delta_timestamp)).log();
         
     }
 
     void PropagateMean(const Input & input)
     {
         // propagate mean value
-        double delta_tiemstamp = input.timestamp - last_timestamp_;
+        double delta_timestamp = input.timestamp - last_timestamp_;
         Sophus::SO3d rotation_SO3 = Sophus::SO3d::exp(state_.theta).matrix();
-        Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.meas_gyro * delta_tiemstamp)).matrix();
+        Eigen::Matrix3d rotation = (rotation_SO3*Sophus::SO3d::exp(input.meas_gyro * delta_timestamp)).matrix();
 
-        state_.posi += delta_tiemstamp * state_.vel 
-                    +0.5*delta_tiemstamp* delta_tiemstamp *(rotation * input.meas_acc +g);
+        state_.posi += delta_timestamp * state_.vel 
+                    +0.5*delta_timestamp* delta_timestamp *(rotation * input.meas_acc +g);
 
-        state_.vel += delta_tiemstamp *(rotation * input.meas_acc +g);
+        state_.vel += delta_timestamp *(rotation * input.meas_acc +g);
 
-        state_.theta = (Sophus::SO3d::exp(state_.theta) * Sophus::SO3d::exp(input.meas_gyro * delta_tiemstamp)).log();        
+        state_.theta = (Sophus::SO3d::exp(state_.theta) * Sophus::SO3d::exp(input.meas_gyro * delta_timestamp)).log();        
     }
     
-    void PropagateRefCov(const Input & input);
+    void PropagateErrorState(const Input & input)
+    {
+        // propagate error state cov
+        double delta_timestamp = input.timestamp - last_timestamp_;
+        Sophus::SO3d Omega = Sophus::SO3d::exp(input.meas_gyro*delta_timestamp);
+        error_state_.theta = Omega.matrix().transpose()*error_state_.theta;
+    }
 
-    void PropagateCov(const Input & input);
+    void PropagateRefCov(const Input & input)
+    { 
+    }
+
+    void PropagateCov(const Input & input)
+    {
+        // propagate error state rotation cov
+        double delta_timestamp = input.timestamp - last_timestamp_;
+        Sophus::SO3d Omega = Sophus::SO3d::exp(input.meas_gyro*delta_timestamp);
+
+        error_state_cov_.theta_cov = Omega.matrix().transpose()*
+                                     error_state_cov_.theta_cov*
+                                     Omega.matrix();
+
+        Eigen::Matrix3d J_r = Eigen::Matrix3d::Zero();
+        rightJacobianSO3(Omega.log(),J_r);
+        error_state_cov_.theta_cov += J_r*
+                                      imu_noise_model_.noise_gyro*
+                                      J_r.transpose();
+    }                   
     // void PropagateErrorState(const Input & input);
     
-    // void UpdateObservation();
-    // void RefreshState();
+    // 得到K 和 P
+    void UpdateObservation(const Observation & obs)
+    {
+        // update rotation obs
+        Vector3d error_state_obs = (Sophus::SO3d::exp(state_.theta).inverse()*
+                                   Sophus::SO3d::exp(obs.obs_theta)).log();
+        K_.setZero();
+        K_ = error_state_cov_.theta_cov*(error_state_cov_.theta_cov+obs.obs_cov_theta).inverse();
+        m_ = K_*(error_state_obs);
+        P_k_k_ = (Eigen::Matrix3d::Identity()-K_)*error_state_cov_.theta_cov;
+    }
+    
+    void RefreshState()
+    {
+        // SO3 角度 update 
+        state_.theta = (Sophus::SO3d::exp(state_.theta)*Sophus::SO3d::exp(m_)).log();
+        Eigen::Matrix3d J_r_inv;
+        J_r_inv.setZero();
+        rightJacobianInvSO3(m_,J_r_inv);
+        error_state_cov_.theta_cov = J_r_inv*P_k_k_*J_r_inv.transpose();
+    }
 
     Input MidValue(const Input & pre_input, const Input & cur_input)
     {
@@ -151,8 +249,17 @@ class ESKF
     Eigen::Vector3d ref_vel_explorate_posi_;
 
     State ref_state_;
+    State last_ref_state_;
     State state_;
+    State last_state_;
     State error_state_;
+    IMUNoiseModel imu_noise_model_;
+    StateCovariance error_state_cov_;
+    // add for SO3 EKF test
+    Eigen::Matrix3d K_;
+    Eigen::Matrix3d P_k_k_;
+    Eigen::Vector3d m_;
+    
     double last_timestamp_;
 };
 
