@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-22 21:24:56
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-30 22:24:01
+ * @LastEditTime: 2021-05-30 22:27:35
  * @Description: 
  * 验证算法思想
  * 
@@ -206,6 +206,9 @@ class ESKF
     // void PropagateErrorState(const Input & input);
     
     // 得到K 和 P
+
+    protected:
+
     void UpdateObservation(const Observation & obs)
     {
         // update rotation obs
@@ -255,6 +258,7 @@ class ESKF
     State error_state_;
     IMUNoiseModel imu_noise_model_;
     StateCovariance error_state_cov_;
+    
     // add for SO3 EKF test
     Eigen::Matrix3d K_;
     Eigen::Matrix3d P_k_k_;
