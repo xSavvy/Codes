@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-10 13:22:03
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-11 16:06:14
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-05-31 12:42:08
  * @FilePath: /Codes/47. basalt/code_reading/optimize.md
  * @Description: 
 -->
@@ -13,6 +13,8 @@
 
 
 -----
+
+KeyPoint_vo
 
 1. 信息管理逻辑  measure 一起进行分析
     |__ meassure 输入
@@ -47,6 +49,8 @@
             |__ for iter< vio_max_iterations
                 |__ linearizeHelper          这里主要是构建 视觉的各个 jacobiian 和hessian 小块    
                 |__ 
+
+
         |__ marginalize
 
 2. 重要成员函数解析 -- linearizeHelper

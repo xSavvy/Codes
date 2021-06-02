@@ -34,15 +34,21 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
+// 还可以做方格内部降噪
+//
+//
+//
 
-#ifndef PCL_VOXEL_GRID_COVARIANCE_H_
-#define PCL_VOXEL_GRID_COVARIANCE_H_
 
 #include <pcl/filters/boost.h>
 #include <pcl/filters/voxel_grid.h>
 #include <map>
 #include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
+#include <utility>
+#include <algorithm>
+
+using namespace pcl;
 
 namespace ndt_analysis
 {
@@ -54,7 +60,7 @@ namespace ndt_analysis
     * \author Brian Okorn (Space and Naval Warfare Systems Center Pacific)
     */
   template<typename PointT>
-  class VoxelGridCovariance : public VoxelGrid<PointT>
+  class VoxelGridCovariance : public pcl::VoxelGrid<PointT>
   {
     protected:
       using VoxelGrid<PointT>::filter_name_;
@@ -102,8 +108,10 @@ namespace ndt_analysis
           cov_ (Eigen::Matrix3d::Identity ()),
           icov_ (Eigen::Matrix3d::Zero ()),
           evecs_ (Eigen::Matrix3d::Identity ()),
-          evals_ (Eigen::Vector3d::Zero ())
+          evals_ (Eigen::Vector3d::Zero ()),
+          good_leaf_(true)
         {
+          point_cloud_ptr_.reset(new PointCloud());
         }
 
         /** \brief Get the voxel covariance.
@@ -185,6 +193,10 @@ namespace ndt_analysis
         /** \brief Eigen values of voxel covariance matrix */
         Eigen::Vector3d evals_;
 
+        PointCloudPtr point_cloud_ptr_;
+
+        bool good_leaf_;
+
       };
 
       /** \brief Pointer to VoxelGridCovariance leaf structure */
@@ -205,7 +217,8 @@ namespace ndt_analysis
         leaves_ (),
         voxel_centroids_ (),
         voxel_centroids_leaf_indices_ (),
-        kdtree_ ()
+        kdtree_ (),
+        line_eval_threshold_(4)
       {
         downsample_all_data_ = false;
         save_leaf_layout_ = false;
@@ -214,6 +227,14 @@ namespace ndt_analysis
         max_b_.setZero ();
         filter_name_ = "VoxelGridCovariance";
       }
+
+      inline void 
+      setLineEvalThreshold( double line_eval_threshold)
+      {
+        line_eval_threshold_ = line_eval_threshold;
+      }
+
+
 
       /** \brief Set the minimum number of points required for a cell to be used (must be 3 or greater for covariance calculation).
         * \param[in] min_points_per_voxel the minimum number of points for required for a voxel to be used
@@ -276,6 +297,26 @@ namespace ndt_analysis
           // Initiates kdtree of the centroids of voxels containing a sufficient number of points
           kdtree_.setInputCloud (voxel_centroids_);
         }
+      }
+
+      inline void
+      getLeafPointCloud(PointCloud & output)
+      {
+        output.clear();
+
+        
+        for (typename std::map<size_t, Leaf>::iterator it = leaves_.begin (); it != leaves_.end (); ++it)
+        {
+          bool c1=false,c2 = false,c3=false;
+          // Normalize the centroid
+          Leaf& leaf = it->second;
+          if(leaf.evals_(2)/leaf.evals_(1)>line_eval_threshold_) c1 = true;
+          if(leaf.evals_(2)<point_eval_threshold_) c2  = true;
+          if(leaf.nr_points>30) c3= true;
+          if((c1||c2)&&c3)
+          output += *leaf.point_cloud_ptr_;
+        }
+
       }
 
       /** \brief Initializes voxel structure.
@@ -396,12 +437,6 @@ namespace ndt_analysis
       }
 
 
-      /** \brief Get a cloud to visualize each voxels normal distribution.
-       * \param[out] cell_cloud a cloud created by sampling the normal distributions of each voxel
-       */
-      void
-      getDisplayCloud (pcl::PointCloud<PointXYZ>& cell_cloud);
-
       /** \brief Search for the k-nearest occupied voxels for the given query point.
        * \note Only voxels containing a sufficient number of points are used.
        * \param[in] point the given query point
@@ -510,6 +545,10 @@ namespace ndt_analysis
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
 
+      std::vector<std::pair<double,Eigen::Vector2d>> linear_ratio;
+
+
+
     protected:
 
       /** \brief Filter cloud and initializes voxel structure.
@@ -537,10 +576,16 @@ namespace ndt_analysis
 
       /** \brief KdTree generated using \ref voxel_centroids_ (used for searching). */
       KdTreeFLANN<PointT> kdtree_;
+
+      double line_eval_threshold_;
+
+      double point_eval_threshold_;
+
+      int point_num_threshold_;
   };
 }
 
 
 #include <voxel_grid_covariance.hpp>
 
-#endif  //#ifndef PCL_VOXEL_GRID_COVARIANCE_H_
+

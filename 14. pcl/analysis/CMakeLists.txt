@@ -1,7 +1,7 @@
 project(jump_issue)
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_FLAGS "-std=c++11 -o3")
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 find_package(PCL REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
@@ -19,3 +19,4 @@ link_libraries(${Boost_LIBRARIES})
 
 add_executable(jump_analysis analysis.cc)
 add_executable(test test_bad_scan.cc)
+add_executable(new_voxel_filter test_new_voxel_filter.cc)

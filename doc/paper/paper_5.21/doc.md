@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-21 12:18:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-21 12:24:44
+ * @LastEditTime: 2021-06-02 08:47:46
  * @Description: 
 -->
 1. Bundle Adjustment with Feature Scale
@@ -17,4 +17,7 @@ Accuracy
 关于方差的建模，属于尝试性的方法，选了几个值测试结果，结果如下:
 ![](./pic/3.png)
 
+
+2. Probabilistic Normal Distributions Transform Representation
+for Accurate 3D Point Cloud Registration
 

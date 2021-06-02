@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-27 17:09:04
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-28 11:12:53
+ * @LastEditTime: 2021-06-01 10:32:44
  * @Description: 
  * 
  * 主要是用于测试处理之后的点云，是否会出现跳变的问题
@@ -107,9 +107,10 @@ int main()
     ndt_.setInputSource(scan);
     ndt_.align(*trans_scan,real_matrix);
 
+
     cout<<"the estimation:"<<ndt_.getFinalTransformation().col(3).transpose()<<endl;
 
-
+    
     AssignColorToPointCloud(map,map_color,255,255,255);
     AssignColorToPointCloud(trans_scan,scan_color,255,0,0);
 
