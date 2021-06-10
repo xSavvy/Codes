@@ -34,10 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-// 还可以做方格内部降噪
-//
-//
-//
+
 
 
 #include <pcl/filters/boost.h>
@@ -45,8 +42,6 @@
 #include <map>
 #include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
-#include <utility>
-#include <algorithm>
 
 using namespace pcl;
 
@@ -170,6 +165,12 @@ namespace ndt_analysis
           return (nr_points);
         }
 
+        enum LEAF_TYPE{
+          LINE =0,
+          POINT,
+          UNKOWN
+        };
+
         /** \brief Number of points contained by voxel */
         int nr_points;
 
@@ -195,7 +196,13 @@ namespace ndt_analysis
 
         PointCloudPtr point_cloud_ptr_;
 
+        std::vector<bool> outliers_;
+
         bool good_leaf_;
+
+        int leaf_type;
+
+        double outlier_ratio_;
 
       };
 
@@ -303,17 +310,11 @@ namespace ndt_analysis
       getLeafPointCloud(PointCloud & output)
       {
         output.clear();
-
-        
         for (typename std::map<size_t, Leaf>::iterator it = leaves_.begin (); it != leaves_.end (); ++it)
         {
-          bool c1=false,c2 = false,c3=false;
           // Normalize the centroid
           Leaf& leaf = it->second;
-          if(leaf.evals_(2)/leaf.evals_(1)>line_eval_threshold_) c1 = true;
-          if(leaf.evals_(2)<point_eval_threshold_) c2  = true;
-          if(leaf.nr_points>30) c3= true;
-          if((c1||c2)&&c3)
+          if(leaf.good_leaf_)
           output += *leaf.point_cloud_ptr_;
         }
 
@@ -545,10 +546,6 @@ namespace ndt_analysis
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
 
-      std::vector<std::pair<double,Eigen::Vector2d>> linear_ratio;
-
-
-
     protected:
 
       /** \brief Filter cloud and initializes voxel structure.
@@ -578,14 +575,10 @@ namespace ndt_analysis
       KdTreeFLANN<PointT> kdtree_;
 
       double line_eval_threshold_;
-
-      double point_eval_threshold_;
-
-      int point_num_threshold_;
   };
 }
 
 
-#include <voxel_grid_covariance.hpp>
+#include <jump_issue_add/voxel_grid_covariance.hpp>
 
 

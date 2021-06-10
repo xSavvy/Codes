@@ -375,26 +375,31 @@ VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
       continue;
     }
   
-    // ! LWL: 统计ratio 和对应的特征值
+    // ! LWL: 添加新的探测
+    // ! LWL: 1. 方差线性形状检测
+    // ! LWL: 2. outlier 检测，去除之后重新估计，各自方差
+
+    // 1. 线性方差形状检测
+
+    std::vector<double> line_ratio;
+    line_ratio.reserve(leaves_.size());
+    for(auto & leaf_pair:leaves_)
+    {
+      
+    }
+      
+
+    // 2. outlier ratio 计算
+
+    // 3. average point threshold
+    
+
+
+
   
-    double ratio = leaf.evals_(2)/leaf.evals_(1);
-
-    linear_ratio.push_back(std::make_pair(ratio,Eigen::Vector2d(leaf.evals_(1),leaf.evals_(2))));
-
   }
 
-  // ! LWL:通过先找线、然后来找点
   output.width = static_cast<uint32_t> (output.points.size ());
-  using element = std::pair<double,Eigen::Vector2d>;
-  std::sort(linear_ratio.begin(),linear_ratio.end(),[](const element & e1,const element & e2){ return e1.first>e2.first?true:false;});
-  
-  int size = linear_ratio.size()*0.4;
-  
-  line_eval_threshold_ = linear_ratio[size].first;
-
-  point_eval_threshold_ = linear_ratio[size].second.x();
-
-  // ! 需要进行点约束
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
