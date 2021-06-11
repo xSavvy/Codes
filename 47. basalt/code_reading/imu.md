@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-10 08:56:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-11 19:53:38
+ * @LastEditTime: 2021-06-11 20:34:45
  * @FilePath: /Codes/47. basalt/code_reading/imu.md
  * @Description: 
 -->
@@ -35,6 +35,23 @@ error state 是一种补充，也就是在state的存在噪声或者建模不佳
 <font color = "Red"> 2021.6.11 添加 </font><br>
 VIO的图优化感觉完全可以和ESKF一样进行理解。
 
+以旋转预积分为例
+$$
+    \Delta R\delta \Delta R = R_iexp(\delta \theta_i)(R_jexp(\delta \theta_j))^Texp(n)
+$$
+
+$$
+    R_i^T\Delta RR_j = \delta \Delta R
+$$
+得到观测的error state
+然后建立起观测error和error state之间的关系
+$$
+    \delta \Delta R = exp(\delta \theta_i)exp(\delta \theta_j)^Texp(R_jn) 
+$$
+如果只是从MLE的框架下来看，在优化的过程中，就会不断迭代和重置$\delta \theta_i,\delta \theta_i$ 
+这个过程和ESKF的过程基本是一直的。
+
+VINS中保持bias 在error state  的操作和多传感器融合的ESKF的操作是一样的
 
 
 ### BASALT IMU 迭代
