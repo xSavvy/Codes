@@ -41,8 +41,12 @@
 #ifndef PCL_REGISTRATION_NDT_H_
 #define PCL_REGISTRATION_NDT_H_
 
+#include <iostream>
+#include <set>
+#include <utility>
 #include <pcl/registration/registration.h>
 #include <voxel_grid_covariance.h>
+#include "pcl/visualization/cloud_viewer.h"
 
 #include <unsupported/Eigen/NonLinearOptimization>
 
@@ -212,6 +216,41 @@ namespace ndt_analysis
         convertTransform (x, _affine);
         trans = _affine.matrix ();
       }
+
+
+      //
+      class NDTVisualizer
+      {
+          public:
+          using PointVoxelPair = std::pair<PointSource,TargetGridLeafConstPtr>;
+          using ColorCloud = pcl::PointCloud<pcl::PointXYZRGB>;
+          using ColorCloudPtr = pcl::PointCloud<pcl::PointXYZRGB>::Ptr;
+          using ColorPoint = pcl::PointXYZRGB;
+          std::vector<PointVoxelPair> pairs_;
+          std::set<long long> voxel_set_;
+          int voxel_count_;
+          ColorCloudPtr color_leaf_point_cloud_;
+          ColorCloudPtr color_scan_;
+          inline void push_back(const PointVoxelPair & pair){
+              pairs_.push_back(pair); 
+              if(voxel_set_.find((long long)pair.second)==voxel_set_.end())
+              {
+                voxel_set_.insert((long long)pair.second);
+                voxel_count_++;
+              }
+            }
+          void PrintPointCloud();
+          inline void Reset(){
+              pairs_.clear();
+              voxel_count_=0;
+              color_leaf_point_cloud_->clear();
+              color_scan_->clear();
+              voxel_set_.clear();
+          }
+          // 没有想到比较好的显示方法，所以就先留着显示函数，之后按需求进行编写
+      };
+
+
 
     protected:
 

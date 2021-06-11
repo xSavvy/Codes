@@ -35,12 +35,10 @@
  *
  */
 
-#ifndef PCL_VOXEL_GRID_COVARIANCE_IMPL_H_
-#define PCL_VOXEL_GRID_COVARIANCE_IMPL_H_
 
 #include <pcl/common/common.h>
 #include <pcl/filters/boost.h>
-#include <pcl/filters/voxel_grid_covariance.h>
+
 #include <Eigen/Dense>
 #include <Eigen/Cholesky>
 
@@ -380,14 +378,38 @@ VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
     // ! LWL: 2. outlier 检测，去除之后重新估计，各自方差
 
     // 1. 线性方差形状检测
+    // 1.a. 通过方差直接进行判断 目前使用的版本 应该和leaf_size_ 强相关
+    // 1.b. 根据比例大小进行判断(options)
+    // 1.c. 如果是线 voxel 内部点的数量一定要足够多
 
     std::vector<double> line_ratio;
     line_ratio.reserve(leaves_.size());
-    for(auto & leaf_pair:leaves_)
+    int line_count = 0,vertex_count=0;
+    for (typename std::map<size_t, Leaf>::iterator it = leaves_.begin (); it != leaves_.end (); ++it)
     {
-      
+        Leaf& leaf = it->second; 
+        double tmp_ratio = leaf.evals_(2)/leaf.evals_(1);
+        if(tmp_ratio>config_.line_ratio && leaf.nr_points > config_.line_point_threshold)
+        {
+          leaf.leaf_type =0;
+          leaf.line_direction_ = leaf.evecs_.col(2);
+          line_count++;
+          continue;
+        }
+
+        // 2. 进vertex 判断
+        // 2.a. 通过最大的evals 来进行判断
+        // 2.b. voxel 需要满足一定的点数量
+        if(leaf.evals_(2)<config_.vertex_eigen_value_threshold &&
+           leaf.nr_points > config_.vertex_point_threshold)
+        {
+          leaf.leaf_type =1;
+          vertex_count++;
+          continue;
+        }
     }
-      
+
+    // 3. corner(options)等 GMM算法出来之后，就可以对这个进行编写了
 
     // 2. outlier ratio 计算
 
@@ -439,7 +461,5 @@ VoxelGridCovariance<PointT>::getNeighborhoodAtPoint (const PointT& reference_poi
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#define PCL_INSTANTIATE_VoxelGridCovariance(T) template class PCL_EXPORTS pcl::VoxelGridCovariance<T>;
-}
 
-#endif    // PCL_VOXEL_GRID_COVARIANCE_IMPL_H_
+}

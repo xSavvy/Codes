@@ -40,8 +40,31 @@
 
 #ifndef PCL_REGISTRATION_NDT_IMPL_H_
 #define PCL_REGISTRATION_NDT_IMPL_H_
+
+
 namespace ndt_analysis
 {
+
+template<typename TPtr>
+void SimpleShow(TPtr & point_cloud_)
+{
+    pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
+    viewer.showCloud (point_cloud_);
+    while (!viewer.wasStopped ())
+    {
+    }
+}
+
+template<typename TPtrIn,typename TPtrOut>
+void AssignColorToPointCloud(TPtrIn & pc_in, TPtrOut & pc_out, uint8_t r,uint8_t g,uint8_t b)
+{
+    pcl::copyPointCloud(*pc_in,*pc_out);
+    for (int i =0;i<pc_out->size();i++)
+    {
+        uint32_t rgb = ((uint32_t)r << 16 | (uint32_t)g << 8 | (uint32_t)b);
+        pc_out->points[i].rgb = *reinterpret_cast<float*>(&rgb);
+    }
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename PointSource, typename PointTarget>
 NormalDistributionsTransform<PointSource, PointTarget>::NormalDistributionsTransform () 
@@ -762,6 +785,69 @@ NormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT (con
 
   return (a_t);
 }
+
+template<typename PointSource, typename PointTarget> void
+NormalDistributionsTransform<PointSource, PointTarget>::NDTVisualizer::PrintPointCloud()
+{
+  // 颜色分割
+  int interval = std::ceil(double(voxel_count_)/3.);
+  int color_interval = 155/interval;
+  int r =100,g=100,b=100;
+
+  std::vector<int> r_list;
+  std::vector<int> g_list;
+  std::vector<int> b_list;
+
+  r_list.reserve(voxel_count_*1.2);
+  g_list.reserve(voxel_count_*1.2);
+  b_list.reserve(voxel_count_*1.2);
+
+  for(int i =0;i<interval;i++)
+  {
+    for(int j= 0;j<interval;j++)
+    {
+      for(int k =0;k<interval;k++)
+      {
+        r_list.push_back(100+i*color_interval);
+        g_list.push_back(100+j*color_interval);
+        b_list.push_back(100+k*color_interval);
+      }
+    }
+  }
+
+  // 进行上色
+  int count = -1;
+  std::sort(pairs_.begin(),pairs_.end(),
+  [](const PointVoxelPair & p1,const PointVoxelPair & p2){
+    long long addr_p1 = (long long)p1.second;
+    long long addr_p2 = (long long)p2.second;
+    return addr_p1>addr_p2?true:false;
+  })
+
+  long long last_addr = 0;
+  for(const PointVoxelPair & pair:pairs_)
+  {
+      ColorCloudPtr tmp (new ColorCloud());
+      if(last_addr !=(long long) pair.second)
+      {
+        count++;
+        AssignColorToPointCloud(pair.second->point_cloud_ptr_,tmp,r_list[count],g_list[count],b_list[count]);
+        *color_leaf_point_cloud_ += *tmp;
+        last_addr = (long long) pair.second;
+      }
+      ColorPoint cp;
+      cp.x = pair.first.x;
+      cp.y = pair.first.y;
+      cp.z = pair.first.z;
+      
+      uint32_t rgb = ((uint32_t)r_list[count] << 16 | (uint32_t)g_list[count] << 8 | (uint32_t)b_list[count]);
+      cp.rgb = *reinterpret_cast<float*>(&rgb);
+      color_scan_->push_back(cp);
+  }
+}
+
+
+
 }
 
 #endif // PCL_REGISTRATION_NDT_IMPL_H_

@@ -17,6 +17,12 @@ endif()
 include_directories(${Boost_INCLUDE_DIRS})
 link_libraries(${Boost_LIBRARIES})
 
+# YAML 
+find_package(yaml-cpp REQUIRED)
+
+include_directories(${YAML_CPP_INCLUDE_DIR})
+link_libraries(yaml-cpp) 
+
 add_executable(jump_analysis analysis.cc)
 add_executable(test test_bad_scan.cc)
 add_executable(new_voxel_filter test_new_voxel_filter.cc)

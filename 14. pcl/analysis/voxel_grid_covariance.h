@@ -36,7 +36,9 @@
  */
 
 
-
+#include <string>
+#include <iostream>
+#include "yaml-cpp/yaml.h"
 #include <pcl/filters/boost.h>
 #include <pcl/filters/voxel_grid.h>
 #include <map>
@@ -88,6 +90,29 @@ namespace ndt_analysis
       typedef boost::shared_ptr< VoxelGrid<PointT> > Ptr;
       typedef boost::shared_ptr< const VoxelGrid<PointT> > ConstPtr;
 
+      class InternalConfig
+      {
+        public:
+        InternalConfig(const std::string & config_path)
+        {
+          YAML::Node node_ = YAML::LoadFile(config_path);
+          line_ratio = node_["LineRatio"].as<double>();
+          line_point_threshold = node_["LinePointThreshold"].as<int>();
+          vertex_eigen_value_threshold = node_["VertexEigenValueThreshold"].as<double>();
+          vertex_point_threshold = node_["VertexPointThreshold"].as<int>();
+          std::cout<<"the eigen ratio for line : "<<line_ratio<<std::endl;
+          std::cout<<"the point threshold for line : "<<line_point_threshold<<std::endl;
+        }
+
+        
+        double line_ratio;
+        double vertex_eigen_value_threshold;
+        int    line_point_threshold;
+        int    vertex_point_threshold;
+        
+      
+      };
+      InternalConfig config_;
 
       /** \brief Simple structure to hold a centroid, covarince and the number of points in a leaf.
         * Inverse covariance, eigen vectors and engen values are precomputed. */
@@ -104,7 +129,8 @@ namespace ndt_analysis
           icov_ (Eigen::Matrix3d::Zero ()),
           evecs_ (Eigen::Matrix3d::Identity ()),
           evals_ (Eigen::Vector3d::Zero ()),
-          good_leaf_(true)
+          good_leaf_(true),
+          line_direction_(Eigen::Vector3d::Zero())
         {
           point_cloud_ptr_.reset(new PointCloud());
         }
@@ -200,7 +226,8 @@ namespace ndt_analysis
 
         bool good_leaf_;
 
-        int leaf_type;
+        int leaf_type = 2;
+        Eigen::Vector3d line_direction_;
 
         double outlier_ratio_;
 
@@ -579,6 +606,6 @@ namespace ndt_analysis
 }
 
 
-#include <jump_issue_add/voxel_grid_covariance.hpp>
+#include <voxel_grid_covariance.hpp>
 
 
