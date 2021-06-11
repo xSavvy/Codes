@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-10 08:56:51
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-11 16:07:01
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-06-11 19:53:38
  * @FilePath: /Codes/47. basalt/code_reading/imu.md
  * @Description: 
 -->
@@ -13,7 +13,7 @@
 3. IntegratedImuMeasurement -> prograte
    |__ integrate()
 
-<font color = "Red"> 2021.3.10 添加 </font>
+<font color = "Red"> 2021.3.10 添加 </font><br>
 如何正确理解 state 和 error state?
 error state 是一种补充，也就是在state的存在噪声或者建模不佳的时候，对state 正确结果的补充内容。
 
@@ -22,6 +22,20 @@ error state 是一种补充，也就是在state的存在噪声或者建模不佳
 所以我们在进行状态方差分析的时候，才会在 error state 上进行。 进一步讲 error state + state 才是 我们真实的state 变量
 
 这个是从VINS 的预积分思想上进行的。
+
+<font color = "Red"> 2021.6.11 添加 </font><br>
+今天在突然的提起IMU 预积分之后，又重新回来看了一下。
+
+发现确实对IMU 预积分的概念有了新的理解，有些时候没有把ba 和bw 放入状态方程，可能是因为ba 和bw 本身的变化已经非常小了。
+
+而且作为一个一直不被置零的error state 存在也是可以的啊
+
+这就和之前多传感器融合的课程联系到了一起
+
+<font color = "Red"> 2021.6.11 添加 </font><br>
+VIO的图优化感觉完全可以和ESKF一样进行理解。
+
+
 
 ### BASALT IMU 迭代
 1. 状态迭代 就是正常的进行
@@ -138,8 +152,6 @@ $$
 如果上面是右乘，那么更新的时候就进行右乘。
 
 好像不太对啊！！ 之后还是要再看看
-
-
 
 </font>
 发现了一个很不同的地方
@@ -265,11 +277,13 @@ $$
 
     这个过程本质上，是和ESKF的更新之后进行原状态量合并是一样的，在进行BA 优化的时候，完全可以按照这个思想进行理解,并且很多问题都讲得通了。
 
-    还有一个问题就是 既然$\delta \Delta S_t$ 使用 $b_{gt},b_{at}$的关系进行调整，那么为什么别的？？？？ 也就是优化的时候，为什么只使用了  $b_{gt},b_{at}$ 的 Jacobian??
+    还有一个问题就是 既然$\delta \Delta S_t$ 使用 $b_{gt},b_{at}$的关系进行调整，那么为什么别的？？？？ 也就是优化的时候，为什么只使用了  $b_{gt},b_{at}$ 的 Jacobian?? 
     
     因为说的到底，这是一个预积分的形式，所以和 初始状态没有关系。在实际看代码的时候，也可以发现这一点也就是，所有内$\Delta S$ 就是从0 开始迭代和任一时刻的位姿都没有关系(预积分的含义) 所以真正本质上需要进行估计的就是 imu 的固有状态 bias
 
-    加速度的去除需要看一下
+    加速度的去除需要看一下:
+
+    最后发现重力是游离在预积分外面的，最后整合的时候才重新放到了一起，所以在预积分传播过程当中就完全和外在姿态隔离开了
     
     <font color ="Red">让我重新理解了误差状态分析的意义。</font>
 
