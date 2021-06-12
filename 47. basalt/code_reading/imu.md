@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-10 08:56:51
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-11 20:34:45
+ * @LastEditTime: 2021-06-12 08:12:56
  * @FilePath: /Codes/47. basalt/code_reading/imu.md
  * @Description: 
 -->
@@ -38,6 +38,8 @@ VIO的图优化感觉完全可以和ESKF一样进行理解。
 以旋转预积分为例
 $$
     \Delta R\delta \Delta R = R_iexp(\delta \theta_i)(R_jexp(\delta \theta_j))^Texp(n)
+    \\
+    \Delta R = R_i R_j^T
 $$
 
 $$
@@ -47,12 +49,22 @@ $$
 然后建立起观测error和error state之间的关系
 $$
     \delta \Delta R = exp(\delta \theta_i)exp(\delta \theta_j)^Texp(R_jn) 
+
+    \\
+    or
+    \\
+    \delta \Delta R = exp(R_j\delta \theta_i)exp(-R_j\delta \theta_j)exp(n)
+    \\
+    (exp(R_j\delta \theta_i)exp(-R_j\delta \theta_j))^T\delta \Delta R = exp(n)
 $$
-如果只是从MLE的框架下来看，在优化的过程中，就会不断迭代和重置$\delta \theta_i,\delta \theta_i$ 
-这个过程和ESKF的过程基本是一直的。
+如果只是从MLE的框架下来看，在优化的过程中，就会不断迭代和重置$\delta \theta_i,\delta \theta_j$ ,方差取的也是IMU预积分的方差
+这个过程和ESKF的过程基本是一致的。
+
+感觉理解的还是有些问题。
 
 VINS中保持bias 在error state  的操作和多传感器融合的ESKF的操作是一样的
 
+BASALT并没有和VINS一样对bias 添加更新上的约束 VINS 是使用了一个bias 的随机行走的噪声当作先验。
 
 ### BASALT IMU 迭代
 1. 状态迭代 就是正常的进行
