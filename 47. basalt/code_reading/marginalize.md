@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-12 23:00:42
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-13 13:33:11
+ * @LastEditTime: 2021-06-13 21:23:55
  * @Description: 
 -->
 ### 主要内容
@@ -53,7 +53,9 @@ BASALT的边缘化
 3. Schur Complement 进行实际上的边缘化操作
 
     ![](../pic/5.png)
-    ![](../pic/6.png)
+    $$
+    p(a|b) \sim N(a-C^TB^{-1}b,A-C^TB^{-1}C)
+    $$
 
 4. Basalt 真的有FEJ吗？
    
