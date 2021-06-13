@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-24 08:05:08
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-07 12:46:05
+ * @LastEditTime: 2021-06-13 12:04:47
  * @Description: 
 -->
 
@@ -46,3 +46,6 @@
 
 2021.5.25<br>
 最终计划,目的就是年底要出一版低算力要求的LiDAR-Stereo-IMU 融合框架。
+
+
+视觉合成(view synthetic)

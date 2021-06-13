@@ -20,3 +20,5 @@ add_executable(pose_graph_test pose_graph_test.cc)
 
 target_link_libraries( pose_graph_test
     ${CHOLMOD_LIBRARIES})
+
+add_executable(sim_marg sim.cpp)

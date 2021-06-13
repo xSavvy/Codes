@@ -6,4 +6,4 @@ include_directories("/usr/local/include/eigen3")
 include_directories("/usr/include/eigen3")
 include_directories("/usr/local/include/sophus")
 
-add_executable(eigen_svd eigen_svd.cpp)
+add_executable(eigen_permutation_matrix eigen_permutation_matrix.cpp)
