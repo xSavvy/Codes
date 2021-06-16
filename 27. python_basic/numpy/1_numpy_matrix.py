@@ -2,37 +2,34 @@
 Author: Liu Weilong
 Date: 2021-05-30 19:31:55
 LastEditors: Liu Weilong
-LastEditTime: 2021-05-30 19:48:29
+LastEditTime: 2021-06-14 10:39:27
 Description: 
 创建数组
-np.zero()生成数组的shape是[7,]
+
 
 
 
 '''
-import numpy as np 
+import numpy as np
 
-tmp = np.array([[1,2,3,4,5,6,7]])
-print(tmp.shape)
+# numpy的数组类型是ndarray
+a = np.arange(15).reshape(3,5)
 
-zero = np.zeros(5);
-print(zero)
+# 数组创建
+b = np.array([3,2.])
+print(type(b))
 
-tmp = tmp+1
-print(tmp)
+b = np.zeros((3,4),dtype=np.int16)
+print(b)
 
-one = np.ones((1,7))
-print(one)
+c = np.linspace(2,10,9)
+d = np.arange(0,3,0.2)
 
-print(tmp*2)
+print(c)
+print(d)
 
-print(tmp*(one*2))
+e = np.asmatrix(c)
+print(e)
+e.transpose()
 
-# 矩阵运算
-a = np.vstack((tmp,one))
-print(a)
-
-a = a+1
-print(a)
-
-# 提取矩阵块
+a.inverse()

@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-13 13:56:38
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-13 21:57:25
+ * @LastEditTime: 2021-06-14 08:57:20
  * @Description: 
 -->
 ### 遗留问题
@@ -73,3 +73,6 @@
     就有了代码中的公式
 
     marg_b -= marg_H * delta;(delta =  $\delta_{keep}$)
+
+    关于先验变化的问题，基本已经明白了，是优化形式导致的
+
