@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-25 13:19:02
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-07 07:55:54
+ * @LastEditTime: 2021-06-19 17:34:31
  * @FilePath: /3rd-test-learning/30. supplement_material/solution_of_linear_equation/doc.md
  * @Description: 
 -->
@@ -145,6 +145,8 @@ SVD|任意矩阵|$U\Sigma V^T$ <br> U、V 是一个酋矩阵也就是说U^TU=I|$
       \end{matrix}
       \right]
    $$
+
+   t(Q_1)的意思就是做了一个填充。让 Q2 矩阵变成方阵且满秩
 
    这里做的第二种，相当于把 Q 从秩为n 的矩阵，补全成了 秩为m的矩阵
    
