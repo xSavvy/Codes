@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-07 14:27:26
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-22 21:57:14
+ * @LastEditTime: 2021-06-24 11:27:52
  * @FilePath: /Codes/46. self_front_end/design.md
  * @Description: 
 -->
@@ -29,7 +29,7 @@
 13. imu 辅助的动态环境克服
 14. 添加特征描述子的定位环节
 15. 添加多种描述子的module
-16. PoseGraph 使用NFR
+16. PoseGraph 使用NFR 加速计算
 
 ### 目标--better BASALT
 1. 添加语义信息

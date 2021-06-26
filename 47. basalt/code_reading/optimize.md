@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-05-10 13:22:03
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-31 12:42:08
+ * @LastEditTime: 2021-06-24 13:02:47
  * @FilePath: /Codes/47. basalt/code_reading/optimize.md
  * @Description: 
 -->
@@ -10,6 +10,7 @@
 1. 入口 measure
 2. 信息管理逻辑
 3. 重要成员函数解析
+4. 优化的相对量的逻辑
 
 
 -----
@@ -84,6 +85,7 @@ KeyPoint_vo
                     |__ calculate Landmark Hessian
 
 
+
    
 
 
@@ -104,3 +106,4 @@ KeyPoint_vo
 
 
 
+4. 优化的相对量的逻辑(TODO)
