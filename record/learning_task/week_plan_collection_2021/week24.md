@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-20 21:53:10
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-26 22:31:49
+ * @LastEditTime: 2021-06-27 10:34:41
  * @Description: 
 -->
 
@@ -39,3 +39,20 @@ SLAM的名气打造
 围绕这四个点，按计划和目标进行实施吧。 压制住情绪带来影响
 
 允许这一年做一些 无用的 事情，来打打基础吧
+
+周日的计划
+
+12:30 吃完中饭+一杯咖啡
+
+15:00 改完tzpDetection
+
+17:00 NFR阅读
+
+19:00 吃完晚餐
+
+22:00 BASALT 主要帧和点管理提取。
+
+
+
+
+
