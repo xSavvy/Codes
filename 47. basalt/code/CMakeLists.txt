@@ -16,9 +16,11 @@ message( status "cmake modudle path :" ${CMAKE_MODULE_PATH})
 find_package( Cholmod REQUIRED )
 include_directories( ${CHOLMOD_INCLUDE_DIR} )
 
-add_executable(pose_graph_test pose_graph_test.cc)
+# add_executable(pose_graph_test pose_graph_test.cc)
 
-target_link_libraries( pose_graph_test
-    ${CHOLMOD_LIBRARIES})
+# target_link_libraries( pose_graph_test
+#     ${CHOLMOD_LIBRARIES})
 
-add_executable(sim_marg sim.cpp)
+# add_executable(sim_marg sim.cpp)
+
+add_executable(assert_study assert_study.cc)

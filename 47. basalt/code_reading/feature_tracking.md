@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-05-10 08:56:44
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-05-10 10:57:09
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-06-29 22:11:48
  * @FilePath: /Codes/47. basalt/code/feature_tracking.md
  * @Description: 
 -->
@@ -24,3 +24,6 @@
         |__ addPoints
         |__ filterPoints
     没有使用IMU信息啊，感觉不太行，可能唯一的trick 就是一个se2 + 循环验证 + 外参极线验证
+
+
+注: basalt 的确速度可以做到非常快，里面所有的帧都在进行优化，那么basalt精度高的确是有一点道理的，毕竟所有的都进行了优化。

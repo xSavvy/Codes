@@ -2,19 +2,18 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-27 21:52:57
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-29 16:37:43
+ * @LastEditTime: 2021-06-29 16:58:09
  * @Description: 
 -->
 
 
 序号|任务|状态|备注
 ---|---|---|---
-1. |凸优化 -> lecture 14-20 || 尽可能完成保凸运算+ 凸优化问题
-2. |SLAM -> BASALT NFR 代码阅读+优化逻辑||还没有进行笔记整理
-3. |SLAM -> 点管理的搬运||先做一个drawio 的图表
-4. |网络是如何连接的 chapter1、2||
-5. |tzp -> 代码联调||
-6. |tnw -> problem list汇总||
+1. |SLAM -> BASALT NFR 代码阅读+优化逻辑||还没有进行笔记整理
+2. |SLAM -> 点管理的搬运||先做一个drawio 的图表
+3. |网络是如何连接的 chapter1、2||娱乐
+4. |tzp -> 代码联调||
+5. |tnw -> problem list汇总||
 
 
 上个周没有完成计划的原因是没有严格的计划，个人的作息也不好导致的。
@@ -40,7 +39,3 @@ SLAM框架: 用于打开局面，也是DeepSLAM的植根地。非常重要
 tzp->  重要
 
 tnw->  problem list    重要又紧急
-
-凸优化  时间上低收益。    重要不紧急 看到凸函数的保凸运算，暂时放弃吧。有更重要的事情要去做
-
-投资基础知识             要重      暂时放弃吧。有更重要的事情要去做
