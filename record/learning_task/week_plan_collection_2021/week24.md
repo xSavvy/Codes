@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-20 21:53:10
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-27 10:34:41
+ * @LastEditTime: 2021-06-27 21:57:07
  * @Description: 
 -->
 
@@ -16,7 +16,8 @@
 3. |凸优化 -> lecture 5-8 |完成| lecture5-7 已经看完，lecture8 还没有看
 4. |SLAM框架 -> 画一个大概框架drawio|完成|大概流程该整理一下了
 5. |凸优化 -> lecture 10-13|完成| lecture 9 缺失，缺少对于联合概率是不是凸集的思考  6h
-6. |SLAM -> BASALT NFR 代码阅读+优化逻辑||还没有进行笔记整理
+6. |tzp -> 代码编写|完成|
+7. |SLAM -> BASALT NFR 代码阅读+优化逻辑||还没有进行笔记整理
 
 
 现在进入了一种 无目标的状态，或者说现有的目标没有办法很直接地激发自己的斗志。
