@@ -15,7 +15,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/lwl/workspace/3rd-test-learning/14. pcl/analysis/build/new_voxel_filter",
+            "program": "/home/lwl/workspace/3rd-test-learning/51. tinyxml2/build/tutorial_2",
             "args": [],
             "stopAtEntry": false,
             "cwd": "/home/lwl/workspace/3rd-test-learning",
