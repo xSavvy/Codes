@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-29 16:41:49
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-21 08:35:58
+ * @LastEditTime: 2021-07-01 15:02:19
  * @FilePath: /Codes/record/learning_task/week_plan_collection_2021/interesting_target.md
  * @Description: 
 -->
@@ -27,8 +27,9 @@
 17. |概率、信息论、凸优化、线性代数(基础补全:大项目)||
 18. |PC、NFR 等手法||
 19. |BASALT 代码阅读|暂停|就剩下一个NFR <br>
+20. |TEASER 带出的全局最优的问题||清华的特奖还是太强了 凸优化啊 凸优化 有时间一定要看一下啊啊啊啊啊啊啊 很好奇有时间看一下
 
-20. 前端
+21. 前端
    1.a. 深度学习的Feature (误匹配、匹配的好)
    1.b. 40帧/s
    1.c. 
