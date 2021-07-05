@@ -138,18 +138,20 @@ Rolling Shutter Effect 大佬们给出的讨论
    18. (ICE-BA) 相机畸变 应该有对应的方差刻画
    19. (ORB)尽量让当前帧和更加古老的帧建立关系，来减少累计误差，这也是为什么有回环，几乎所有的算法都是Frame2Map 的匹配。ORB会有CreateNewMapPoint 的原因，说到底都是为了和更加古老的帧建立关系
    20. (SELF) patch matching + 极线搜索对于匹配有很大的潜力，可以好好探索一下的。
-   
+   21. (BASALT) 进一步加速: 恒定线性化点，让所有线性化之后的帧都不在进行线性化。减少大量计算量。每一帧都参与到slide window 当中，那样精度的确会有大量的加速。
+   22. (FAST-LIO + 猜测) 进一步加速: BASALT的思路是减少线性化的思路。FAST-LIO的EKF思路，对于VIO来说，让算法更新的从landmark 的维护降低到 state 的维护。结合SVO的深度滤波应该效果也不会差。更重要的是搭建起 MSCKF方法到图优化方法的桥梁
+
 ### FrontEnd SlideWindow
 
    1. SlideWindow的策略制定会对算法有影响
       DSO   
 
 ### 关于地面约束
-1. 如果地面比较平、并且加减速也做的比较好，可以直接用 光度误差的 物理意义来进行限制。<br>也就是只要是同一个点 uv v 代表y v 就不会变化太大。<br>也就是说这个v 的信息矩阵权重可以设置的比较大
+   1. 如果地面比较平、并且加减速也做的比较好，可以直接用 光度误差的 物理意义来进行限制。<br>也就是只要是同一个点 uv v 代表y v 就不会变化太大。<br>也就是说这个v 的信息矩阵权重可以设置的比较大
 
 ### 硬件
-1. 关于自动曝光
-2. 关于图像rect与否
+   1. 关于自动曝光
+   2. 关于图像rect与否
 
 ## Lidar 好效果重点
 
@@ -170,7 +172,7 @@ Rolling Shutter Effect 大佬们给出的讨论
       当然可以这么做也是因为激光雷达非常准确的深度。
    7. (猜测) 利用好激光数据的连续性特性，和NDT的栅格离散特性，两两结合，一定会有非常好的效果
 ### 融合
-1. 在长距离里IMU 的作用是不是会比Camera更大？ 除了提供视差以外。感觉并不会啊
+1. 在长距离里IMU 的作用是不是会比Camera更大？ 除了提供视差以外。感觉并不会啊,没有从根本上解决SE3视角不同时的匹配的问题
 2. (OC-EKF\DSO) 注意可观性分析之后，对于SLAM问题的可观性的维护
 
 
@@ -185,11 +187,13 @@ f. 累计误差的消除，是和更古老的帧发生约束来进行的(ORB)<br
 
 
 ### 图像质量
+
 1. 模糊
    Reading_List
-        Image Deblurring using Smartphone Inertial Sensors
-        Inertial-aided Motion Deblurring with Deep Networks
-        图像去模糊之初探--Single Image Motion Deblurring
+   Image Deblurring using Smartphone Inertial Sensors
+   Inertial-aided Motion Deblurring with Deep Networks
+   图像去模糊之初探--Single Image Motion Deblurring
+
 2. 光照 
    Reading_List
       Active Exposure Control for Robust Visual Odometry in HDR Environments

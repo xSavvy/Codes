@@ -2,17 +2,17 @@
  * @Author: Liu Weilong
  * @Date: 2021-06-27 21:52:57
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-06-29 16:58:09
+ * @LastEditTime: 2021-07-05 12:21:19
  * @Description: 
 -->
 
 
 序号|任务|状态|备注
 ---|---|---|---
-1. |SLAM -> BASALT NFR 代码阅读+优化逻辑||还没有进行笔记整理
-2. |SLAM -> 点管理的搬运||先做一个drawio 的图表
-3. |网络是如何连接的 chapter1、2||娱乐
-4. |tzp -> 代码联调||
+1. |SLAM -> BASALT NFR 代码阅读+优化逻辑||暂停
+2. |SLAM -> 点管理的搬运|完成|先做一个drawio 的图表
+3. |网络是如何连接的 chapter1、2||娱乐、没有时间进行
+4. |tzp -> 代码联调|完成|
 5. |tnw -> problem list汇总||
 
 
