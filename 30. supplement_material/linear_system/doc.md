@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-04 07:35:18
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-24 19:01:24
+ * @LastEditTime: 2021-07-06 11:14:52
  * @Description: 
 -->
 ### 线性系统速记 小手册
@@ -32,6 +32,7 @@
      
    $$
    $e^{At}$ 可以通过CH 公式写成解析解
+   
 2. 定常系统求解方法<br>
    系统公式:<br>
    $$

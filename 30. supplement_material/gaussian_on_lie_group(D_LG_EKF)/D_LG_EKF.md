@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-02-24 11:32:20
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-05-30 22:13:09
+ * @LastEditTime: 2021-07-06 11:14:29
  * @FilePath: /Codes/30. supplement_material/gaussian_on_lie_group(D_LG_EKF)/D_LG_EKF.md
  * @Description: 
 -->
@@ -230,4 +230,10 @@
    tips 有没有解决更新方向不知道如何更新的问题?
    
    答: 大概是解决了，要么直接所有过程全部左乘(右乘)，要么就是根据error state 的位置(左、右)来进行更新
+   
+   <font color ="Red">
+   目前，这个文章的最大收获是对于 ESKF的更新问题有了更好的理解。
+
+   并且更加深刻的理解的  state 和 error state 之间的组合关系。
+   </font>
     
