@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-05 16:32:55
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-08 16:22:20
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-07-06 15:26:51
  * @FilePath: /3rd-test-learning/38. line_feature/edgelet/code/test_edgelet.cc
  * @Description: 
  * 
@@ -26,7 +26,7 @@ std::string img_path;
 
 int main()
 {
-    img_path = "../1.png";
+    img_path = "/home/lwl/workspace/3rd-test-learning/38. line_feature/source_pic/1.png";
     
     auto start = chrono::high_resolution_clock::now();
     

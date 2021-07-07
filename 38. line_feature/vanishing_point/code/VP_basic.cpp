@@ -1,8 +1,8 @@
 /*
  * @Author: Liu Weilong
  * @Date: 2021-03-25 18:53:46
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-03-25 19:50:03
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-07-06 12:20:20
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/code/VP_basic.cpp
  * @Description: 
  */
@@ -40,9 +40,4 @@ void Init()
 int main()
 {
     Init();
-
-
-    
-
-
 }

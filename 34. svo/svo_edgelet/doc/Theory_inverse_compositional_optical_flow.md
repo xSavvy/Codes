@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-01-04 09:16:13
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-07-06 11:22:36
+ * @LastEditTime: 2021-07-06 16:21:43
  * @FilePath: /Codes/31. orb_slam_related/YGZ/doc/Theory.md
  * @Description: 
 -->
@@ -19,7 +19,6 @@ $$
 进行更更新的时候
 $$
     \begin{aligned}
-
     W(x;p)&\leftarrow{W(x;p)\circ{W(x;\Delta{p})^{-1}}}  
     \\
     & = W(W(x;\Delta{p})^{-1};p)  
@@ -27,11 +26,8 @@ $$
     &=\exp(p)\exp(-\Delta{p})x
     \\
     &=\exp(p_{new})x
-    
     \end{aligned}
 $$
-
-$\cfrac{\partial{T}}{\partial{W}}$ 具体实现还是需要参考YGZ-ORB
 
 Warp 要求是半群<br>
 这个Compositional真的是神奇，也不知道是哪里的概念\
@@ -160,7 +156,7 @@ Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 �
    将$I_pre$ 正方形template 的像素投影到$I_cur$ 就可以得到Affine变换。示例:
    调整前|调整后
    ----|----
-   ![](./../picture/2.png)|![](./../picture/3.png)
+   ![](../pic/2.png)|![](../pic/3.png)
    当然这个有前提的假设，也就是初值必须是比较好的。
 
 3. 金字塔层数调整:
@@ -172,7 +168,7 @@ Align2D 图像匹配过程还是为了找到匹配的2d像素位置 而不是 �
    但是这个的缩放没有直接乘在Affine 来调节大小
    而是在WarpAffine()的时候，通过减小patch 的大小，来间接调节
    示意图:
-   ![](./../picture/4.png)
+   ![](../pic/4.png)
 
 4. 克服自动曝光:
    添加一个光流的补偿项，两帧之间的亮度进行补偿。

@@ -1,8 +1,8 @@
 <!--
  * @Author: Liu Weilong
  * @Date: 2021-01-05 09:57:00
- * @LastEditors: Liu Weilong 
- * @LastEditTime: 2021-04-20 10:07:01
+ * @LastEditors: Liu Weilong
+ * @LastEditTime: 2021-07-06 16:43:30
  * @FilePath: /Codes/30. supplement_material/ground_constraint/theory.md
  * @Description: 
 -->
@@ -48,9 +48,7 @@ $z$ 就是包含待优化真值的$f(x)$
 b. SE2XYZ边的推导<br>
 b.1. 真值推导<br>
 $$
-
     uv = \pi(R^c_{bi}R^{bi}_w(l_w-p_w)+t^{c}_b)
-
 $$
 b.2. 真实分析<br>
 误差主要是在$R^{bi}_w$ 、 $p_w$、$uv$ 上
@@ -84,7 +82,6 @@ se2lam 的地面约束添加是在混合在了重投影误差当中的，坐标�
 最终修改的是重投影误差的方差。<br>
 <font color = "Red">
 2021.1.6 添加<br>
-今天开会的时候，对这篇论文中的误差分析进行了思考。<br>
 想到了为什么自己对于这个内容的理解感觉有些抗拒<br>
 a. 对于误差的分析，这里的分析是存在问题的<br>
    这种递推类的误差分析，对于真实情况的考虑，这里非常直接只修正了模型上的不完美，也就是给Roll Pitch z 添加了一个0均值的抖动。<br>
