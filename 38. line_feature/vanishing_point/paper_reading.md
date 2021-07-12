@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-03-05 17:00:55
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-03-27 21:24:25
+ * @LastEditTime: 2021-07-08 10:01:19
  * @FilePath: /3rd-test-learning/38. line_feature/vanishing_point/paper_reading.md
  * @Description: 
 -->
@@ -110,13 +110,21 @@ in Manhattan World
    5. Using Vanishing Points to Improve Visual-Inertial Odometry
    mark！！！！
    笔记:
-   a. 在WM 假设下，Vanishing Line,在空间中是一条直线，有了重力方向之后，可以让知道VL的方向，<font color = "Red">代验证</font>。
-   b. 1-line RANSAC 也就说 任何一个和VL相交的线产生一个VP，也就有了一个VP 假设，可以进行RANSAC
-   c. 但是最终的结果是只能找到  两种VP，但是好像这篇文章只是想要使用这两个VP 来解决yaw 的问题，是比较适合之后使用一篇文章。mark 一下
+   a. 在WM 假设下，Vanishing Line,在空间中是一条直线，有了重力方向之后，可以让知道VL的方向，想到了一个例子基本上是不需要验证。
+      ![](./pic/13.png)
+   b. 1-line RANSAC 也就说 
+      任何一个和VL相交的线产生一个VP.然后就是对这个VP进行一个统计(但是这里应该说已经把线分成了两类、垂直和水平线，这里的RANSAC 是对水平线进行的)
+   
+      然后通过已知的条件: 1. mahanttan 假设 2. 水平结构线产生的VP 都在VL上
+      每一个VP 结合Gravity 都会生成一个VP set 然后进行评价就可以了。 (怪不得说是1-line Ransac)  大概思想是这样,之后再进行细致的阅读吧，还是挺有意思的。
+   c. 找到最优ransac 组之后,还需要进行一次 VP refine
+
    ![](./pic/12.png)
+
+   这篇文章,现在读起来还是很有味道的。之后有机会仔细看一下
    
 
-
+   6. Struct VIO
 
 
 

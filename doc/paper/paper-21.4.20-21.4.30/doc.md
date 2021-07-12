@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-04-21 18:04:50
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-04-22 20:38:13
+ * @LastEditTime: 2021-07-08 16:43:12
  * @FilePath: /Codes/doc/paper/paper-21.4.20-21.4.30/doc.md
  * @Description: 
 -->
@@ -29,3 +29,5 @@ c. 光照补偿
 距离再好一点的光流，还差一个patch 的仿射
 
 d. 其余参数调节，见论文 Implement Detail
+
+![](./pic/6.png)

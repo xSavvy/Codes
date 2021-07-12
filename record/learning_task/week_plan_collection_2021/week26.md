@@ -2,7 +2,7 @@
  * @Author: Liu Weilong
  * @Date: 2021-07-05 12:21:31
  * @LastEditors: Liu Weilong
- * @LastEditTime: 2021-07-06 20:29:39
+ * @LastEditTime: 2021-07-07 15:21:31
  * @Description: 
 -->
 
@@ -15,6 +15,5 @@
 3. |other-> NFR 等后端算法测试平台 6h||
 4. |tzp-> ROS Service BUG 6h ||
 5. |other -> bash 编写||
-
 
 31.5h 极限时间,已到。不再接受其他的任务。
